@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>老師的論文</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet"> <!-- 共用 CSS -->
+</head>
+<body>
+
+<!-- Navbar 共用 -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">教授個人網頁</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html#about">自我介紹</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html#research">研究方向</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html#courses">課程資訊</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html#appointment">預約面談</a></li>
+                <li class="nav-item"><a class="nav-link active" href="study.html">老師的論文</a></li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-light ms-3" href="login.html">登入</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Header -->
+<header class="bg-light py-5 text-center">
+    <div class="container">
+        <h1 class="fw-bold">李榮三 教授的論文</h1>
+        <p class="text-muted">歷年發表論文列表</p>
+    </div>
+</header>
+
+<!-- 論文區塊 -->
+<div class="container my-5">
+    <!-- 前三篇 -->
+    <div>
+        <p class="paper-title">論文標題 1</p>
+        <p class="paper-details">作者：李榮三 教授</p>
+        <p class="paper-details">摘要：這是第一篇論文的摘要內容。</p>
+        <p class="paper-details">發表年份：2023</p>
+    </div>
+    <div>
+        <p class="paper-title">論文標題 2</p>
+        <p class="paper-details">作者：李榮三 教授</p>
+        <p class="paper-details">摘要：這是第二篇論文的摘要內容。</p>
+        <p class="paper-details">發表年份：2022</p>
+    </div>
+    <div>
+        <p class="paper-title">論文標題 3</p>
+        <p class="paper-details">作者：李榮三 教授</p>
+        <p class="paper-details">摘要：這是第三篇論文的摘要內容。</p>
+        <p class="paper-details">發表年份：2021</p>
+    </div>
+
+    <!-- 隱藏更多 -->
+    <div id="morePapers" class="hidden">
+        <div>
+            <p class="paper-title">論文標題 4</p>
+            <p class="paper-details">作者：李榮三 教授</p>
+            <p class="paper-details">摘要：這是第四篇論文的摘要內容。</p>
+            <p class="paper-details">發表年份：2020</p>
+        </div>
+        <div>
+            <p class="paper-title">論文標題 5</p>
+            <p class="paper-details">作者：李榮三 教授</p>
+            <p class="paper-details">摘要：這是第五篇論文的摘要內容。</p>
+            <p class="paper-details">發表年份：2019</p>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <button id="showMoreBtn" class="btn btn-secondary">展開更多</button>
+    </div>
+</div>
+
+<!-- Footer 共用 -->
+<footer class="bg-primary text-white text-center py-3">
+    <div class="container">
+        <small>&copy; 2025 李榮三教授 | 國立中正大學</small>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="scripts.js"></script> <!-- 共用 JS -->
+</body>
+</html>

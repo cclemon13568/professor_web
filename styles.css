@@ -1,0 +1,128 @@
+/* 預設樣式（適用於大螢幕） */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fafafa;
+}
+
+header img {
+    max-width: 300px; /* 將圖片的最大寬度設為 300px */
+    height: auto; /* 確保圖片比例不變 */
+    border-radius: 15px; /* 設定鈍角半徑 */
+}
+
+header h1 {
+    font-size: 3rem;
+}
+
+footer {
+    background-color: #fafafa; /* 奶茶色 */
+}
+
+.navbar {
+    width: 100%; /* 填滿整條 X 軸 */
+    margin: 0; /* 移除外邊距 */
+    border-radius: 0; /* 移除圓角 */
+    padding: 10px 20px;
+    background-color: #ffffff; /* 設定背景為白色 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加陰影 */
+}
+
+.navbar-brand {
+    font-size: 1.5rem; /* 調整品牌名稱的字體大小 */
+    font-weight: bold; /* 加粗品牌名稱 */
+}
+
+.nav-link {
+    font-size: 1.1rem; /* 調整導覽連結的字體大小 */
+    margin: 0 10px; /* 增加連結之間的間距 */
+}
+
+.navbar-toggler {
+    border: none; /* 移除切換按鈕的邊框 */
+    background-color: rgba(255, 255, 255, 0.2); /* 添加透明背景 */
+}
+
+/* 手機螢幕（小於 768px） */
+@media (max-width: 768px) {
+    header img {
+        max-width: 100%; /* 圖片寬度自適應 */
+    }
+
+    header h1 {
+        font-size: 2rem; /* 縮小標題字體大小 */
+    }
+
+    .navbar {
+        max-width: 100%; /* 導覽列寬度填滿螢幕 */
+        padding: 10px; /* 減少內邊距 */
+    }
+
+    .nav-link {
+        font-size: 1rem; /* 縮小導覽連結字體大小 */
+        margin: 0 5px; /* 減少連結間距 */
+    }
+}
+
+.navbar .btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* 輕微亮一點 */
+    color: rgba(255, 255, 255, 0.85); /* 提高文字亮度 */
+    border-color: rgba(255, 255, 255, 0.85);
+}
+
+
+.navbar .btn-login:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加懸浮陰影 */
+    transform: translateY(-2px); /* 輕微上移效果（可選） */
+}
+
+.navbar-dark.bg-primary {
+    background-color: rgb(168, 32, 32) !important; /* 紅色背景 */
+    width: 100%; /* 填滿整條 X 軸 */
+    margin: 0; /* 移除外邊距 */
+    border-radius: 0; /* 移除圓角 */
+}
+footer.bg-primary {
+    background-color: rgb(168, 32, 32) !important;
+}
+
+/* 平板螢幕（768px 至 1024px） */
+@media (min-width: 768px) and (max-width: 1024px) {
+    header img {
+        max-width: 600px; /* 限制圖片寬度 */
+    }
+
+    header h1 {
+        font-size: 2.5rem; /* 調整標題字體大小 */
+    }
+
+    .navbar {
+        max-width: 90%; /* 導覽列寬度為螢幕的 90% */
+    }
+}
+
+.conecinfo {
+    width: fit-content;           /* 寬度剛好包住內容 */
+    margin: 0 auto;               /* 水平置中 */
+    text-align: left;             /* 內部文字左對齊 */
+    line-height: 1.6;
+}
+
+#about {
+    border-top: 2px solid #000; /* 設定橫線的粗細與顏色 */
+    padding-top: 20px; /* 增加上方內邊距，讓內容與橫線有間距 */
+}
+
+.container{
+    line-height: 2;
+}
+
+/* 修改按鈕顏色 */
+#appointment .btn-primary {
+    background-color: #28a745; /* 設定按鈕背景為綠色 */
+    border-color: #28a745; /* 設定按鈕邊框為綠色 */
+}
+
+#appointment .btn-primary:hover {
+    background-color: #218838; /* 設定按鈕懸停時的背景顏色 */
+    border-color: #1e7e34; /* 設定按鈕懸停時的邊框顏色 */
+}
