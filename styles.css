@@ -4,41 +4,44 @@ body {
     background-color: #fafafa;
 }
 
+header {
+    background-color: #fafafa;
+    display: flex;              /* 啟用 Flexbox 佈局 */
+    align-items: center;        /* 垂直置中對齊子元素 */
+    justify-content: center;    /* 水平置中 header 內的元素 */
+    padding: 20px;              /* 可調整 header 的內邊距 */
+    flex-direction: row;        /* 預設水平排列 */
+}
+
 header img {
-    max-width: 300px; /* 將圖片的最大寬度設為 300px */
-    height: auto; /* 確保圖片比例不變 */
-    border-radius: 15px; /* 設定鈍角半徑 */
-}
-
-header h1 {
-    font-size: 3rem;
-}
-
-footer {
-    background-color: #fafafa; /* 奶茶色 */
+    max-width: 300px;       /* 將圖片的最大寬度設為 300px */
+    height: auto;           /* 確保圖片比例不變 */
+    border-radius: 15px;    /* 設定鈍角半徑 */
+    margin-right: 50px;     /* 圖片和文字之間的間距 */
 }
 
 .navbar {
-    width: 100%; /* 填滿整條 X 軸 */
-    margin: 0; /* 移除外邊距 */
-    border-radius: 0; /* 移除圓角 */
+    background-color: #fafafa;
+    width: 100%;                                /* 填滿整條 X 軸 */
+    margin: 0;                                  /* 移除外邊距 */
+    border-radius: 0;                           /* 移除圓角 */
     padding: 10px 20px;
-    background-color: #ffffff; /* 設定背景為白色 */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加陰影 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);   /* 添加陰影 */
 }
 
+/* 左上網頁標題 */
 .navbar-brand {
     font-size: 1.5rem; /* 調整品牌名稱的字體大小 */
     font-weight: bold; /* 加粗品牌名稱 */
 }
 
 .nav-link {
-    font-size: 1.1rem; /* 調整導覽連結的字體大小 */
-    margin: 0 10px; /* 增加連結之間的間距 */
+    font-size: 1.1rem;   /* 調整導覽連結的字體大小 */
+    margin: 0 10px;      /* 增加連結之間的間距 */
 }
 
 .navbar-toggler {
-    border: none; /* 移除切換按鈕的邊框 */
+    border: none;                               /* 移除切換按鈕的邊框 */
     background-color: rgba(255, 255, 255, 0.2); /* 添加透明背景 */
 }
 
@@ -65,7 +68,7 @@ footer {
 
 .navbar .btn-outline-light:hover {
     background-color: rgba(255, 255, 255, 0.1); /* 輕微亮一點 */
-    color: rgba(255, 255, 255, 0.85); /* 提高文字亮度 */
+    color: rgba(255, 255, 255, 0.85);           /* 提高文字亮度 */
     border-color: rgba(255, 255, 255, 0.85);
 }
 
@@ -76,13 +79,14 @@ footer {
 }
 
 .navbar-dark.bg-primary {
-    background-color: rgb(168, 32, 32) !important; /* 紅色背景 */
-    width: 100%; /* 填滿整條 X 軸 */
-    margin: 0; /* 移除外邊距 */
-    border-radius: 0; /* 移除圓角 */
+    background-color: #6B7EA5 !important;          /* 紅色背景 */
+    width: 100%;                                   /* 填滿整條 X 軸 */
+    margin: 0;                                     /* 移除外邊距 */
+    border-radius: 0;                              /* 移除圓角 */
 }
+/*底部的邊*/
 footer.bg-primary {
-    background-color: rgb(168, 32, 32) !important;
+    background-color: #6B7EA5 !important;      /*rgb(168, 32, 32)*/
 }
 
 /* 平板螢幕（768px 至 1024px） */
@@ -100,16 +104,31 @@ footer.bg-primary {
     }
 }
 
-.conecinfo {
-    width: fit-content;           /* 寬度剛好包住內容 */
-    margin: 0 auto;               /* 水平置中 */
-    text-align: left;             /* 內部文字左對齊 */
+header .conecinfo {
+    text-align: left;
     line-height: 1.6;
+    /*width: fit-content;           !* 寬度剛好包住內容 *!*/
+    /*margin: 0 auto;               !* 水平置中 *!*/
+    /*text-align: left;             !* 內部文字左對齊 *!*/
+    /*line-height: 1.6;*/
+}
+
+header .conecinfo p {
+    margin-bottom: 5px;
+}
+
+header .conecinfo a {
+    color: #007bff;     /* 參考 Bootstrap 的連結顏色 */
+    text-decoration: none;
+}
+
+header .conecinfo a:hover {
+    text-decoration: underline;
 }
 
 #about {
     border-top: 2px solid #000; /* 設定橫線的粗細與顏色 */
-    padding-top: 20px; /* 增加上方內邊距，讓內容與橫線有間距 */
+    padding-top: 20px;          /* 增加上方內邊距，讓內容與橫線有間距 */
 }
 
 .container{
