@@ -9,92 +9,116 @@
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <div class="container">
-    <a class="navbar-brand" href="#">教授個人網頁</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="#about">自我介紹</a></li>
-        <li class="nav-item"><a class="nav-link" href="study.html">研究方向</a></li>
-        <li class="nav-item"><a class="nav-link" href="#courses">課程資訊</a></li>
-        <li class="nav-item"><a class="nav-link" href="#appointment">預約面談</a></li>
-        <li class="nav-item">
-          <a class="btn btn-outline-light ms-3" href="login.html">登入</a>
-        </li>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand" href="#">教授個人網頁</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#about">自我介紹</a></li>
+          <li class="nav-item"><a class="nav-link" href="study.html">研究方向</a></li>
+          <li class="nav-item"><a class="nav-link" href="#courses">課程資訊</a></li>
+          <li class="nav-item"><a class="nav-link" href="#appointment">預約面談</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">討論區</a></li>
+          <li class="nav-item">
+            <a class="btn btn-outline-light ms-3" href="login.html">登入</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="bg-light py-5 text-center">
+    <img src="images/lee.png" style="max-width: 300px; height: auto;" alt="教授照片">
+    <div class="conecinfo">
+      <h1 class="fw-bold">李榮三教授</h1>
+      <p class="text-muted">國立中正大學 資訊工程系</p>
+      <p><strong>聯絡信箱：</strong><a href="https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcSHwCwSVGvxTqVxZNgQTtTGmHzLrjjGjvlljdssXVHWRRsQrfLBQHzNHTmgZWTGdpfBfdPlX" >leejs@fcu.edu.tw</a>
+      </p>
+      <p><strong>分機號碼 : </strong>#3767</p>
+      <p><strong>實驗室 : </strong>資訊安全實驗室</p>
+    </div>
+  </header>
+
+  <!-- About Section -->
+  <section id="about" class="py-5">
+    <div class="container">
+      <h2 class="mb-4"><strong>專長</strong></h2>
+      <ul>
+        <li>無線通訊Wireless Communications</li>
+        <li>資訊安全Information Security</li>
+        <li>電子商務E-Commerce</li>
+        <li>密碼學Cryptography</li>
+        <li>數位影像處理Image Processing</li>
+        <li>區塊鏈技術與應用Blockchain technique and its application</li>
       </ul>
     </div>
-  </div>
-</nav>
+  </section>
 
-<!-- Header -->
-<header class="bg-light py-5 text-center">
-  <img src="images/lee.png" style="max-width: 300px; height: auto;" alt="教授照片">
-  <div class="conecinfo">
-    <h1 class="fw-bold">李榮三教授</h1>
-    <p class="text-muted">國立中正大學 資訊工程系</p>
-    <p><strong>聯絡信箱：</strong><a href="https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcSHwCwSVGvxTqVxZNgQTtTGmHzLrjjGjvlljdssXVHWRRsQrfLBQHzNHTmgZWTGdpfBfdPlX" >leejs@fcu.edu.tw</a>
-    </p>
-    <p><strong>分機號碼 : </strong>#3767</p>
-    <p><strong>實驗室 : </strong>資訊安全實驗室</p>
-  </div>
-</header>
+  <!-- Research Section -->
+  <section id="research" class="bg-light py-5">
+    <hr style="border: 2px solid #000; margin-bottom: 20px;">
+    <div class="container">
+      <h2 class="mb-4"><strong>學歷</strong></h2>
+      <h4 style="white-space: pre;">學位                              畢業學校                                           科系 </h4>
+    </div>
+  </section>
 
-<!-- About Section -->
-<section id="about" class="py-5">
-  <div class="container">
-    <h2 class="mb-4"><strong>專長</strong></h2>
-    <ul>
-      <li>無線通訊Wireless Communications</li>
-      <li>資訊安全Information Security</li>
-      <li>電子商務E-Commerce</li>
-      <li>密碼學Cryptography</li>
-      <li>數位影像處理Image Processing</li>
-      <li>區塊鏈技術與應用Blockchain technique and its application</li>
-    </ul>
-  </div>
-</section>
+  <!-- Courses Section -->
+  <section id="courses" class="py-5">
+    <div class="container">
+      <h2 class="mb-4"><strong>開設課程</strong></h2>
+      <ul>
+        <li>資料庫系統（春季班）</li>
+        <li>人工智慧導論（秋季班）</li>
+      </ul>
+    </div>
+  </section>
 
-<!-- Research Section -->
-<section id="research" class="bg-light py-5">
-  <hr style="border: 2px solid #000; margin-bottom: 20px;">
-  <div class="container">
-    <h2 class="mb-4"><strong>學歷</strong></h2>
-    <h4 style="white-space: pre;">學位                              畢業學校                                           科系 </h4>
-  </div>
-</section>
+  <!-- Appointment Section -->
+  <section id="appointment" class="bg-light py-5 text-center">
+    <div class="container">
+      <h2 class="mb-4">預約面談</h2>
+      <p>如果有需要面談，請點擊下方按鈕預約。</p>
+      <a href="https://docs.google.com/forms/d/1wo7ZtfNohiTijuSXe0YWkqGs1fUpV1UzlTJm0h_vubQ/edit" class="btn btn-primary btn-lg">預約面談</a>
+    </div>
+  </section>
 
-<!-- Courses Section -->
-<section id="courses" class="py-5">
-  <div class="container">
-    <h2 class="mb-4"><strong>開設課程</strong></h2>
-    <ul>
-      <li>資料庫系統（春季班）</li>
-      <li>人工智慧導論（秋季班）</li>
-    </ul>
-  </div>
-</section>
+  <!-- Footer -->
+  <footer class="bg-primary text-white text-center py-3">
+    <div class="container">
+      <small>&copy; 2025 李榮三教授 | 國立中正大學</small>
+    </div>
+  </footer>
 
-<!-- Appointment Section -->
-<section id="appointment" class="bg-light py-5 text-center">
-  <div class="container">
-    <h2 class="mb-4">預約面談</h2>
-    <p>如果有需要面談，請點擊下方按鈕預約。</p>
-    <a href="https://docs.google.com/forms/d/1wo7ZtfNohiTijuSXe0YWkqGs1fUpV1UzlTJm0h_vubQ/edit" class="btn btn-primary btn-lg">預約面談</a>
-  </div>
-</section>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="scripts.js"></script>
 
-<!-- Footer -->
-<footer class="bg-primary text-white text-center py-3">
-  <div class="container">
-    <small>&copy; 2025 李榮三教授 | 國立中正大學</small>
+  <!-- Question button -->
+  <div id="floating-question-button">
+    <!-- 顯示浮動圖示 -->
+    <button id="question-icon-button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-6h2v6zm-1-8c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
+      </svg>
+    </button>
+    <div id="question-modal" class="hidden">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h3>提問</h3>
+        <textarea id="question-textarea" placeholder="請輸入您的問題..."></textarea>
+        <button id="send-question-button" class="btn btn-primary">發送</button>
+        <div id="question-response" class="hidden mt-2">
+          <p><strong>回覆：</strong></p>
+          <div id="response-text"></div>
+        </div>
+      </div>
+    </div>
   </div>
-</footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="scripts.js"></script>
 </body>
 </html>
