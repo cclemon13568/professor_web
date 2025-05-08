@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>討論區 | 李榮三教授</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="#">教授個人網頁</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#about">自我介紹</a></li>
+                <li class="nav-item"><a class="nav-link" href="study.html">研究方向</a></li>
+                <li class="nav-item"><a class="nav-link" href="#courses">課程資訊</a></li>
+                <li class="nav-item"><a class="nav-link" href="#appointment">預約面談</a></li>
+                <li class="nav-item"><a class="nav-link" href="#discussion">討論區</a></li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-light ms-3" href="login.html">登入</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Header -->
+<header class="bg-light py-5 text-center">
+    <img src="images/lee.png" style="max-width: 300px; height: auto;" alt="教授照片">
+    <div class="conecinfo">
+        <h1 class="fw-bold">李榮三教授</h1>
+        <p class="text-muted">國立中正大學 資訊工程系</p>
+        <p><strong>聯絡信箱：</strong><a href="https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcSHwCwSVGvxTqVxZNgQTtTGmHzLrjjGjvlljdssXVHWRRsQrfLBQHzNHTmgZWTGdpfBfdPlX" >leejs@fcu.edu.tw</a>
+        </p>
+        <p><strong>分機號碼 : </strong>#3767</p>
+        <p><strong>實驗室 : </strong>資訊安全實驗室</p>
+    </div>
+</header>
+
+<!-- Discussion Section -->
+<section id="discussion" class="py-5">
+    <div class="container">
+        <h2 class="mb-4"><strong>討論區</strong></h2>
+
+        <!-- Discussion Board -->
+        <div class="discussion-board">
+            <div class="discussion-thread">
+                <div class="thread-header d-flex justify-content-between">
+                    <h4>如何選擇適合的資料庫系統？</h4>
+                    <small>2025年5月8日 | 使用者1</small>
+                </div>
+                <div class="thread-body">
+                    <p>請問各位同學，有沒有推薦的資料庫系統可以用來開發一個小型的商業網站？</p>
+                    <button class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#reply1">回覆</button>
+                    <div id="reply1" class="collapse mt-2">
+                        <textarea class="form-control" rows="3" placeholder="請輸入您的回覆..."></textarea>
+                        <button class="btn btn-primary mt-2">發送回覆</button>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            <div class="discussion-thread">
+                <div class="thread-header d-flex justify-content-between">
+                    <h4>如何理解區塊鏈技術的基礎概念？</h4>
+                    <small>2025年5月6日 | 使用者2</small>
+                </div>
+                <div class="thread-body">
+                    <p>有同學可以分享如何更好地理解區塊鏈的概念和技術細節嗎？</p>
+                    <button class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#reply2">回覆</button>
+                    <div id="reply2" class="collapse mt-2">
+                        <textarea class="form-control" rows="3" placeholder="請輸入您的回覆..."></textarea>
+                        <button class="btn btn-primary mt-2">發送回覆</button>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+
+        <!-- New Post Section -->
+        <div class="new-post">
+            <h4>發表新問題</h4>
+            <textarea class="form-control" rows="4" placeholder="請輸入您的問題..."></textarea>
+            <button class="btn btn-primary mt-2">發表問題</button>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-primary text-white text-center py-3">
+    <div class="container">
+        <small>&copy; 2025 李榮三教授 | 國立中正大學</small>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="scripts.js"></script>
+
+</body>
+</html>
