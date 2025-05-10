@@ -156,6 +156,19 @@ header .conecinfo {
 
 
 
+/*Discussion*/
+
+/*發表新問題 標題、問題空隙*/
+textarea.form-control {
+    margin-bottom: 10px; /* 調整下方的間距 */
+}
+
+/*Discussion end*/
+
+
+
+
+
 
 /*study.html*/
 .highlight {
@@ -207,16 +220,7 @@ footer.bg-primary {
     line-height: 2;
 }
 
-/* 修改按鈕顏色 */
-#appointment .btn-primary {
-    background-color: #28a745; /* 設定按鈕背景為綠色 */
-    border-color: #28a745; /* 設定按鈕邊框為綠色 */
-}
 
-#appointment .btn-primary:hover {
-    background-color: #218838; /* 設定按鈕懸停時的背景顏色 */
-    border-color: #1e7e34; /* 設定按鈕懸停時的邊框顏色 */
-}
 
 /*                       提問按鈕                                */
 /* Floating Question Button Styles */

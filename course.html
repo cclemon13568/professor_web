@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>課程資訊</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Header -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="#">教授個人網頁</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">自我介紹</a></li>
+                <li class="nav-item"><a class="nav-link" href="study.html">研究方向</a></li>
+                <li class="nav-item"><a class="nav-link" href="course.html">課程資訊</a></li>
+                <li class="nav-item"><a class="nav-link" href="meeting.html">預約面談</a></li>
+                <li class="nav-item"><a class="nav-link" href="Discussion.html">討論區</a></li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-light ms-3" href="login.html">登入</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main content -->
+<div class="container my-5">
+    <h2 class="mb-4">教授開設的課程</h2>
+
+    <!-- 課程卡片範例 -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">計算機結構</h5>
+            <h6 class="card-subtitle mb-2 text-muted">教室：E210 ｜ 時間：週一 10:00-12:00  ｜  課程代碼:13422</h6>
+            <p class="card-text">介紹計算機的基本結構、指令集設計、記憶體階層、I/O系統等基礎知識。</p>
+            <a href="rating.html?course=計算機結構" class="btn btn-outline-primary">我要評價</a>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">嵌入式系統</h5>
+            <h6 class="card-subtitle mb-2 text-muted">教室：D305 ｜ 時間：週三 13:00-15:00  ｜  課程代碼:13456</h6>
+            <p class="card-text">學習嵌入式系統的架構與應用，包括ARM架構、開發工具與實作專題。</p>
+            <a href="rating.html?course=嵌入式系統" class="btn btn-outline-primary">我要評價</a>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">物聯網概論</h5>
+            <h6 class="card-subtitle mb-2 text-muted">教室：F101 ｜ 時間：週五 09:00-11:00  ｜  課程代碼:15877</h6>
+            <p class="card-text">介紹IoT的基本架構、感測器、通訊技術與實務應用。</p>
+            <a href="rating.html?course=物聯網概論" class="btn btn-outline-primary">我要評價</a>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-light text-center py-4 mt-auto">
+    <div class="container">
+        <p class="mb-0">© 2025 教授個人網頁. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="scripts.js"></script>
+</body>
+</html>

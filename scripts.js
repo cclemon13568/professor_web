@@ -88,20 +88,48 @@ document.addEventListener('DOMContentLoaded', function() {
 //瀏覽列互動效果
 document.addEventListener("DOMContentLoaded", () => {
     const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
-    const currentPath = window.location.pathname;
+    const currentPage = window.location.pathname.split("/").pop(); // e.g. 'course.html'
 
     navLinks.forEach(link => {
-        // 檢查當前鏈接是否匹配當前路徑
-        if (link.getAttribute("href") === currentPath || link.getAttribute("href") === currentPath + window.location.hash) {
+        const linkHref = link.getAttribute("href");
+        if (linkHref === currentPage) {
             link.classList.add("active");
         } else {
             link.classList.remove("active");
         }
-
-        // 點擊時更新 active 類名
-        link.addEventListener("click", function () {
-            navLinks.forEach(nav => nav.classList.remove("active"));
-            this.classList.add("active");
-        });
     });
+});
+
+
+/*討論區問題發表*/
+document.getElementById('post-button').addEventListener('click', function () {
+    const title = document.getElementById('new-title').value.trim();
+    const content = document.getElementById('new-content').value.trim();
+    if (!title || !content) return;
+
+    const today = new Date();
+    const dateStr = today.getFullYear() + '年' + (today.getMonth() + 1) + '月' + today.getDate() + '日';
+
+    const thread = document.createElement('div');
+    thread.className = 'discussion-thread';
+    thread.innerHTML = `
+        <div class="thread-header d-flex justify-content-between">
+            <h4>${title}</h4>
+            <small>${dateStr} | 使用者</small>
+        </div>
+        <div class="thread-body">
+            <p>${content}</p>
+            <button class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#reply-new-${Date.now()}">回覆</button>
+            <div id="reply-new-${Date.now()}" class="collapse mt-2">
+                <textarea class="form-control" rows="3" placeholder="請輸入您的回覆..."></textarea>
+                <button class="btn btn-primary mt-2">發送回覆</button>
+            </div>
+        </div>
+        <hr>
+    `;
+
+    const board = document.querySelector('.discussion-board');
+    board.insertBefore(thread, board.firstChild); // 插到最上面
+    document.getElementById('new-title').value = '';
+    document.getElementById('new-content').value = '';
 });
