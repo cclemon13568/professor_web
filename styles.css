@@ -1,8 +1,53 @@
 /* 預設樣式（適用於大螢幕） */
+
 body {
     font-family: Arial, sans-serif;
     background-color: #fafafa;
 }
+
+/* 手機螢幕（小於 768px） */
+@media (max-width: 768px) {
+    header img {
+        max-width: 100%; /* 圖片寬度自適應 */
+    }
+
+    header h1 {
+        font-size: 2rem; /* 縮小標題字體大小 */
+    }
+
+    .navbar {
+        max-width: 100%; /* 導覽列寬度填滿螢幕 */
+        padding: 10px; /* 減少內邊距 */
+    }
+
+    .nav-link {
+        font-size: 1rem; /* 縮小導覽連結字體大小 */
+        margin: 0 5px; /* 減少連結間距 */
+    }
+}
+
+/* 平板螢幕（768px 至 1024px） */
+@media (min-width: 768px) and (max-width: 1024px) {
+    header img {
+        max-width: 600px; /* 限制圖片寬度 */
+    }
+
+    header h1 {
+        font-size: 2.5rem; /* 調整標題字體大小 */
+    }
+
+    .navbar {
+        max-width: 90%; /* 導覽列寬度為螢幕的 90% */
+    }
+}
+
+/*網頁大小調整*/
+
+
+
+
+
+/*header 最上塊區 老師照片*/
 
 header {
     background-color: #fafafa;
@@ -12,7 +57,6 @@ header {
     padding: 20px;              /* 可調整 header 的內邊距 */
     flex-direction: row;        /* 預設水平排列 */
 }
-
 header img {
     max-width: 250px;       /* 將圖片的最大寬度設為 300px */
     height: auto;           /* 確保圖片比例不變 */
@@ -20,6 +64,38 @@ header img {
     margin-right: 50px;     /* 圖片和文字之間的間距 */
 }
 
+header .conecinfo p {
+    margin-bottom: 5px;
+}
+
+header .conecinfo a {
+    color: #007bff;     /* 參考 Bootstrap 的連結顏色 */
+    text-decoration: none;
+}
+
+header .conecinfo a:hover {
+    text-decoration: underline;
+}
+
+header .conecinfo {
+    text-align: left;
+    line-height: 1.6;
+    /*width: fit-content;           !* 寬度剛好包住內容 *!*/
+    /*margin: 0 auto;               !* 水平置中 *!*/
+    /*text-align: left;             !* 內部文字左對齊 *!*/
+    /*line-height: 1.6;*/
+}
+
+/*header end*/
+
+
+
+
+
+
+/*瀏覽列*/
+
+/*色塊區*/
 .navbar {
     background-color: #fafafa;
     width: 100%;                                /* 填滿整條 X 軸 */
@@ -45,26 +121,15 @@ header img {
     background-color: rgba(255, 255, 255, 0.2); /* 添加透明背景 */
 }
 
-/* 手機螢幕（小於 768px） */
-@media (max-width: 768px) {
-    header img {
-        max-width: 100%; /* 圖片寬度自適應 */
-    }
-
-    header h1 {
-        font-size: 2rem; /* 縮小標題字體大小 */
-    }
-
-    .navbar {
-        max-width: 100%; /* 導覽列寬度填滿螢幕 */
-        padding: 10px; /* 減少內邊距 */
-    }
-
-    .nav-link {
-        font-size: 1rem; /* 縮小導覽連結字體大小 */
-        margin: 0 5px; /* 減少連結間距 */
-    }
+/*點選瀏覽列後的效果*/
+.nav-link.active {
+    font-weight: bold;
+    color: #fff !important;
+    background-color: #2f5077;
+    border-radius: 5px;
 }
+
+
 
 .navbar .btn-outline-light:hover {
     background-color: rgba(255, 255, 255, 0.1); /* 輕微亮一點 */
@@ -84,46 +149,53 @@ header img {
     margin: 0;                                     /* 移除外邊距 */
     border-radius: 0;                              /* 移除圓角 */
 }
+
+/*瀏覽列end*/
+
+
+
+
+
+
+/*study.html*/
+.highlight {
+    background-color: #6091f6; /* 色塊背景顏色 */
+    padding: 8px 8px;         /* 內邊距，讓文字與邊框有距離 */
+    border-radius: 10px;       /* 圓角效果 */
+    font-weight: bold;        /* 加粗文字 */
+}
+/* study.html end*/
+
+
+
+
+
+
+/* login.html */
+
+/*這裡是針對按鈕的樣式*/
+.btn-primary {
+    background-color: #6B7EA5; /* 修改背景顏色 */
+    border-color: #6B7EA5; /* 修改邊框顏色 */
+    font-weight: bold; /* 加粗文字 */
+}
+.btn-primary:hover {
+    background-color: #5A6C8E; /* 懸停時的背景顏色 */
+    border-color: #5A6C8E; /* 懸停時的邊框顏色 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加懸停陰影效果 */
+}
+
+
+/* login.html end */
+
+
+
+
+
+
 /*底部的邊*/
 footer.bg-primary {
     background-color: #6B7EA5 !important;      /*rgb(168, 32, 32)*/
-}
-
-/* 平板螢幕（768px 至 1024px） */
-@media (min-width: 768px) and (max-width: 1024px) {
-    header img {
-        max-width: 600px; /* 限制圖片寬度 */
-    }
-
-    header h1 {
-        font-size: 2.5rem; /* 調整標題字體大小 */
-    }
-
-    .navbar {
-        max-width: 90%; /* 導覽列寬度為螢幕的 90% */
-    }
-}
-
-header .conecinfo {
-    text-align: left;
-    line-height: 1.6;
-    /*width: fit-content;           !* 寬度剛好包住內容 *!*/
-    /*margin: 0 auto;               !* 水平置中 *!*/
-    /*text-align: left;             !* 內部文字左對齊 *!*/
-    /*line-height: 1.6;*/
-}
-
-header .conecinfo p {
-    margin-bottom: 5px;
-}
-
-header .conecinfo a {
-    color: #007bff;     /* 參考 Bootstrap 的連結顏色 */
-    text-decoration: none;
-}
-
-header .conecinfo a:hover {
-    text-decoration: underline;
 }
 
 #about {
@@ -260,3 +332,5 @@ header .conecinfo a:hover {
 #response-text {
     white-space: pre-wrap; /* 保留換行和空格 */
 }
+
+

@@ -84,3 +84,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+//瀏覽列互動效果
+document.addEventListener("DOMContentLoaded", () => {
+    const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+    const currentPath = window.location.pathname;
+
+    navLinks.forEach(link => {
+        // 檢查當前鏈接是否匹配當前路徑
+        if (link.getAttribute("href") === currentPath || link.getAttribute("href") === currentPath + window.location.hash) {
+            link.classList.add("active");
+        } else {
+            link.classList.remove("active");
+        }
+
+        // 點擊時更新 active 類名
+        link.addEventListener("click", function () {
+            navLinks.forEach(nav => nav.classList.remove("active"));
+            this.classList.add("active");
+        });
+    });
+});
