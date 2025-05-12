@@ -59,9 +59,20 @@
                 <div class="thread-body">
                     <p>請問各位同學，有沒有推薦的資料庫系統可以用來開發一個小型的商業網站？</p>
                     <button class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#reply1">回覆</button>
+                    <a href="#" class="view-replies-link" data-target-replies="#allReplies1">查看所有回覆</a>
                     <div id="reply1" class="collapse mt-2">
                         <textarea class="form-control" rows="3" placeholder="請輸入您的回覆..."></textarea>
-                        <button class="btn btn-primary mt-2">發送回覆</button>
+                        <button class="btn btn-primary mt-2" data-reply-thread="${uniqueId}">發送回覆</button>
+                    </div>
+                    <div id="allReplies1" class="replies-container collapse mt-2">
+                        <div class="reply">
+                            <small>U1 (2025年5月9日)</small>
+                            <p>我推薦使用 MySQL，它是一個開源且廣泛使用的關聯式資料庫。</p>
+                        </div>
+                        <div class="reply">
+                            <small>U2 (2025年5月9日)</small>
+                            <p>PostgreSQL 也是一個不錯的選擇，功能更強大一些。</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -75,9 +86,16 @@
                 <div class="thread-body">
                     <p>有同學可以分享如何更好地理解區塊鏈的概念和技術細節嗎？</p>
                     <button class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#reply2">回覆</button>
+                    <a href="#" class="view-replies-link" data-target-replies="#allReplies2">查看所有回覆</a>
                     <div id="reply2" class="collapse mt-2">
                         <textarea class="form-control" rows="3" placeholder="請輸入您的回覆..."></textarea>
-                        <button class="btn btn-primary mt-2">發送回覆</button>
+                        <button class="btn btn-primary mt-2" data-reply-thread="${uniqueId}">發送回覆</button>
+                    </div>
+                    <div id="allReplies2" class="replies-container collapse mt-2">
+                        <div class="reply">
+                            <small>U1 (2025年5月7日)</small>
+                            <p>可以從比特幣的白皮書開始了解。</p>
+                        </div>
                     </div>
                 </div>
             </div>

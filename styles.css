@@ -163,6 +163,29 @@ textarea.form-control {
     margin-bottom: 10px; /* 調整下方的間距 */
 }
 
+/*查看所有回覆的樣式*/
+.view-replies-link {
+    margin-left: 10px; /* 與回覆按鈕的間距 */
+    text-decoration: none; /* 移除預設的下劃線 */
+    color: #007bff; /* 藍色連結文字 */
+    cursor: pointer;
+}
+
+.view-replies-link:hover {
+    color: #6091f6;
+}
+
+.replies-container .reply {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-left: 2px solid #ccc;
+}
+
+.replies-container .reply small {
+    color: #6c757d;
+}
+
+
 /*Discussion end*/
 
 
@@ -250,7 +273,7 @@ footer.bg-primary {
     background-color: #53A7BC;
 }
 
-/*提問彈出視窗*/
+/*提問框*/
 #question-modal {
     position: fixed;
     bottom: 80px;   /* 調整彈出視窗與按鈕的距離 */
@@ -336,5 +359,6 @@ footer.bg-primary {
 #response-text {
     white-space: pre-wrap; /* 保留換行和空格 */
 }
+/*提問框 end*/
 
 
