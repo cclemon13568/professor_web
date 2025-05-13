@@ -132,4 +132,45 @@ document.getElementById('post-button').addEventListener('click', function () {
     board.insertBefore(thread, board.firstChild); // 插到最上面
     document.getElementById('new-title').value = '';
     document.getElementById('new-content').value = '';
+});document.addEventListener("DOMContentLoaded", () => {
+    const postButton = document.getElementById("post-button");
+    const titleInput = document.getElementById("new-title");
+    const contentInput = document.getElementById("new-content");
+    const board = document.querySelector(".discussion-board");
+
+    postButton.addEventListener("click", () => {
+        const title = titleInput.value.trim();
+        const content = contentInput.value.trim();
+
+        if (!title || !content) {
+            alert("請輸入標題和內容！");
+            return;
+        }
+
+        const now = new Date();
+        const dateStr = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
+
+        const newThread = document.createElement("div");
+        newThread.classList.add("discussion-thread");
+        newThread.innerHTML = `
+            <div class="thread-header d-flex justify-content-between">
+                <h4>${title}</h4>
+                <small>${dateStr} | 匿名使用者</small>
+            </div>
+            <div class="thread-body">
+                <p>${content}</p>
+                <button class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#reply-new${Date.now()}">回覆</button>
+                <div id="reply-new${Date.now()}" class="collapse mt-2">
+                    <textarea class="form-control" rows="3" placeholder="請輸入您的回覆..."></textarea>
+                    <button class="btn btn-primary mt-2">發送回覆</button>
+                </div>
+            </div>
+            <hr>
+        `;
+
+        board.prepend(newThread); // 將新問題加到最上面
+
+        titleInput.value = "";
+        contentInput.value = "";
+    });
 });
