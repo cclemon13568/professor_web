@@ -1,8 +1,8 @@
 <?php
 $host = 'localhost';// 主機位址
-$dbname = 'your_database_name';// 資料庫名稱
-$user = 'your_username';// 帳號
-$pass = 'your_password';// 密碼
+$dbname = 'D1249166';// 資料庫名稱
+$user = 'D1249166';// 帳號
+$pass = '#3PPnntjK';// 密碼
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
