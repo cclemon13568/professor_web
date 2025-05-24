@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： localhost:3306
--- 產生時間： 2025 年 05 月 22 日 07:52
+-- 產生時間： 2025 年 05 月 24 日 08:03
 -- 伺服器版本： 10.11.11-MariaDB-0ubuntu0.24.04.2
 -- PHP 版本： 8.3.6
 
@@ -198,7 +198,7 @@ CREATE TABLE `login_info` (
 --
 
 INSERT INTO `login_info` (`professor_accoutnumber`, `professor_password`, `verification_code`) VALUES
-('T001(test)', 'pass123(test)', 'VER123(test)');
+('T002(test)', 'pass123(test)', 'VER123(test)');
 
 -- --------------------------------------------------------
 
