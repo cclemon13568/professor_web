@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>教授個人系網 - 編輯模式</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="#">教授個人網頁</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">自我介紹</a></li>
+                <li class="nav-item"><a class="nav-link" href="study.html">研究方向</a></li>
+                <li class="nav-item"><a class="nav-link" href="course.html">課程資訊</a></li>
+                <li class="nav-item"><a class="nav-link" href="meeting.html">預約面談</a></li>
+                <li class="nav-item"><a class="nav-link" href="Discussion.html">討論區</a></li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-light ms-3" href="login.html">登入</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Header -->
+<header class="bg-light py-4 text-center mb-4">
+    <h1 class="fw-bold">教師資料編輯</h1>
+    <p class="text-muted">請填寫並更新您的個人資訊</p>
+</header>
+
+<!-- 編輯表單 -->
+<main class="container mb-5">
+    <form id="teacherForm" method="POST" action="api/update_teacher.php" novalidate>
+        <input type="hidden" name="teacher_ID" value="123" />
+        <div class="mb-3">
+            <label for="teacher_name" class="form-label">姓名</label>
+            <input type="text" class="form-control" id="teacher_name" name="teacher_name" required minlength="2" maxlength="50" value="李榮三" />
+            <div class="invalid-feedback">請輸入有效的姓名 (2-50字元)。</div>
+        </div>
+        <div class="mb-3">
+            <label for="teacher_email" class="form-label">電子郵件</label>
+            <input type="email" class="form-control" id="teacher_email" name="teacher_email" required value="leejs@fcu.edu.tw" />
+            <div class="invalid-feedback">請輸入有效的電子郵件地址。</div>
+        </div>
+        <div class="mb-3">
+            <label for="teacher_phone" class="form-label">聯絡電話</label>
+            <input type="tel" class="form-control" id="teacher_phone" name="teacher_phone" pattern="^(\+?886\-?|0)?9\d{8}$" placeholder="09xxxxxxxx" />
+            <div class="invalid-feedback">請輸入有效的電話號碼（如：0912345678）。</div>
+        </div>
+        <button type="submit" class="btn btn-primary">更新資料</button>
+    </form>
+</main>
+
+<!-- Footer -->
+<footer class="bg-primary text-white text-center py-3 fixed-bottom">
+    <div class="container">
+        <small>&copy; 2025 李榮三教授 | 逢甲大學</small>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Bootstrap 5 表單驗證
+    (() => {
+        'use strict'
+        const form = document.getElementById('teacherForm');
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    })();
+</script>
+
+</body>
+</html>
