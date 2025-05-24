@@ -1,13 +1,20 @@
 <?php
-$conn = new mysqli('localhost', '帳號', '密碼', '資料庫名稱');
-if ($conn->connect_error) {
-    die("連線失敗: " . $conn->connect_error);
+include('../config/db.php');
+header('Content-Type: application/json; charset=utf-8');
+
+// 檢查是否有傳入 teacher_ID
+$teacher_id = $_GET['teacher_ID'] ?? '';
+
+if ($teacher_id === '') {
+    echo json_encode(["error" => "請提供 teacher_ID"]);
+    exit;
 }
 
-$teacher_id = $_GET['teacher_ID']; // 例如: ?teacher_ID=T_123456
-
-$sql = "SELECT * FROM teacher_info WHERE teacher_ID = '$teacher_id'";
-$result = $conn->query($sql);
+$sql = "SELECT * FROM personal_info WHERE teacher_ID = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $teacher_id);
+$stmt->execute();
+$result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $data = $result->fetch_assoc();
@@ -16,5 +23,6 @@ if ($result->num_rows > 0) {
     echo json_encode(["error" => "找不到資料"]);
 }
 
+$stmt->close();
 $conn->close();
 ?>

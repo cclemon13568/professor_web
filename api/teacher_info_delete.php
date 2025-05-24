@@ -1,5 +1,5 @@
 <?php
-$conn = new mysqli('localhost', '帳號', '密碼', '資料庫名稱');
+$conn = new mysqli('localhost', 'root', '', 'professor_db');
 if ($conn->connect_error) {
     die("連線失敗: " . $conn->connect_error);
 }
