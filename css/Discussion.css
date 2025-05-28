@@ -1,0 +1,140 @@
+/*瀏覽列*/
+/*色塊區*/
+.navbar {
+    background-color: #fafafa;
+    width: 100%; /* 填滿整條 X 軸 */
+    margin: 0; /* 移除外邊距 */
+    border-radius: 0; /* 移除圓角 */
+    padding: 10px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加陰影 */
+}
+
+/* 左上網頁標題 */
+.navbar-brand {
+    font-size: 1.5rem; /* 調整品牌名稱的字體大小 */
+    font-weight: bold; /* 加粗品牌名稱 */
+}
+
+.nav-link {
+    font-size: 1.1rem; /* 調整導覽連結的字體大小 */
+    margin: 0 10px; /* 增加連結之間的間距 */
+}
+
+.navbar-toggler {
+    border: none; /* 移除切換按鈕的邊框 */
+    background-color: rgba(255, 255, 255, 0.2); /* 添加透明背景 */
+}
+
+/*點選瀏覽列後的效果*/
+.nav-link.active {
+    font-weight: bold;
+    color: #fff !important;
+    background-color: #2f5077;
+    border-radius: 5px;
+}
+
+
+.navbar .btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* 輕微亮一點 */
+    color: rgba(255, 255, 255, 0.85); /* 提高文字亮度 */
+    border-color: rgba(255, 255, 255, 0.85);
+}
+
+
+.navbar .btn-login:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加懸浮陰影 */
+    transform: translateY(-2px); /* 輕微上移效果（可選） */
+}
+
+.navbar-dark.bg-primary {
+    background-color: #6B7EA5 !important; /* 紅色背景 */
+    width: 100%; /* 填滿整條 X 軸 */
+    margin: 0; /* 移除外邊距 */
+    border-radius: 0; /* 移除圓角 */
+}
+
+/*瀏覽列end*/
+
+
+/*底部的邊*/
+footer.bg-primary {
+    background-color: #6B7EA5 !important; /*rgb(168, 32, 32)*/
+}
+
+#about {
+    border-top: 2px solid #000; /* 設定橫線的粗細與顏色 */
+    padding-top: 20px; /* 增加上方內邊距，讓內容與橫線有間距 */
+}
+
+.container {
+    line-height: 2;
+}
+
+
+/*Discussion*/
+/*發表新問題 標題、問題空隙*/
+textarea.form-control {
+    margin-bottom: 10px; /* 調整下方的間距 */
+}
+
+/* "查看所有回覆"的樣式 */
+.view-replies-link {
+    margin-left: 10px; /* 與回覆按鈕的間距 */
+    text-decoration: none; /* 移除預設的下劃線 */
+    color: #6091f6; /* 藍色連結文字 */
+    cursor: pointer;
+}
+
+.view-replies-link:hover {
+    color: #6B7EA5;
+}
+
+.replies-container .reply {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-left: 2px solid #ccc;
+}
+
+.replies-container .reply small {
+    color: #6c757d;
+}
+
+/* 回覆操作按鈕樣式 */
+.reply-actions button.reply-to-reply-btn,
+.reply-actions a.view-nested-replies-link {
+    margin-right: 5px;
+    font-size: 0.9rem; /* 保留原有的字體大小 */
+    color: #6091f6; /* 與 "查看回覆" 相同的顏色 */
+    text-decoration: none; /* 移除預設的下劃線 */
+    cursor: pointer;
+    border: none; /* 移除按鈕邊框 */
+    background: none; /* 移除按鈕背景 */
+    padding: 0; /* 移除內邊距 */
+}
+
+.reply-actions button.reply-to-reply-btn:hover,
+.reply-actions a.view-nested-replies-link:hover {
+    color: #6B7EA5; /* 與 "查看回覆:hover" 相同的顏色 */
+    text-decoration: underline; /* 可以添加底線效果 */
+}
+
+/* 子回覆容器的縮排 */
+.nested-replies-container {
+    margin-left: 20px;
+    border-left: 1px solid #eee;
+    padding-left: 10px;
+}
+/*Discussion end*/
+
+/*這裡是針對按鈕的樣式*/
+.btn-primary {
+    background-color: #6B7EA5; /* 修改背景顏色 */
+    border-color: #6B7EA5; /* 修改邊框顏色 */
+    font-weight: bold; /* 加粗文字 */
+}
+
+.btn-primary:hover {
+    background-color: #5A6C8E; /* 懸停時的背景顏色 */
+    border-color: #5A6C8E; /* 懸停時的邊框顏色 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加懸停陰影效果 */
+}

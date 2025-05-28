@@ -1,0 +1,117 @@
+/* 提問按鈕                                */
+/* Floating Question Button Styles */
+#floating-question-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000; /* 確保浮在其他元素之上 */
+}
+
+#question-icon-button {
+    background-color: #5FC0D9; /* 您喜歡的背景色 */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#question-icon-button:hover {
+    background-color: #53A7BC;
+}
+
+
+/*提問框*/
+#question-modal {
+    position: fixed;
+    bottom: 80px; /* 調整彈出視窗與按鈕的距離 */
+    left: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    width: 300px;
+}
+
+#question-modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    position: relative;
+}
+
+.modal-content h3 {
+    font-size: 25px;
+}
+
+.close-button {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #222;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    background-color: #555;
+}
+
+#question-textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+#send-question-button {
+    /* 您現有的按鈕樣式可能會覆蓋這裡的樣式，請根據需要調整 */
+    background-color: #5FC0D9;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#send-question-button:hover {
+    background-color: #53A7BC;
+}
+
+#question-response {
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+}
+
+#question-response p {
+    margin-bottom: 3px;
+}
+
+#question-response.hidden {
+    display: none;
+}
+
+#response-text {
+    white-space: pre-wrap; /* 保留換行和空格 */
+}
+
+/*提問框 end*/
