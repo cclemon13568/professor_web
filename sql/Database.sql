@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： localhost:3306
--- 產生時間： 2025 年 05 月 28 日 06:53
+-- 產生時間： 2025 年 05 月 28 日 06:58
 -- 伺服器版本： 10.11.11-MariaDB-0ubuntu0.24.04.2
 -- PHP 版本： 8.3.6
 
@@ -56,17 +56,18 @@ INSERT INTO `appointment_info` (`appointment_ID`, `office_location`, `appoint_Da
 
 CREATE TABLE `appointment_mapping` (
   `teacher_ID` char(15) NOT NULL,
-  `appointment_ID` char(15) NOT NULL
+  `appointment_ID` char(15) NOT NULL,
+  `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `appointment_mapping`
 --
 
-INSERT INTO `appointment_mapping` (`teacher_ID`, `appointment_ID`) VALUES
-('T002', 'A001(test)'),
-('T002', 'A002(test)'),
-('T002', 'A003(test)');
+INSERT INTO `appointment_mapping` (`teacher_ID`, `appointment_ID`, `id`) VALUES
+('T002', 'A001(test)', 1),
+('T002', 'A002(test)', 2),
+('T002', 'A003(test)', 3);
 
 -- --------------------------------------------------------
 
@@ -151,17 +152,18 @@ INSERT INTO `evaluation` (`evaluate_ID`, `student_ID`, `course_period`, `evaluat
 
 CREATE TABLE `evaluation_mapping` (
   `course_ID` char(15) NOT NULL,
-  `evaluate_ID` char(15) NOT NULL
+  `evaluate_ID` char(15) NOT NULL,
+  `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `evaluation_mapping`
 --
 
-INSERT INTO `evaluation_mapping` (`course_ID`, `evaluate_ID`) VALUES
-('CS001', 'E001(test)'),
-('CS001', 'E002(test)'),
-('CS002', 'E003(test)');
+INSERT INTO `evaluation_mapping` (`course_ID`, `evaluate_ID`, `id`) VALUES
+('CS001', 'E001(test)', 1),
+('CS001', 'E002(test)', 2),
+('CS002', 'E003(test)', 3);
 
 -- --------------------------------------------------------
 
@@ -462,6 +464,7 @@ ALTER TABLE `appointment_info`
 --
 ALTER TABLE `appointment_mapping`
   ADD PRIMARY KEY (`teacher_ID`,`appointment_ID`),
+  ADD UNIQUE KEY `id` (`id`),
   ADD KEY `appointment_ID` (`appointment_ID`);
 
 --
@@ -489,6 +492,7 @@ ALTER TABLE `evaluation`
 --
 ALTER TABLE `evaluation_mapping`
   ADD PRIMARY KEY (`course_ID`,`evaluate_ID`),
+  ADD UNIQUE KEY `id` (`id`),
   ADD KEY `evaluate_ID` (`evaluate_ID`);
 
 --
@@ -576,10 +580,22 @@ ALTER TABLE `teacher_major`
 --
 
 --
+-- 使用資料表自動遞增(AUTO_INCREMENT) `appointment_mapping`
+--
+ALTER TABLE `appointment_mapping`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- 使用資料表自動遞增(AUTO_INCREMENT) `campus_experience`
 --
 ALTER TABLE `campus_experience`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `evaluation_mapping`
+--
+ALTER TABLE `evaluation_mapping`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `external_experience`
