@@ -42,7 +42,8 @@ body {
 /*網頁大小調整*/
 
 
-/*header 最上塊區 老師照片*/
+
+/*OK header 最上塊區 老師照片*/
 
 header {
     background-color: #fafafa;
@@ -85,7 +86,7 @@ header .conecinfo {
 /*header end*/
 
 
-/*瀏覽列*/
+/*OK 瀏覽列*/
 
 /*色塊區*/
 .navbar {
@@ -141,7 +142,7 @@ header .conecinfo {
     border-radius: 0; /* 移除圓角 */
 }
 
-/*瀏覽列end*/
+/*瀏覽列end */
 
 
 /*Discussion*/
@@ -214,25 +215,10 @@ textarea.form-control {
 /* study.html end*/
 
 
-/* login.html */
-
-/*這裡是針對按鈕的樣式*/
-.btn-primary {
-    background-color: #6B7EA5; /* 修改背景顏色 */
-    border-color: #6B7EA5; /* 修改邊框顏色 */
-    font-weight: bold; /* 加粗文字 */
-}
-
-.btn-primary:hover {
-    background-color: #5A6C8E; /* 懸停時的背景顏色 */
-    border-color: #5A6C8E; /* 懸停時的邊框顏色 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加懸停陰影效果 */
-}
-
-/* login.html end */
 
 
-/*底部的邊*/
+
+/* OK 底部的邊*/
 footer.bg-primary {
     background-color: #6B7EA5 !important; /*rgb(168, 32, 32)*/
 }

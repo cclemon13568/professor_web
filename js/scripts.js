@@ -276,4 +276,64 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
+//教師資訊update串api
+saveBtn.addEventListener('click', () => {
+    const data = {
+        teacher_ID: 'T001',  // ← 記得根據實際登入者或資料夾編號替換
+        teacher_name: document.getElementById('profName').innerText.trim(),
+        teacher_email: document.getElementById('profEmail').innerText.trim(),
+        teacher_intro: document.getElementById('profDept').innerText.trim(),
+        office_location: document.getElementById('profLab').innerText.trim(),
+        office_hours: document.getElementById('profExt').innerText.trim(),
+    };
 
+    // 將資料用 form 格式送出
+    const formData = new FormData();
+    for (let key in data) {
+        formData.append(key, data[key]);
+    }
+
+    fetch('php/api/update_teacher.php', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert("✅ 資料更新成功！");
+            } else {
+                alert("❌ 更新失敗：" + result.message);
+            }
+        })
+        .catch(error => {
+            console.error('錯誤:', error);
+            alert("❌ 發生錯誤，請稍後再試！");
+        });
+
+    // 關閉編輯模式
+    editToggle.click();
+});
+
+// script.js
+function loadTableData() {
+    fetch('.php')
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.querySelector('#data-table tbody');
+            tableBody.innerHTML = ''; // 清空原本資料
+
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+          <td>${row.id}</td>
+          <td>${row.name}</td>
+          <td>${row.email}</td>
+          <td>
+            <button onclick="editRow(${row.id})">編輯</button>
+            <button onclick="deleteRow(${row.id})">刪除</button>
+          </td>
+        `;
+                tableBody.appendChild(tr);
+            });
+        });
+}

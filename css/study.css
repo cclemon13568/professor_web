@@ -99,53 +99,9 @@
 /*瀏覽列end*/
 
 
-/* /////////////////////////////////////////////////////////// */
 
+/* //////////////////////////////////////////////////////////// */
 
-/*header 最上塊區 老師照片*/
-
-header {
-    background-color: #fafafa;
-    display: flex; /* 啟用 Flexbox 佈局 */
-    align-items: center; /* 垂直置中對齊子元素 */
-    justify-content: center; /* 水平置中 header 內的元素 */
-    padding: 20px; /* 可調整 header 的內邊距 */
-    flex-direction: row; /* 預設水平排列 */
-}
-
-header img {
-    max-width: 250px; /* 將圖片的最大寬度設為 300px */
-    height: auto; /* 確保圖片比例不變 */
-    border-radius: 15px; /* 設定鈍角半徑 */
-    margin-right: 50px; /* 圖片和文字之間的間距 */
-}
-
-header .conecinfo p {
-    margin-bottom: 5px;
-}
-
-header .conecinfo a {
-    color: #007bff; /* 參考 Bootstrap 的連結顏色 */
-    text-decoration: none;
-}
-
-header .conecinfo a:hover {
-    text-decoration: underline;
-}
-
-header .conecinfo {
-    text-align: left;
-    line-height: 1.6;
-    /*width: fit-content;           !* 寬度剛好包住內容 *!*/
-    /*margin: 0 auto;               !* 水平置中 *!*/
-    /*text-align: left;             !* 內部文字左對齊 *!*/
-    /*line-height: 1.6;*/
-}
-
-/*header end*/
-
-
-/* /////////////////////////////////////////////////////////// */
 
 /*底部的邊*/
 
@@ -165,4 +121,3 @@ footer.bg-primary {
 
 
 /* /////////////////////////////////////////////////////////// */
-
