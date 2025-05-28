@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： localhost:3306
--- 產生時間： 2025 年 05 月 24 日 08:03
+-- 產生時間： 2025 年 05 月 28 日 06:58
 -- 伺服器版本： 10.11.11-MariaDB-0ubuntu0.24.04.2
 -- PHP 版本： 8.3.6
 
@@ -34,6 +34,7 @@ CREATE TABLE `appointment_info` (
   `status` tinyint(1) DEFAULT NULL,
   `student_ID` char(10) DEFAULT NULL,
   `student_Name` varchar(20) DEFAULT NULL,
+  `student_email` varchar(25) DEFAULT NULL,
   `course_ID` char(15) DEFAULT NULL,
   `problem_description` varchar(150) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -42,10 +43,10 @@ CREATE TABLE `appointment_info` (
 -- 傾印資料表的資料 `appointment_info`
 --
 
-INSERT INTO `appointment_info` (`appointment_ID`, `office_location`, `appoint_Date`, `status`, `student_ID`, `student_Name`, `course_ID`, `problem_description`) VALUES
-('A001(test)', 'E405(test)', '2025-05-21 00:00:00', 0, 'S001(test)', '王小明(test)', 'CS001', '想詢問專題方向與資料蒐集方式(test)'),
-('A002(test)', 'E406(test)', '2025-05-22 00:00:00', 1, 'S002(test)', '林小華(test)', 'CS002', '不確定作業需求內容與評分標準(test)'),
-('A003(test)', 'E405(test)', '2025-05-23 00:00:00', 2, 'S003(test)', '張大同(test)', 'CS001', '想更改期末報告主題(test)');
+INSERT INTO `appointment_info` (`appointment_ID`, `office_location`, `appoint_Date`, `status`, `student_ID`, `student_Name`, `student_email`, `course_ID`, `problem_description`) VALUES
+('A001(test)', 'E405(test)', '2025-05-21 00:00:00', 0, 'S001(test)', '王小明(test)', 'wangxm@example.com', 'CS001', '想詢問專題方向與資料蒐集方式(test)'),
+('A002(test)', 'E406(test)', '2025-05-22 00:00:00', 1, 'S002(test)', '林小華(test)', 'lish@example.com', 'CS002', '不確定作業需求內容與評分標準(test)'),
+('A003(test)', 'E405(test)', '2025-05-23 00:00:00', 2, 'S003(test)', '張大同(test)', 'chendh@example.com', 'CS001', '想更改期末報告主題(test)');
 
 -- --------------------------------------------------------
 
@@ -55,17 +56,18 @@ INSERT INTO `appointment_info` (`appointment_ID`, `office_location`, `appoint_Da
 
 CREATE TABLE `appointment_mapping` (
   `teacher_ID` char(15) NOT NULL,
-  `appointment_ID` char(15) NOT NULL
+  `appointment_ID` char(15) NOT NULL,
+  `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `appointment_mapping`
 --
 
-INSERT INTO `appointment_mapping` (`teacher_ID`, `appointment_ID`) VALUES
-('T002', 'A001(test)'),
-('T002', 'A002(test)'),
-('T002', 'A003(test)');
+INSERT INTO `appointment_mapping` (`teacher_ID`, `appointment_ID`, `id`) VALUES
+('T002', 'A001(test)', 1),
+('T002', 'A002(test)', 2),
+('T002', 'A003(test)', 3);
 
 -- --------------------------------------------------------
 
@@ -75,26 +77,27 @@ INSERT INTO `appointment_mapping` (`teacher_ID`, `appointment_ID`) VALUES
 
 CREATE TABLE `campus_experience` (
   `teacher_ID` char(15) NOT NULL,
-  `experience` varchar(500) NOT NULL
+  `experience` varchar(500) NOT NULL,
+  `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `campus_experience`
 --
 
-INSERT INTO `campus_experience` (`teacher_ID`, `experience`) VALUES
-('T002', '校務企劃組 組長'),
-('T002', '系統維運組 組長'),
-('T002', '資源管理中心 主任'),
-('T002', '資訊工程學系 副教授'),
-('T002', '資訊工程學系 助理教授'),
-('T002', '資訊工程學系 教授'),
-('T002', '資訊工程學系 特聘教授'),
-('T002', '資訊工程學系 系主任'),
-('T002', '資訊教學中心 主任'),
-('T002', '資通安全研究中心 主任'),
-('T002', '資通安全研究中心 副主任'),
-('T002', '逢甲大學帆宣智慧城市5G實驗室 研究員');
+INSERT INTO `campus_experience` (`teacher_ID`, `experience`, `id`) VALUES
+('T002', '校務企劃組 組長', 1),
+('T002', '系統維運組 組長', 2),
+('T002', '資源管理中心 主任', 3),
+('T002', '資訊工程學系 副教授', 4),
+('T002', '資訊工程學系 助理教授', 5),
+('T002', '資訊工程學系 教授', 6),
+('T002', '資訊工程學系 特聘教授', 7),
+('T002', '資訊工程學系 系主任', 8),
+('T002', '資訊教學中心 主任', 9),
+('T002', '資通安全研究中心 主任', 10),
+('T002', '資通安全研究中心 副主任', 11),
+('T002', '逢甲大學帆宣智慧城市5G實驗室 研究員', 12);
 
 -- --------------------------------------------------------
 
@@ -149,17 +152,18 @@ INSERT INTO `evaluation` (`evaluate_ID`, `student_ID`, `course_period`, `evaluat
 
 CREATE TABLE `evaluation_mapping` (
   `course_ID` char(15) NOT NULL,
-  `evaluate_ID` char(15) NOT NULL
+  `evaluate_ID` char(15) NOT NULL,
+  `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `evaluation_mapping`
 --
 
-INSERT INTO `evaluation_mapping` (`course_ID`, `evaluate_ID`) VALUES
-('CS001', 'E001(test)'),
-('CS001', 'E002(test)'),
-('CS002', 'E003(test)');
+INSERT INTO `evaluation_mapping` (`course_ID`, `evaluate_ID`, `id`) VALUES
+('CS001', 'E001(test)', 1),
+('CS001', 'E002(test)', 2),
+('CS002', 'E003(test)', 3);
 
 -- --------------------------------------------------------
 
@@ -169,17 +173,18 @@ INSERT INTO `evaluation_mapping` (`course_ID`, `evaluate_ID`) VALUES
 
 CREATE TABLE `external_experience` (
   `teacher_ID` char(15) NOT NULL,
-  `experience` varchar(500) NOT NULL
+  `experience` varchar(500) NOT NULL,
+  `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `external_experience`
 --
 
-INSERT INTO `external_experience` (`teacher_ID`, `experience`) VALUES
-('T002', '參與政府資安政策白皮書撰寫計畫，提供AI資安應用建議。(test)'),
-('T002', '受邀至國際資安研討會發表「人工智慧與資安未來」專題演講。(test)'),
-('T002', '曾任某科技公司資安顧問，負責企業資安風險評估與防護規劃。(test)');
+INSERT INTO `external_experience` (`teacher_ID`, `experience`, `id`) VALUES
+('T002', '參與政府資安政策白皮書撰寫計畫，提供AI資安應用建議。(test)', 1),
+('T002', '受邀至國際資安研討會發表「人工智慧與資安未來」專題演講。(test)', 2),
+('T002', '曾任某科技公司資安顧問，負責企業資安風險評估與防護規劃。(test)', 3);
 
 -- --------------------------------------------------------
 
@@ -188,7 +193,7 @@ INSERT INTO `external_experience` (`teacher_ID`, `experience`) VALUES
 --
 
 CREATE TABLE `login_info` (
-  `professor_accoutnumber` char(15) NOT NULL,
+  `professor_accountnumber` varchar(20) NOT NULL,
   `professor_password` varchar(50) DEFAULT NULL,
   `verification_code` char(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -197,8 +202,8 @@ CREATE TABLE `login_info` (
 -- 傾印資料表的資料 `login_info`
 --
 
-INSERT INTO `login_info` (`professor_accoutnumber`, `professor_password`, `verification_code`) VALUES
-('T002(test)', 'pass123(test)', 'VER123(test)');
+INSERT INTO `login_info` (`professor_accountnumber`, `professor_password`, `verification_code`) VALUES
+('P101', 'testpass123', 'leejs@fcu.edu.tw');
 
 -- --------------------------------------------------------
 
@@ -207,24 +212,24 @@ INSERT INTO `login_info` (`professor_accoutnumber`, `professor_password`, `verif
 --
 
 CREATE TABLE `message_board` (
-  `question_ID` char(15) NOT NULL,
-  `question_name` varchar(20) DEFAULT NULL,
-  `question_department` varchar(50) DEFAULT NULL,
-  `question` text DEFAULT NULL,
-  `popular_question` text DEFAULT NULL,
-  `respond` text DEFAULT NULL
+  `question_ID` varchar(10) NOT NULL,
+  `question_name` varchar(100) DEFAULT NULL,
+  `question_department` varchar(100) DEFAULT NULL,
+  `question_title` text DEFAULT NULL,
+  `question_content` text DEFAULT NULL,
+  `popular_question` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `message_board`
 --
 
-INSERT INTO `message_board` (`question_ID`, `question_name`, `question_department`, `question`, `popular_question`, `respond`) VALUES
-('Q001(test)', '學生A(test)', '資訊工程系(test)', '請問專題研究課程的報告格式有規定嗎？(test)', '是(test)', '請參考教務處公告的專題報告格式說明文件。(test)'),
-('Q002(test)', '學生B(test)', '資管系(test)', '可以用AI工具協助撰寫報告嗎？(test)', '否(test)', '建議僅作為輔助，內容應為學生親自撰寫。(test)'),
-('Q003(test)', '學生C(test)', '電子系(test)', '請問何時開始選修課加退選？(test)', '是(test)', '加退選時間請見學校行事曆公告。(test)'),
-('Q004(test)', '學生D(test)', '機械系(test)', '學期中如果請假會影響期末成績嗎？(test)', '否(test)', '依課程老師規定為準，建議事先溝通。(test)'),
-('Q005(test)', '學生E(test)', '外文系(test)', '期末報告可以繳交影片代替書面嗎？(test)', '否(test)', '請依照課程大綱中指定的格式繳交。(test)');
+INSERT INTO `message_board` (`question_ID`, `question_name`, `question_department`, `question_title`, `question_content`, `popular_question`) VALUES
+('Q001(test)', '學生A(test)', '資訊工程系(test)', '專題報告格式是否有統一規定？(test)', '我即將開始撰寫專題研究報告，想知道是否有標準的格式可遵循，例如封面格式、字體大小、頁數限制等。(test)', '是(test)'),
+('Q002(test)', '學生B(test)', '資管系(test)', '可以使用AI工具協助撰寫報告嗎？(test)', '我們課堂上要寫期末報告，如果使用像 ChatGPT 的工具產生內容，這樣算違規嗎？可以接受嗎？(test)', '否(test)'),
+('Q003(test)', '學生C(test)', '電子系(test)', '選修課的加退選時間是什麼時候？(test)', '請問下學期選修課的加退選時間如何查詢？是否會公告在學校系統？(test)', '是(test)'),
+('Q004(test)', '學生D(test)', '機械系(test)', '請假會不會影響期末成績？(test)', '因為有家庭因素，這學期可能需請幾次假，想知道是否會對出席率或成績造成影響。(test)', '否(test)'),
+('Q005(test)', '學生E(test)', '外文系(test)', '期末報告能以影片形式繳交嗎？(test)', '我有拍攝一段影片作為報告內容，比傳統書面報告更具體、生動，不知道老師是否接受影片作為繳交形式？(test)', '否(test)');
 
 -- --------------------------------------------------------
 
@@ -339,6 +344,35 @@ INSERT INTO `publication` (`teacher_ID`, `paper_ID`) VALUES
 -- --------------------------------------------------------
 
 --
+-- 資料表結構 `responds`
+--
+
+CREATE TABLE `responds` (
+  `respond_ID` int(11) NOT NULL,
+  `question_ID` varchar(10) DEFAULT NULL,
+  `respond_content` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 傾印資料表的資料 `responds`
+--
+
+INSERT INTO `responds` (`respond_ID`, `question_ID`, `respond_content`, `created_at`) VALUES
+(1, 'Q001(test)', '請參考教務處公告的專題報告格式說明文件。(test)', '2025-05-25 08:29:16'),
+(2, 'Q001(test)', '也可參考前屆學長姐的報告作為參考範例。(test)', '2025-05-25 08:29:16'),
+(3, 'Q002(test)', 'AI 工具僅限用於語言潤飾，內容應為原創。(test)', '2025-05-25 08:29:16'),
+(4, 'Q002(test)', '部分老師可能接受，但需事先取得同意。(test)', '2025-05-25 08:29:16'),
+(5, 'Q003(test)', '加退選時間通常於開學前後公告，請密切注意教務處網站或校務系統。(test)', '2025-05-25 08:29:16'),
+(6, 'Q003(test)', '建議也可詢問導師或系辦確認正確時間。(test)', '2025-05-25 08:29:16'),
+(7, 'Q004(test)', '出席狀況可能影響平時成績，請事先與授課老師溝通請假原因。(test)', '2025-05-25 08:29:16'),
+(8, 'Q004(test)', '有些課程會計算出席率，應避免無故缺課。(test)', '2025-05-25 08:29:16'),
+(9, 'Q005(test)', '依據課綱要求，如未註明可使用影片，則應繳交書面報告。(test)', '2025-05-25 08:29:16'),
+(10, 'Q005(test)', '如需影片輔助，可事先詢問授課老師是否接受。(test)', '2025-05-25 08:29:16');
+
+-- --------------------------------------------------------
+
+--
 -- 資料表結構 `sensitive_words`
 --
 
@@ -378,16 +412,17 @@ INSERT INTO `sensitive_words` (`word_ID`, `word`) VALUES
 
 CREATE TABLE `teacher_degree` (
   `teacher_ID` char(15) NOT NULL,
-  `degree` varchar(100) NOT NULL
+  `degree` varchar(100) NOT NULL,
+  `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `teacher_degree`
 --
 
-INSERT INTO `teacher_degree` (`teacher_ID`, `degree`) VALUES
-('T002', '中正大學 資訊工程學系 博士'),
-('T002', '中正大學 資訊工程學系 學士');
+INSERT INTO `teacher_degree` (`teacher_ID`, `degree`, `id`) VALUES
+('T002', '中正大學 資訊工程學系 博士', 1),
+('T002', '中正大學 資訊工程學系 學士', 2);
 
 -- --------------------------------------------------------
 
@@ -397,20 +432,21 @@ INSERT INTO `teacher_degree` (`teacher_ID`, `degree`) VALUES
 
 CREATE TABLE `teacher_major` (
   `teacher_ID` char(15) NOT NULL,
-  `major` varchar(100) NOT NULL
+  `major` varchar(100) NOT NULL,
+  `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `teacher_major`
 --
 
-INSERT INTO `teacher_major` (`teacher_ID`, `major`) VALUES
-('T002', '區塊鏈技術與應用'),
-('T002', '密碼學'),
-('T002', '數位影像處理'),
-('T002', '無線通訊'),
-('T002', '資訊安全'),
-('T002', '電子商務');
+INSERT INTO `teacher_major` (`teacher_ID`, `major`, `id`) VALUES
+('T002', '區塊鏈技術與應用', 1),
+('T002', '密碼學', 2),
+('T002', '數位影像處理', 3),
+('T002', '無線通訊', 4),
+('T002', '資訊安全', 5),
+('T002', '電子商務', 6);
 
 --
 -- 已傾印資料表的索引
@@ -428,13 +464,15 @@ ALTER TABLE `appointment_info`
 --
 ALTER TABLE `appointment_mapping`
   ADD PRIMARY KEY (`teacher_ID`,`appointment_ID`),
+  ADD UNIQUE KEY `id` (`id`),
   ADD KEY `appointment_ID` (`appointment_ID`);
 
 --
 -- 資料表索引 `campus_experience`
 --
 ALTER TABLE `campus_experience`
-  ADD PRIMARY KEY (`teacher_ID`,`experience`);
+  ADD PRIMARY KEY (`teacher_ID`,`experience`),
+  ADD UNIQUE KEY `id` (`id`);
 
 --
 -- 資料表索引 `course_info`
@@ -454,19 +492,22 @@ ALTER TABLE `evaluation`
 --
 ALTER TABLE `evaluation_mapping`
   ADD PRIMARY KEY (`course_ID`,`evaluate_ID`),
+  ADD UNIQUE KEY `id` (`id`),
   ADD KEY `evaluate_ID` (`evaluate_ID`);
 
 --
 -- 資料表索引 `external_experience`
 --
 ALTER TABLE `external_experience`
-  ADD PRIMARY KEY (`teacher_ID`,`experience`);
+  ADD PRIMARY KEY (`teacher_ID`,`experience`),
+  ADD UNIQUE KEY `id` (`id`);
 
 --
 -- 資料表索引 `login_info`
 --
 ALTER TABLE `login_info`
-  ADD PRIMARY KEY (`professor_accoutnumber`);
+  ADD PRIMARY KEY (`professor_accountnumber`),
+  ADD KEY `fk_verification_email` (`verification_code`);
 
 --
 -- 資料表索引 `message_board`
@@ -491,7 +532,8 @@ ALTER TABLE `participation`
 -- 資料表索引 `personal_info`
 --
 ALTER TABLE `personal_info`
-  ADD PRIMARY KEY (`teacher_ID`);
+  ADD PRIMARY KEY (`teacher_ID`),
+  ADD UNIQUE KEY `unique_teacher_email` (`teacher_email`);
 
 --
 -- 資料表索引 `project_info`
@@ -507,6 +549,13 @@ ALTER TABLE `publication`
   ADD KEY `paper_ID` (`paper_ID`);
 
 --
+-- 資料表索引 `responds`
+--
+ALTER TABLE `responds`
+  ADD PRIMARY KEY (`respond_ID`),
+  ADD KEY `question_ID` (`question_ID`);
+
+--
 -- 資料表索引 `sensitive_words`
 --
 ALTER TABLE `sensitive_words`
@@ -516,23 +565,67 @@ ALTER TABLE `sensitive_words`
 -- 資料表索引 `teacher_degree`
 --
 ALTER TABLE `teacher_degree`
-  ADD PRIMARY KEY (`teacher_ID`,`degree`);
+  ADD PRIMARY KEY (`teacher_ID`,`degree`),
+  ADD UNIQUE KEY `id` (`id`);
 
 --
 -- 資料表索引 `teacher_major`
 --
 ALTER TABLE `teacher_major`
-  ADD PRIMARY KEY (`teacher_ID`,`major`);
+  ADD PRIMARY KEY (`teacher_ID`,`major`),
+  ADD UNIQUE KEY `id` (`id`);
 
 --
 -- 在傾印的資料表使用自動遞增(AUTO_INCREMENT)
 --
 
 --
+-- 使用資料表自動遞增(AUTO_INCREMENT) `appointment_mapping`
+--
+ALTER TABLE `appointment_mapping`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `campus_experience`
+--
+ALTER TABLE `campus_experience`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `evaluation_mapping`
+--
+ALTER TABLE `evaluation_mapping`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `external_experience`
+--
+ALTER TABLE `external_experience`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `responds`
+--
+ALTER TABLE `responds`
+  MODIFY `respond_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
 -- 使用資料表自動遞增(AUTO_INCREMENT) `sensitive_words`
 --
 ALTER TABLE `sensitive_words`
   MODIFY `word_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `teacher_degree`
+--
+ALTER TABLE `teacher_degree`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `teacher_major`
+--
+ALTER TABLE `teacher_major`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- 已傾印資料表的限制式
@@ -577,6 +670,12 @@ ALTER TABLE `external_experience`
   ADD CONSTRAINT `external_experience_ibfk_1` FOREIGN KEY (`teacher_ID`) REFERENCES `personal_info` (`teacher_ID`) ON DELETE CASCADE;
 
 --
+-- 資料表的限制式 `login_info`
+--
+ALTER TABLE `login_info`
+  ADD CONSTRAINT `fk_verification_email` FOREIGN KEY (`verification_code`) REFERENCES `personal_info` (`teacher_email`);
+
+--
 -- 資料表的限制式 `participation`
 --
 ALTER TABLE `participation`
@@ -588,6 +687,12 @@ ALTER TABLE `participation`
 ALTER TABLE `publication`
   ADD CONSTRAINT `publication_ibfk_1` FOREIGN KEY (`teacher_ID`) REFERENCES `personal_info` (`teacher_ID`),
   ADD CONSTRAINT `publication_ibfk_2` FOREIGN KEY (`paper_ID`) REFERENCES `paper_info` (`paper_ID`);
+
+--
+-- 資料表的限制式 `responds`
+--
+ALTER TABLE `responds`
+  ADD CONSTRAINT `responds_ibfk_1` FOREIGN KEY (`question_ID`) REFERENCES `message_board` (`question_ID`);
 
 --
 -- 資料表的限制式 `teacher_degree`

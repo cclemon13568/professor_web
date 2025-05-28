@@ -145,63 +145,62 @@ header .conecinfo {
 /*瀏覽列end */
 
 
-/*Discussion*/
+/*!*Discussion*!*/
 
-/*發表新問題 標題、問題空隙*/
-textarea.form-control {
-    margin-bottom: 10px; /* 調整下方的間距 */
-}
+/*!*發表新問題 標題、問題空隙*!*/
+/*textarea.form-control {*/
+/*    margin-bottom: 10px; !* 調整下方的間距 *!*/
+/*}*/
 
-/* "查看所有回覆"的樣式 */
-.view-replies-link {
-    margin-left: 10px; /* 與回覆按鈕的間距 */
-    text-decoration: none; /* 移除預設的下劃線 */
-    color: #6091f6; /* 藍色連結文字 */
-    cursor: pointer;
-}
+/*!* "查看所有回覆"的樣式 *!*/
+/*.view-replies-link {*/
+/*    margin-left: 10px; !* 與回覆按鈕的間距 *!*/
+/*    text-decoration: none; !* 移除預設的下劃線 *!*/
+/*    color: #6091f6; !* 藍色連結文字 *!*/
+/*    cursor: pointer;*/
+/*}*/
 
-.view-replies-link:hover {
-    color: #6B7EA5;
-}
+/*.view-replies-link:hover {*/
+/*    color: #6B7EA5;*/
+/*}*/
 
-.replies-container .reply {
-    margin-bottom: 10px;
-    padding: 10px;
-    border-left: 2px solid #ccc;
-}
+/*.replies-container .reply {*/
+/*    margin-bottom: 10px;*/
+/*    padding: 10px;*/
+/*    border-left: 2px solid #ccc;*/
+/*}*/
 
-.replies-container .reply small {
-    color: #6c757d;
-}
+/*.replies-container .reply small {*/
+/*    color: #6c757d;*/
+/*}*/
 
-/* 回覆操作按鈕樣式 */
-.reply-actions button.reply-to-reply-btn,
-.reply-actions a.view-nested-replies-link {
-    margin-right: 5px;
-    font-size: 0.9rem; /* 保留原有的字體大小 */
-    color: #6091f6; /* 與 "查看回覆" 相同的顏色 */
-    text-decoration: none; /* 移除預設的下劃線 */
-    cursor: pointer;
-    border: none; /* 移除按鈕邊框 */
-    background: none; /* 移除按鈕背景 */
-    padding: 0; /* 移除內邊距 */
-}
+/*!* 回覆操作按鈕樣式 *!*/
+/*.reply-actions button.reply-to-reply-btn,*/
+/*.reply-actions a.view-nested-replies-link {*/
+/*    margin-right: 5px;*/
+/*    font-size: 0.9rem; !* 保留原有的字體大小 *!*/
+/*    color: #6091f6; !* 與 "查看回覆" 相同的顏色 *!*/
+/*    text-decoration: none; !* 移除預設的下劃線 *!*/
+/*    cursor: pointer;*/
+/*    border: none; !* 移除按鈕邊框 *!*/
+/*    background: none; !* 移除按鈕背景 *!*/
+/*    padding: 0; !* 移除內邊距 *!*/
+/*}*/
 
-.reply-actions button.reply-to-reply-btn:hover,
-.reply-actions a.view-nested-replies-link:hover {
-    color: #6B7EA5; /* 與 "查看回覆:hover" 相同的顏色 */
-    text-decoration: underline; /* 可以添加底線效果 */
-}
+/*.reply-actions button.reply-to-reply-btn:hover,*/
+/*.reply-actions a.view-nested-replies-link:hover {*/
+/*    color: #6B7EA5; !* 與 "查看回覆:hover" 相同的顏色 *!*/
+/*    text-decoration: underline; !* 可以添加底線效果 *!*/
+/*}*/
 
-/* 子回覆容器的縮排 */
-.nested-replies-container {
-    margin-left: 20px;
-    border-left: 1px solid #eee;
-    padding-left: 10px;
-}
+/*!* 子回覆容器的縮排 *!*/
+/*.nested-replies-container {*/
+/*    margin-left: 20px;*/
+/*    border-left: 1px solid #eee;*/
+/*    padding-left: 10px;*/
+/*}*/
 
-
-/*Discussion end*/
+/*!*Discussion end*!*/
 
 
 /*study.html*/
@@ -233,119 +232,122 @@ footer.bg-primary {
 }
 
 
-/* 提問按鈕                                */
-/* Floating Question Button Styles */
-#floating-question-button {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 1000; /* 確保浮在其他元素之上 */
-}
 
-#question-icon-button {
-    background-color: #5FC0D9; /* 您喜歡的背景色 */
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    font-size: 20px;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-#question-icon-button:hover {
-    background-color: #53A7BC;
-}
+/*!* 提問按鈕                                *!*/
+/*!* Floating Question Button Styles *!*/
+/*#floating-question-button {*/
+/*    position: fixed;*/
+/*    bottom: 20px;*/
+/*    left: 20px;*/
+/*    z-index: 1000; !* 確保浮在其他元素之上 *!*/
+/*}*/
 
-/*提問框*/
-#question-modal {
-    position: fixed;
-    bottom: 80px; /* 調整彈出視窗與按鈕的距離 */
-    left: 20px;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    padding: 15px;
-    width: 300px;
-}
+/*#question-icon-button {*/
+/*    background-color: #5FC0D9; !* 您喜歡的背景色 *!*/
+/*    color: white;*/
+/*    border: none;*/
+/*    border-radius: 50%;*/
+/*    width: 50px;*/
+/*    height: 50px;*/
+/*    font-size: 20px;*/
+/*    cursor: pointer;*/
+/*    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*}*/
 
-#question-modal.hidden {
-    display: none;
-}
+/*#question-icon-button:hover {*/
+/*    background-color: #53A7BC;*/
+/*}*/
 
-.modal-content {
-    position: relative;
-}
 
-.modal-content h3 {
-    font-size: 25px;
-}
+/*!*提問框*!*/
+/*#question-modal {*/
+/*    position: fixed;*/
+/*    bottom: 80px; !* 調整彈出視窗與按鈕的距離 *!*/
+/*    left: 20px;*/
+/*    background-color: #f9f9f9;*/
+/*    border: 1px solid #ccc;*/
+/*    border-radius: 6px;*/
+/*    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);*/
+/*    padding: 15px;*/
+/*    width: 300px;*/
+/*}*/
 
-.close-button {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    background-color: #222;
-    color: white;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    cursor: pointer;
-}
+/*#question-modal.hidden {*/
+/*    display: none;*/
+/*}*/
 
-.close-button:hover {
-    background-color: #555;
-}
+/*.modal-content {*/
+/*    position: relative;*/
+/*}*/
 
-#question-textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    box-sizing: border-box;
-    font-size: 16px;
-}
+/*.modal-content h3 {*/
+/*    font-size: 25px;*/
+/*}*/
 
-#send-question-button {
-    /* 您現有的按鈕樣式可能會覆蓋這裡的樣式，請根據需要調整 */
-    background-color: #5FC0D9;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    font-size: 16px;
-    cursor: pointer;
-}
+/*.close-button {*/
+/*    position: absolute;*/
+/*    top: -10px;*/
+/*    right: -10px;*/
+/*    background-color: #222;*/
+/*    color: white;*/
+/*    border-radius: 50%;*/
+/*    width: 20px;*/
+/*    height: 20px;*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    font-size: 16px;*/
+/*    cursor: pointer;*/
+/*}*/
 
-#send-question-button:hover {
-    background-color: #53A7BC;
-}
+/*.close-button:hover {*/
+/*    background-color: #555;*/
+/*}*/
 
-#question-response {
-    border-top: 1px solid #eee;
-    padding-top: 10px;
-}
+/*#question-textarea {*/
+/*    width: 100%;*/
+/*    padding: 10px;*/
+/*    margin-bottom: 10px;*/
+/*    border: 1px solid #ccc;*/
+/*    border-radius: 3px;*/
+/*    box-sizing: border-box;*/
+/*    font-size: 16px;*/
+/*}*/
 
-#question-response p {
-    margin-bottom: 3px;
-}
+/*#send-question-button {*/
+/*    !* 您現有的按鈕樣式可能會覆蓋這裡的樣式，請根據需要調整 *!*/
+/*    background-color: #5FC0D9;*/
+/*    color: white;*/
+/*    border: none;*/
+/*    border-radius: 5px;*/
+/*    padding: 10px 15px;*/
+/*    font-size: 16px;*/
+/*    cursor: pointer;*/
+/*}*/
 
-#question-response.hidden {
-    display: none;
-}
+/*#send-question-button:hover {*/
+/*    background-color: #53A7BC;*/
+/*}*/
 
-#response-text {
-    white-space: pre-wrap; /* 保留換行和空格 */
-}
+/*#question-response {*/
+/*    border-top: 1px solid #eee;*/
+/*    padding-top: 10px;*/
+/*}*/
 
-/*提問框 end*/
+/*#question-response p {*/
+/*    margin-bottom: 3px;*/
+/*}*/
+
+/*#question-response.hidden {*/
+/*    display: none;*/
+/*}*/
+
+/*#response-text {*/
+/*    white-space: pre-wrap; !* 保留換行和空格 *!*/
+/*}*/
+
+/*!*提問框 end*!*/
