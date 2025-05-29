@@ -7,10 +7,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/study.css" rel="stylesheet">
     <link href="css/question_box.css" rel="stylesheet">
+    <link href="css/custom_layout.css" rel="stylesheet">
+
 </head>
 <body>
 
-<!-- Navbar 共用 -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
         <a class="navbar-brand" href="#">教授個人網頁</a>
@@ -32,7 +33,6 @@
     </div>
 </nav>
 
-<!-- Header -->
 <header class="bg-light py-5 text-center">
     <div class="container">
         <h1 class="fw-bold">李榮三 教授的論文</h1>
@@ -40,83 +40,123 @@
     </div>
 </header>
 
-<!-- 論文區塊 -->
-<div class="container my-5">
-    <!-- 前三篇 -->
-    <div>
-        <p class="paper-title"><strong>論文名稱 : ML-based Intrusion Detection System for Precise APT Cyber-clustering (2024-11)</strong> </p>
-        <p class="paper-details"><strong>期刊名稱 : </strong>Computers & Secuirty (SCIE)</p>
-        <p class="paper-details"><strong>作者群 : </strong>  Lee, J.S., Fan, Y.Y., Cheng, C.H, Chew, C. J., and Kuo, C.W.*</p>
-        <div>
+<div class="main-content-wrapper">
+    <div class="column-left">
+        <h2>最新論文</h2>
+        <div class="paper-entry-block paper-item">
+            <p class="paper-title"><strong>論文名稱 : ML-based Intrusion Detection System for Precise APT Cyber-clustering (2024-11)</strong> </p>
+            <p class="paper-details"><strong>期刊名稱 : </strong>Computers & Secuirty (SCIE)</p>
+            <p class="paper-details"><strong>作者群 : </strong>  Lee, J.S., Fan, Y.Y., Cheng, C.H, Chew, C. J., and Kuo, C.W.*</p>
+        </div>
+        <div class="paper-entry-block paper-item">
             <p class="paper-title">
                 <span class="highlight">論文名稱 :</span> Log Preservation in Custody Dual Blockchain with Energy Regime and Obfuscation Shuffle (2024-07)
             </p>
             <p class="paper-details"><strong>期刊名稱 : </strong>IEEE Transactions on Network Science and Engineering (SCIE)</p>
-            <p class="paper-details"><strong>作者群 : </strong>  Chew, C. J., Lee, W.B., Chen, T.H., Lin I.C., and Lee, J.S.*</p>
+            <p class="paper-details"><strong>作者群 : </strong>  Chew, C. J., Lee, W.B., Chen, T.H., Lin I.C., and Lee, J.S.*</p>
         </div>
-    <div>
-        <p class="paper-title">論文標題 3</p>
-        <p class="paper-details">作者：李榮三 教授</p>
-        <p class="paper-details">摘要：這是第三篇論文的摘要內容。</p>
-        <p class="paper-details">發表年份：2021</p>
-    </div>
-
-    <!-- 隱藏更多 -->
-    <div id="morePapers" class="hidden">
-        <div>
-            <p class="paper-title">論文標題 4</p>
+        <div class="paper-entry-block paper-item">
+            <p class="paper-title">論文標題 3</p>
             <p class="paper-details">作者：李榮三 教授</p>
-            <p class="paper-details">摘要：這是第四篇論文的摘要內容。</p>
-            <p class="paper-details">發表年份：2020</p>
+            <p class="paper-details">摘要：這是第三篇論文的摘要內容。</p>
+            <p class="paper-details">發表年份：2021</p>
         </div>
-        <div>
-            <p class="paper-title">論文標題 5</p>
-            <p class="paper-details">作者：李榮三 教授</p>
-            <p class="paper-details">摘要：這是第五篇論文的摘要內容。</p>
-            <p class="paper-details">發表年份：2019</p>
+
+        <div id="morePapers" class="hidden">
+            <div class="paper-entry-block paper-item">
+                <p class="paper-title">論文標題 4</p>
+                <p class="paper-details">作者：李榮三 教授</p>
+                <p class="paper-details">摘要：這是第四篇論文的摘要內容。</p>
+                <p class="paper-details">發表年份：2020</p>
+            </div>
+            <div class="paper-entry-block paper-item">
+                <p class="paper-title">論文標題 5</p>
+                <p class="paper-details">作者：李榮三 教授</p>
+                <p class="paper-details">摘要：這是第五篇論文的摘要內容。</p>
+                <p class="paper-details">發表年份：2019</p>
+            </div>
+            <div class="paper-entry-block paper-item">
+                <p class="paper-title">論文標題 6</p>
+                <p class="paper-details">作者：李榮三 教授</p>
+                <p class="paper-details">摘要：這是第六篇論文的摘要內容。</p>
+                <p class="paper-details">發表年份：2019</p>
+            </div>
+            <div class="paper-entry-block paper-item">
+                <p class="paper-title">論文標題 7</p>
+                <p class="paper-details">作者：李榮三 教授</p>
+                <p class="paper-details">摘要：這是第七篇論文的摘要內容。</p>
+                <p class="paper-details">發表年份：2019</p>
+            </div>
         </div>
+
+        <div class="text-center mt-4 custom-button-wrapper">
+            <button id="showMoreBtn" class="btn btn-secondary">展開更多</button>
+        </div>
+    </div>
+    <div class="column-right">
+        <h2>研究計畫</h2>
+        <div class="ranking-item-block ranking-item">
+            <h3>人工智慧在網路安全中的應用</h3>
+            <p>相關論文: AI-based Threat Detection, Machine Learning for APT</p>
+        </div>
+        <div class="ranking-item-block ranking-item">
+            <h3>區塊鏈技術與資料保護</h3>
+            <p>相關論文: Log Preservation in Custody Dual Blockchain</p>
+        </div>
+        <div class="ranking-item-block ranking-item">
+            <h3>能源系統優化與數據驅動決策</h3>
+            <p>相關論文: Wave Power Plant Location Selection</p>
+        </div>
+
+        <div id="moreResearchProjects" class="hidden">
+            <div class="ranking-item-block ranking-item">
+                <h3>第四個研究項目</h3>
+                <p>描述第四個研究項目的內容。</p>
+            </div>
+            <div class="ranking-item-block ranking-item">
+                <h3>第五個研究項目</h3>
+                <p>描述第五個研究項目的內容。</p>
+            </div>
+            <div class="ranking-item-block ranking-item">
+                <h3>第六個研究項目</h3>
+                <p>描述第六個研究項目的內容。</p>
+            </div>
+        </div>
+
+        <div class="text-center mt-4 custom-button-wrapper">
+            <button id="showMoreResearchBtn" class="btn btn-secondary">展開更多</button>
+        </div>
+    </div>
     </div>
 
-    <div class="text-center mt-4">
-        <button id="showMoreBtn" class="btn btn-secondary">展開更多</button>
-    </div>
-</div>
-
-<!-- Footer 共用 -->
-<footer class="bg-primary text-white text-center py-3">
-    <div class="container">
-        <small>&copy; 2025 李榮三教授 | 國立中正大學</small>
-    </div>
+<footer class="bg-primary text-white text-center py-3 custom-full-width-footer">
+    <small>&copy; 2025 李榮三教授 | 國立中正大學</small>
 </footer>
 
+
+<script src="js/study.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/study.js"></script>
+<script src="js/question_box.js"></script>
 
-
-    <!-- Question button -->
-    <div id="floating-question-button">
-        <!-- 顯示浮動圖示 -->
-        <button id="question-icon-button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-6h2v6zm-1-8c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
-            </svg>
-        </button>
-        <div id="question-modal" class="hidden">
-            <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <h3>提問</h3>
-                <textarea id="question-textarea" placeholder="請輸入您的問題..."></textarea>
-                <button id="send-question-button" class="btn btn-primary">發送</button>
-                <div id="question-response" class="hidden mt-2">
-                    <p><strong>回覆：</strong></p>
-                    <div id="response-text"></div>
-                </div>
+<div id="floating-question-button">
+    <button id="question-icon-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-6h2v6zm-1-8c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
+        </svg>
+    </button>
+    <div id="question-modal" class="hidden">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3>提問</h3>
+            <textarea id="question-textarea" placeholder="請輸入您的問題..."></textarea>
+            <button id="send-question-button" class="btn btn-primary">發送</button>
+            <div id="question-response" class="hidden mt-2">
+                <p><strong>回覆：</strong></p>
+                <div id="response-text"></div>
             </div>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/question_box.js"></script>
+</div>
 
 </body>
 </html>

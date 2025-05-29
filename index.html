@@ -7,6 +7,9 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="css/index.css" rel="stylesheet">
   <link href="css/question_box.css" rel="stylesheet">
+  <link href="css/custom_layout.css" rel="stylesheet">
+
+
 </head>
 <body>
 
@@ -24,8 +27,6 @@
           <li class="nav-item"><a class="nav-link" href="course.html">課程資訊</a></li>
           <li class="nav-item"><a class="nav-link" href="meeting.html">預約面談</a></li>
           <li class="nav-item"><a class="nav-link" href="Discussion.html">討論區</a></li>
-          <li class="nav-item"><a class="nav-link" href="ediview.html">編輯區</a></li>
-
           <li class="nav-item">
             <a class="btn btn-outline-light ms-3" href="login.html">登入</a>
           </li>
@@ -38,54 +39,153 @@
   <header class="bg-light py-5 text-center">
     <img src="images/lee.png" style="max-width: 300px; height: auto;" alt="教授照片">
     <div class="conecinfo">
-      <h1 class="fw-bold">李榮三教授</h1>
+      <h1 class="fw-bold"><strong>李榮三教授</strong></h1>
       <p class="text-muted">國立中正大學 資訊工程系</p>
       <p><strong>聯絡信箱：</strong><a href="https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcSHwCwSVGvxTqVxZNgQTtTGmHzLrjjGjvlljdssXVHWRRsQrfLBQHzNHTmgZWTGdpfBfdPlX" >leejs@fcu.edu.tw</a>
       </p>
       <p><strong>分機號碼 : </strong>#3767</p>
       <p><strong>實驗室 : </strong>資訊安全實驗室</p>
+
     </div>
   </header>
 
-<!--  gpt給我的-->
 
 
 
 
-  <!-- About Section -->
-  <section id="about" class="py-5">
-    <div class="container">
-      <h2 class="mb-4"><strong>專長</strong></h2>
-      <ul>
-        <li>無線通訊Wireless Communications</li>
-        <li>資訊安全Information Security</li>
-        <li>電子商務E-Commerce</li>
-        <li>密碼學Cryptography</li>
-        <li>數位影像處理Image Processing</li>
-        <li>區塊鏈技術與應用Blockchain technique and its application</li>
-      </ul>
+<!-- 學歷與專長雙欄區塊 -->
+<section id="profile-section" class="py-5">
+  <div class="container">
+    <div class="row">
+      <!-- 左欄：學歷 -->
+      <div class="col-md-6 mb-4 mb-md-0">
+        <div id="education" class="h-100 d-flex flex-column justify-content-center">
+          <h3 class="mb-4 text-center"><strong>學歷</strong></h3>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">博士　國立中正大學 資訊工程學系</li>
+            <li class="list-group-item">學士　國立中正大學 資訊工程學系</li>
+          </ul>
+        </div>
+      </div>
+      <!-- 右欄：專長 -->
+      <div class="col-md-6">
+        <div id="specialty" class="h-100 d-flex flex-column justify-content-center">
+          <h3 class="mb-4 text-center"><strong>專長</strong></h3>
+          <div class="specialty-list">
+            <ul>
+              <li class="list-group">資訊安全</li>
+              <li class="list-group">密碼學</li>
+              <li class="list-group">人工智慧應用</li>
+              <li class="list-group">資料庫系統</li>
+              <li class="list-group">網路協定設計</li>
+              <!-- 依實際專長增減 -->
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Research Section -->
-  <section id="research" class="bg-light py-5">
-    <hr style="border: 2px solid #000; margin-bottom: 20px;">
-    <div class="container">
-      <h2 class="mb-4"><strong>學歷</strong></h2>
-      <h4 style="white-space: pre;">學位                              畢業學校                                           科系 </h4>
-    </div>
-  </section>
 
-  <!-- Courses Section -->
-  <section id="courses" class="py-5">
-    <div class="container">
-      <h2 class="mb-4"><strong>開設課程</strong></h2>
-      <ul>
-        <li>資料庫系統（春季班）</li>
-        <li>人工智慧導論（秋季班）</li>
-      </ul>
+
+<!-- Experience Section -->
+<section id="experience" class="py-5">
+  <div class="container">
+    <h3 class="mb-4 text-center"><strong>校內外經歷</strong></h3>
+    <div class="row">
+      <div class="col-md-6">
+        <h5>校內經歷</h5>
+        <ul>
+          <li>資訊工程學系 教授</li>
+          <li>資訊工程學系 系主任</li>
+          <li>資訊安全實驗室 主任</li>
+          <!-- 依實際經歷增減 -->
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <h5>校外經歷</h5>
+        <ul>
+          <li>參與政府資安政策白皮書撰寫計畫</li>
+          <li>國際資安研討會專題演講</li>
+          <li>科技公司資安顧問</li>
+          <!-- 依實際經歷增減 -->
+        </ul>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
+
+
+<section id="timetable" class="py-5 bg-light">
+    <div class="container">
+        <h3 class="mb-4 text-center"><strong>課程表</strong></h3> <div class="table-responsive"> <table class="table table-hover schedule-table">
+                <thead>
+                    <tr>
+                        <th></th> <th>星期一</th>
+                        <th>星期二</th>
+                        <th>星期三</th>
+                        <th>星期四</th>
+                        <th>星期五</th>
+                        <th>星期六</th>
+                        <th>星期日</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>第一節<br>08:10~09:00</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr class="highlight-row"> <td>第二節<br>09:10~10:00</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>網路安全實務與社<br>會<br>資訊四合</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>第三節<br>10:10~11:00</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>網路安全實務與社<br>會<br>資訊四合</td>
+                        <td>-</td>
+                    </tr>
+                    <tr class="highlight-row">
+                        <td>第四節<br>11:10~12:00</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>網路安全實務與社<br>會<br>資訊四合</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>第五節<br>12:10~13:00</td>
+                        <td>-</td>
+                        <td>專題研究(一)<br>資訊三丁<br>專題研究(一)<br>資訊三丙<br>專題研究(一)</td>
+                        <td>專題研究(一)<br>資訊三丁<br>專題研究(一)<br>資訊三丙<br>專題研究(一)</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</section>
 
 
 
@@ -121,9 +221,6 @@
       </div>
     </div>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/question_box.js"></script>
 
 </body>
 </html>
