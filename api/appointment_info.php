@@ -83,6 +83,7 @@ switch ($method) {
             $data['status'],
             $data['student_ID'],
             $data['student_Name'],
+            $data['student_email'],
             $data['course_ID'],
             $data['problem_description']
         )) {
@@ -93,18 +94,19 @@ switch ($method) {
 
         $stmt = mysqli_prepare($conn, "
             INSERT INTO appointment_info 
-            (appointment_ID, office_location, appoint_Date, status, student_ID, student_Name, course_ID, problem_description)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            (appointment_ID, office_location, appoint_Date, status, student_ID, student_Name, student_email, course_ID, problem_description)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
         mysqli_stmt_bind_param(
             $stmt,
-            "sssissss",
+            "sssisssss",
             $data['appointment_ID'],
             $data['office_location'],
             $data['appoint_Date'],
             $data['status'],
             $data['student_ID'],
             $data['student_Name'],
+            $data['student_email'],
             $data['course_ID'],
             $data['problem_description']
         );
@@ -169,6 +171,7 @@ switch ($method) {
             "status" => "i",
             "student_ID" => "s",
             "student_Name" => "s",
+            "student_email" => "s",
             "course_ID" => "s",
             "problem_description" => "s"
         ];
