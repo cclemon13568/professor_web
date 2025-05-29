@@ -8,7 +8,7 @@
 }
 
 #question-icon-button {
-    background-color: #5FC0D9; /* 您喜歡的背景色 */
+    background-color: #7ab8cc; /* 您喜歡的背景色 */
     color: white;
     border: none;
     border-radius: 50%;
@@ -84,7 +84,7 @@
 
 #send-question-button {
     /* 您現有的按鈕樣式可能會覆蓋這裡的樣式，請根據需要調整 */
-    background-color: #5FC0D9;
+    background-color: #7ab8cc;
     color: white;
     border: none;
     border-radius: 5px;

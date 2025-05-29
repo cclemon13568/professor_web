@@ -33,7 +33,7 @@
     border-radius: 5px;
 }
 
-
+/* 按鈕樣式 */
 .navbar .btn-outline-light:hover {
     background-color: rgba(255, 255, 255, 0.1); /* 輕微亮一點 */
     color: rgba(255, 255, 255, 0.85); /* 提高文字亮度 */
@@ -69,13 +69,25 @@ footer.bg-primary {
     line-height: 2;
 }
 
+/* 統一表格單元格樣式 */
+.schedule-table th,
 .schedule-table td {
     text-align: center;
     vertical-align: middle;
     padding: 10px;
-    cursor: pointer;
     border: 1px solid #ccc;
+    height: 80px;     /* 統一設定高度 */
+    min-height: 80px; /* 確保最小高度，防止內容撐開 */
+    box-sizing: border-box; /* 確保內邊距和邊框計算在高度內 */
 }
+
+/* 設定時間列的寬度 */
+.schedule-table td:first-child,
+.schedule-table th:first-child {
+    width: 120px; /* 調整為您需要的固定寬度 */
+    min-width: 120px; /* 確保最小寬度，防止內容撐開 */
+}
+
 
 .available {
     background-color: #fff;
@@ -102,3 +114,129 @@ footer.bg-primary {
     color: #000;
     display: block;
 }
+
+
+/* 教授可修改 */
+
+.appointment-slot {
+    cursor: pointer;        /* 讓學生模式下點擊預約有指針效果 */
+    transition: background-color 0.3s ease; /* 平滑過渡效果 */
+    position: relative;     /* 讓子元素可以絕對定位 */
+}
+
+/* 學生視圖文字的基礎樣式 */
+.appointment-slot .student-view-text {
+    display: block; /* 預設顯示 */
+    font-weight: bold;
+    /* 顏色會由 data-status 決定 */
+}
+
+/* 教授操作按鈕容器 - 預設隱藏 */
+.appointment-slot .professor-actions{
+    display: none; /* 預設隱藏 */
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    flex-wrap: wrap; /* 換行以應對小螢幕 */
+    gap: 5px; /* 按鈕間距 */
+    height: 100%; /* 讓容器佔滿單元格高度 */
+    position: absolute; /* 相對於父元素定位 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 5px;
+}
+
+/* 教授模式下，當時段為 'booked' 狀態時，顯示教授操作按鈕 */
+body.professor-mode .appointment-slot[data-status="booked"] .professor-actions {
+    display: flex; /* 顯示接受/拒絕按鈕 */
+}
+
+/* 教授模式下，當時段為 'booked' 狀態時，隱藏學生文字 */
+body.professor-mode .appointment-slot[data-status="booked"] .student-view-text {
+    display: none;
+}
+
+/* 狀態顏色 */
+/* 白色區塊為可預約時段 */
+.appointment-slot[data-status="available"] {
+    background-color: #FFFFFF; /* 白色 */
+    color: #007bff; /* 預設藍色文字 */
+}
+
+/* 灰色區塊為教授已排定行程，無法預約 */
+.appointment-slot[data-status="unavailable"] {
+    background-color: #f0f0f0; /* 淺灰色 */
+    color: #6c757d; /* 灰色文字 */
+    /* 學生模式下不可點擊，教授模式下可以 */
+    cursor: not-allowed;
+}
+
+/* 已預約時段 (例如學生預約後或教授接受後) */
+.appointment-slot[data-status="booked"] {
+    background-color: #e2f0d9; /* 淺綠色或您選擇的其他顏色 */
+    color: #28a745; /* 綠色文字 */
+    /* 學生模式下不可點擊，教授模式下可以 */
+    cursor: not-allowed;
+}
+
+/* 教授模式下選取時段的樣式 */
+body.professor-mode .appointment-slot.selected {
+    background-color: #FFFFFF !important; /* 選取時強制為白色 */
+    border: 3px solid #007bff;            /* 粗藍色邊框 */
+}
+
+/* 教授模式下的控制區塊 */
+.professor-mode-controls {
+    display: none; /* 預設隱藏 */
+}
+
+body.professor-mode .professor-mode-controls {
+    display: flex !important; /* 教授模式下顯示 */
+}
+
+/* 在教授模式下，所有 appointment-slot 都應該是可點擊的 */
+body.professor-mode .appointment-slot {
+    cursor: pointer !important; /* 強制手型指針 */
+}
+
+/* 新增：教授模式下，當時段為 'booked' 狀態時，顯示教授操作按鈕 */
+body.professor-mode .appointment-slot[data-status="booked"] .professor-actions {
+    display: flex; /* 顯示接受/拒絕按鈕 */
+}
+
+/* 新增：教授模式下，當時段為 'booked' 狀態時，隱藏學生文字 */
+body.professor-mode .appointment-slot[data-status="booked"] .student-view-text {
+    display: none;
+}
+
+
+/* 調整按鈕大小 */
+.professor-actions .btn{
+    font-size: 0.8rem;
+    padding: 0.2rem 0.5rem;
+    white-space: nowrap; /* 防止文字換行 */
+}
+
+/* 注意事項列表樣式 */
+.schedule-note ul {
+    list-style-type: disc; /* 使用圓點列表 */
+    padding-left: 20px; /* 左側內邊距 */
+}
+.schedule-note li {
+    margin-bottom: 8px;
+    color: #555;
+}
+
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+    .schedule-table th, .schedule-table td {
+        font-size: 0.9rem; /* 縮小字體 */
+        padding: 0.5rem; /* 調整內邊距 */
+    }
+    .professor-actions .btn {
+        font-size: 0.7rem;
+        padding: 0.15rem 0.4rem;
+    }
+}
+/* 教授可修改 end */
