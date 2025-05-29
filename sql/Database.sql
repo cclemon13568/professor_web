@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： localhost:3306
--- 產生時間： 2025 年 05 月 28 日 06:58
+-- 產生時間： 2025 年 05 月 29 日 16:28
 -- 伺服器版本： 10.11.11-MariaDB-0ubuntu0.24.04.2
 -- PHP 版本： 8.3.6
 
@@ -195,15 +195,16 @@ INSERT INTO `external_experience` (`teacher_ID`, `experience`, `id`) VALUES
 CREATE TABLE `login_info` (
   `professor_accountnumber` varchar(20) NOT NULL,
   `professor_password` varchar(50) DEFAULT NULL,
-  `verification_code` char(20) DEFAULT NULL
+  `verification_code` char(20) DEFAULT NULL,
+  `email` char(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `login_info`
 --
 
-INSERT INTO `login_info` (`professor_accountnumber`, `professor_password`, `verification_code`) VALUES
-('P101', 'testpass123', 'leejs@fcu.edu.tw');
+INSERT INTO `login_info` (`professor_accountnumber`, `professor_password`, `verification_code`, `email`) VALUES
+('P101', 'testpass123', NULL, 'leejs@fcu.edu.tw');
 
 -- --------------------------------------------------------
 
@@ -507,7 +508,8 @@ ALTER TABLE `external_experience`
 --
 ALTER TABLE `login_info`
   ADD PRIMARY KEY (`professor_accountnumber`),
-  ADD KEY `fk_verification_email` (`verification_code`);
+  ADD KEY `fk_verification_email` (`verification_code`),
+  ADD KEY `fk_login_email` (`email`);
 
 --
 -- 資料表索引 `message_board`
@@ -533,7 +535,8 @@ ALTER TABLE `participation`
 --
 ALTER TABLE `personal_info`
   ADD PRIMARY KEY (`teacher_ID`),
-  ADD UNIQUE KEY `unique_teacher_email` (`teacher_email`);
+  ADD UNIQUE KEY `unique_teacher_email` (`teacher_email`),
+  ADD UNIQUE KEY `teacher_email` (`teacher_email`);
 
 --
 -- 資料表索引 `project_info`
@@ -673,6 +676,7 @@ ALTER TABLE `external_experience`
 -- 資料表的限制式 `login_info`
 --
 ALTER TABLE `login_info`
+  ADD CONSTRAINT `fk_login_email` FOREIGN KEY (`email`) REFERENCES `personal_info` (`teacher_email`),
   ADD CONSTRAINT `fk_verification_email` FOREIGN KEY (`verification_code`) REFERENCES `personal_info` (`teacher_email`);
 
 --
