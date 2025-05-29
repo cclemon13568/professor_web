@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： localhost:3306
--- 產生時間： 2025 年 05 月 29 日 16:28
+-- 產生時間： 2025 年 05 月 29 日 17:40
 -- 伺服器版本： 10.11.11-MariaDB-0ubuntu0.24.04.2
 -- PHP 版本： 8.3.6
 
@@ -352,24 +352,34 @@ CREATE TABLE `responds` (
   `respond_ID` int(11) NOT NULL,
   `question_ID` varchar(10) DEFAULT NULL,
   `respond_content` text DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp()
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `parent_respond_ID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `responds`
 --
 
-INSERT INTO `responds` (`respond_ID`, `question_ID`, `respond_content`, `created_at`) VALUES
-(1, 'Q001(test)', '請參考教務處公告的專題報告格式說明文件。(test)', '2025-05-25 08:29:16'),
-(2, 'Q001(test)', '也可參考前屆學長姐的報告作為參考範例。(test)', '2025-05-25 08:29:16'),
-(3, 'Q002(test)', 'AI 工具僅限用於語言潤飾，內容應為原創。(test)', '2025-05-25 08:29:16'),
-(4, 'Q002(test)', '部分老師可能接受，但需事先取得同意。(test)', '2025-05-25 08:29:16'),
-(5, 'Q003(test)', '加退選時間通常於開學前後公告，請密切注意教務處網站或校務系統。(test)', '2025-05-25 08:29:16'),
-(6, 'Q003(test)', '建議也可詢問導師或系辦確認正確時間。(test)', '2025-05-25 08:29:16'),
-(7, 'Q004(test)', '出席狀況可能影響平時成績，請事先與授課老師溝通請假原因。(test)', '2025-05-25 08:29:16'),
-(8, 'Q004(test)', '有些課程會計算出席率，應避免無故缺課。(test)', '2025-05-25 08:29:16'),
-(9, 'Q005(test)', '依據課綱要求，如未註明可使用影片，則應繳交書面報告。(test)', '2025-05-25 08:29:16'),
-(10, 'Q005(test)', '如需影片輔助，可事先詢問授課老師是否接受。(test)', '2025-05-25 08:29:16');
+INSERT INTO `responds` (`respond_ID`, `question_ID`, `respond_content`, `created_at`, `parent_respond_ID`) VALUES
+(1, 'Q001(test)', '請參考教務處公告的專題報告格式說明文件。(test)', '2025-05-25 08:29:16', NULL),
+(2, 'Q001(test)', '也可參考前屆學長姐的報告作為參考範例。(test)', '2025-05-25 08:29:16', NULL),
+(3, 'Q002(test)', 'AI 工具僅限用於語言潤飾，內容應為原創。(test)', '2025-05-25 08:29:16', NULL),
+(4, 'Q002(test)', '部分老師可能接受，但需事先取得同意。(test)', '2025-05-25 08:29:16', NULL),
+(5, 'Q003(test)', '加退選時間通常於開學前後公告，請密切注意教務處網站或校務系統。(test)', '2025-05-25 08:29:16', NULL),
+(6, 'Q003(test)', '建議也可詢問導師或系辦確認正確時間。(test)', '2025-05-25 08:29:16', NULL),
+(7, 'Q004(test)', '出席狀況可能影響平時成績，請事先與授課老師溝通請假原因。(test)', '2025-05-25 08:29:16', NULL),
+(8, 'Q004(test)', '有些課程會計算出席率，應避免無故缺課。(test)', '2025-05-25 08:29:16', NULL),
+(9, 'Q005(test)', '依據課綱要求，如未註明可使用影片，則應繳交書面報告。(test)', '2025-05-25 08:29:16', NULL),
+(10, 'Q005(test)', '如需影片輔助，可事先詢問授課老師是否接受。(test)', '2025-05-25 08:29:16', NULL),
+(11, 'Q001(test)', '哪裡可以找到前屆的報告範例呢？(test)', '2025-05-30 04:00:00', 2),
+(12, 'Q002(test)', '所以老師如果允許的話可以用 AI 幫寫嗎？(test)', '2025-05-30 04:01:00', 4),
+(13, 'Q003(test)', '開學前會寄 email 通知嗎？(test)', '2025-05-30 04:02:00', 5),
+(14, 'Q004(test)', '請問只請假一次還會影響成績嗎？(test)', '2025-05-30 04:03:00', 7),
+(15, 'Q005(test)', '影片報告需要加字幕嗎？(test)', '2025-05-30 04:04:00', 10),
+(16, 'Q001(test)', '請問公告的格式可以用繁體中文嗎？(test)', '2025-05-30 04:05:00', 1),
+(17, 'Q001(test)', '我去年就是照教務處的格式交的，沒問題(test)', '2025-05-30 04:06:00', 1),
+(18, 'Q004(test)', '缺課三次老師就會扣分，建議還是要請假(test)', '2025-05-30 04:07:00', 8),
+(19, 'Q005(test)', '我有用影片交過一次，但老師說要附文字稿(test)', '2025-05-30 04:08:00', 9);
 
 -- --------------------------------------------------------
 
@@ -610,7 +620,7 @@ ALTER TABLE `external_experience`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `responds`
 --
 ALTER TABLE `responds`
-  MODIFY `respond_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `respond_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `sensitive_words`
@@ -691,12 +701,6 @@ ALTER TABLE `participation`
 ALTER TABLE `publication`
   ADD CONSTRAINT `publication_ibfk_1` FOREIGN KEY (`teacher_ID`) REFERENCES `personal_info` (`teacher_ID`),
   ADD CONSTRAINT `publication_ibfk_2` FOREIGN KEY (`paper_ID`) REFERENCES `paper_info` (`paper_ID`);
-
---
--- 資料表的限制式 `responds`
---
-ALTER TABLE `responds`
-  ADD CONSTRAINT `responds_ibfk_1` FOREIGN KEY (`question_ID`) REFERENCES `message_board` (`question_ID`);
 
 --
 -- 資料表的限制式 `teacher_degree`
