@@ -2,17 +2,15 @@
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
-// 取得 id（從 POST 傳入）
-$ID = $_POST['id'] ?? '';
-if (!is_numeric($ID)) {
+$id = $_POST['id'] ?? '';
+if (!is_numeric($id)) {
     echo json_encode(['success' => false, 'message' => '缺少或無效的 id']);
     exit;
 }
-$ID = (int)$ID; // 強制轉為整數
+$id = (int)$id;
 
-// 預備語句進行刪除
-$stmt = $conn->prepare("DELETE FROM teacher_major WHERE id = ?");
-$stmt->bind_param("i", $ID); // ✅ 使用整數型別綁定
+$stmt = $conn->prepare("DELETE FROM teacher_degree WHERE id = ?");
+$stmt->bind_param("i", $id);
 
 if ($stmt->execute()) {
     if ($stmt->affected_rows > 0) {
