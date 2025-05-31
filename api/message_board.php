@@ -17,14 +17,16 @@ switch ($method) {
             $stmt->execute();
             $result = $stmt->get_result();
 
-            if ($result->num_rows > 0) {
-                echo json_encode($result->fetch_all(MYSQLI_ASSOC));
+            if ($row = $result->fetch_assoc()) { // 使用 fetch_assoc() 而不是 fetch_all()
+                echo json_encode($row); // 直接輸出單一物件
             } else {
+                http_response_code(404); // 找不到資料應該是 404
                 echo json_encode([
                     'success' => false,
                     'message' => "找不到 question_ID={$question_ID} 的問題"
                 ]);
             }
+            $stmt->close(); // 關閉 statement
         } else {
             // 查詢所有留言
             $sql = "SELECT * FROM message_board ORDER BY question_ID ASC";
@@ -38,14 +40,19 @@ switch ($method) {
         // 發布新留言
         $data = json_decode(file_get_contents("php://input"), true);
 
-        // 檢查 question_ID 是否存在與非空
+        // 自動產生 question_ID（若未提供）
         if (!isset($data['question_ID']) || empty($data['question_ID'])) {
-            http_response_code(400);
-            echo json_encode([
-                'success' => false,
-                'message' => 'question_ID 不可為空'
-            ]);
-            exit;
+            $result = $conn->query("SELECT question_ID FROM message_board ORDER BY question_ID DESC LIMIT 1");
+
+            if ($result && $result->num_rows > 0) {
+                $last_id = $result->fetch_assoc()['question_ID'];
+                $num = (int)substr($last_id, 1);
+                $new_id = 'Q' . str_pad($num + 1, 3, '0', STR_PAD_LEFT);
+            } else {
+                $new_id = 'Q001';
+            }
+
+            $data['question_ID'] = $new_id;
         }
 
         // 檢查必要欄位是否存在

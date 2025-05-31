@@ -7,8 +7,14 @@ if (!$conn) {
     echo json_encode(['error' => 'Database connection failed']);
     exit;
 }
-
+require_once('words.php');
 $method = $_SERVER['REQUEST_METHOD'];
+
+$statusMap = [
+    0 => '預約失敗',
+    1 => '預約成功',
+    2 => '審查中'
+];
 
 switch ($method) {
     case 'GET':
@@ -25,6 +31,9 @@ switch ($method) {
                 echo json_encode(['error' => '找不到資料']);
                 exit;
             }
+
+            $appointment['status_display'] = $statusMap[$appointment['status']] ?? '未知狀態';
+
             // 取得所有對應的 mapping
             $stmt2 = mysqli_prepare($conn, "SELECT * FROM appointment_mapping WHERE appointment_ID = ?");
             mysqli_stmt_bind_param($stmt2, "s", $appointment_ID);
@@ -43,6 +52,7 @@ switch ($method) {
             $appointments = [];
             $result = mysqli_query($conn, "SELECT * FROM appointment_info");
             while ($row = mysqli_fetch_assoc($result)) {
+                $row['status_display'] = $statusMap[$row['status']] ?? '未知狀態';
                 $appointments[$row['appointment_ID']] = $row;
             }
             if (!empty($appointments)) {
@@ -66,37 +76,126 @@ switch ($method) {
         // 新增預約
         $data = json_decode(file_get_contents("php://input"), true);
 
-        if (empty($data['appointment_ID'])) {
-            http_response_code(400);
+        // 檢查必要欄位是否存在且不為空
+        $required_fields = [
+            'office_location',
+            'appoint_Date',
+            'student_ID',
+            'student_Name',
+            'student_email',
+            'course_ID',
+            'problem_description'
+        ];
+        $missing_fields = [];
+        foreach ($required_fields as $field) {
+            if (!isset($data[$field]) || (is_string($data[$field]) && trim($data[$field]) === '')) {
+                $missing_fields[] = $field;
+            }
+        }
+
+        if (!empty($missing_fields)) {
+            http_response_code(400); // Bad Request
             echo json_encode([
                 'success' => false,
-                'message' => 'appointment_ID 不可為空'
+                'message' => '缺少或欄位為空：' . implode(', ', $missing_fields)
             ]);
             exit;
         }
-        
-        // 欄位檢查
-        if (!isset(
-            $data['appointment_ID'],
-            $data['office_location'],
-            $data['appoint_Date'],
-            $data['status'],
-            $data['student_ID'],
-            $data['student_Name'],
-            $data['student_email'],
-            $data['course_ID'],
-            $data['problem_description']
-        )) {
+
+        if (!isset($data['status']) || $data['status'] === '') {
+            $data['status'] = 2;
+        } else {
+            // 確保 status 是整數，以防從前端傳來的是字串
+            $data['status'] = (int)$data['status'];
+        }
+
+        // 自動生成 appointment_ID (如果沒有提供)
+        $newID = '';
+        if (empty($data['appointment_ID'])) {
+            $result = mysqli_query($conn, "SELECT appointment_ID FROM appointment_info ORDER BY appointment_ID DESC LIMIT 1");
+            if ($result && $row = mysqli_fetch_assoc($result)) {
+                $lastID = $row['appointment_ID'];
+                $num = intval(substr($lastID, 1)) + 1;
+                $newID = 'A' . str_pad($num, 3, '0', STR_PAD_LEFT);
+            } else {
+                $newID = 'A001';
+            }
+        } else {
+            // 如果提供了 appointment_ID，則檢查是否已存在
+            $newID = $data['appointment_ID'];
+            $checkStmt = mysqli_prepare($conn, "SELECT COUNT(*) FROM appointment_info WHERE appointment_ID = ?");
+            if (!$checkStmt) {
+                http_response_code(500);
+                echo json_encode(['success' => false, 'message' => '資料庫查詢準備失敗', 'error' => mysqli_error($conn)]);
+                exit;
+            }
+            mysqli_stmt_bind_param($checkStmt, "s", $newID);
+            mysqli_stmt_execute($checkStmt);
+            mysqli_stmt_bind_result($checkStmt, $count);
+            mysqli_stmt_fetch($checkStmt);
+            mysqli_stmt_close($checkStmt);
+
+            if ($count > 0) {
+                http_response_code(409); // Conflict
+                echo json_encode(['success' => false, 'message' => "appointment_ID: {$newID} 已存在，請勿重複新增"]);
+                exit;
+            }
+        }
+        $data['appointment_ID'] = $newID;
+
+         // 敏感字檢查
+        $combinedText = $data['appointment_ID'] . ' ' . $data['problem_description'];
+        $violations = checkSensitiveWords($conn, $combinedText);
+
+        if (!empty($violations)) {
             http_response_code(400);
-            echo json_encode(['success' => false, 'message' => '缺少必要欄位']);
+            echo json_encode([
+                'status' => 'false',
+                'message' => '問題描述中含有敏感字詞請檢查：' . implode(', ', $violations),
+                'matched_words' => $violations
+            ]);
             exit;
         }
 
+
+        // 檢查 course_ID 是否存在
+        $course_ID = $data['course_ID'];
+        $checkCourseStmt = mysqli_prepare($conn, "SELECT COUNT(*) FROM course_info WHERE course_ID = ?");
+        if (!$checkCourseStmt) {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => '資料庫查詢準備失敗', 'error' => mysqli_error($conn)]);
+            exit;
+        }
+        mysqli_stmt_bind_param($checkCourseStmt, "s", $course_ID);
+        mysqli_stmt_execute($checkCourseStmt);
+        mysqli_stmt_bind_result($checkCourseStmt, $course_count);
+        mysqli_stmt_fetch($checkCourseStmt);
+        mysqli_stmt_close($checkCourseStmt);
+
+        if ($course_count == 0) {
+            http_response_code(404); // Not Found
+            echo json_encode([
+                'success' => false,
+                'message' => "課程 ID: {$course_ID} 不存在，請檢查課程資料。"
+            ]);
+            exit;
+        }
+
+
+        // 開始資料庫事務 (如果需要多個操作的原子性)
+        mysqli_begin_transaction($conn);
+
         $stmt = mysqli_prepare($conn, "
-            INSERT INTO appointment_info 
+            INSERT INTO appointment_info
             (appointment_ID, office_location, appoint_Date, status, student_ID, student_Name, student_email, course_ID, problem_description)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
+        if (!$stmt) {
+            mysqli_rollback($conn); // 準備失敗也回滾
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => '資料庫插入準備失敗', 'error' => mysqli_error($conn)]);
+            exit;
+        }
         mysqli_stmt_bind_param(
             $stmt,
             "sssisssss",
@@ -112,16 +211,38 @@ switch ($method) {
         );
 
         if (mysqli_stmt_execute($stmt)) {
-            // 成功回傳
+            mysqli_stmt_close($stmt);
+
+            // 新增對應 mapping，teacher_ID 固定為 T002
+            $teacher_ID = 'T002'; // 固定值或從 $data 中獲取
+            $stmtMap = mysqli_prepare($conn, "INSERT INTO appointment_mapping (appointment_ID, teacher_ID) VALUES (?, ?)");
+            if (!$stmtMap) {
+                mysqli_rollback($conn); // 準備失敗也回滾
+                http_response_code(500);
+                echo json_encode(['success' => false, 'message' => '資料庫映射插入準備失敗', 'error' => mysqli_error($conn)]);
+                exit;
+            }
+            mysqli_stmt_bind_param($stmtMap, "ss", $data['appointment_ID'], $teacher_ID);
+            if (!mysqli_stmt_execute($stmtMap)) {
+                mysqli_rollback($conn); // 執行失敗回滾
+                http_response_code(500);
+                echo json_encode(['success' => false, 'message' => '預約映射新增失敗', 'error' => mysqli_error($conn)]);
+                exit;
+            }
+            mysqli_stmt_close($stmtMap);
+
+            mysqli_commit($conn); // 所有操作成功，提交事務
             echo json_encode([
                 'success' => true,
-                'message' => '新增成功'
+                'message' => '預約新增成功',
+                'appointment_ID' => $data['appointment_ID'] // 返回新增的ID
             ]);
         } else {
+            mysqli_rollback($conn); // 執行失敗回滾
             http_response_code(500);
             echo json_encode([
                 'success' => false,
-                'message' => '資料庫新增失敗',
+                'message' => '預約主資料新增失敗',
                 'error' => mysqli_error($conn)
             ]);
         }
@@ -131,15 +252,19 @@ switch ($method) {
     case 'PUT':
         $data = json_decode(file_get_contents("php://input"), true);
 
-        // 情況一：appointment_ID 不可為空
-        if (!$data || empty($data['appointment_ID'])) {
-            http_response_code(400);
-            echo json_encode([
-                "success" => false,
-                "message" => "appointment_ID 不可為空"
-            ]);
-            exit;
+        if (empty($data['appointment_ID'])) {
+        // 自動生成 appointment_ID
+        $result = mysqli_query($conn, "SELECT appointment_ID FROM appointment_info ORDER BY appointment_ID DESC LIMIT 1");
+        if ($result && $row = mysqli_fetch_assoc($result)) {
+            // 取出最大ID的數字部分，假設格式是 A001、A002
+            $lastID = $row['appointment_ID'];
+            $num = intval(substr($lastID, 1)) + 1;
+            $newID = 'A' . str_pad($num, 3, '0', STR_PAD_LEFT);
+        } else {
+            $newID = 'A001'; // 如果表中無資料，從A001開始
         }
+        $data['appointment_ID'] = $newID;
+    }
 
         $appointment_ID = $data['appointment_ID'];
 
@@ -180,7 +305,11 @@ switch ($method) {
             if (isset($data[$field])) {
                 $fields[] = "$field = ?";
                 $types .= $type;
-                $values[] = $data[$field];
+                if ($field === 'status') {
+                    $values[] = (int)$data[$field];
+                } else {
+                    $values[] = $data[$field];
+                }
             }
         }
 
