@@ -1,61 +1,51 @@
 <?php
-session_start(); // 開啟 session
-include('../config/db.php'); // 連線資料庫
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+session_start();
+include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
-// 接收帳號與密碼
+// 接收 POST 登入資料
 $username = $_POST['username'] ?? '';
 $password = $_POST['password'] ?? '';
 
+// 欄位驗證
 if (empty($username) || empty($password)) {
-    header("Location: login.html?error=empty");
+    echo json_encode(["success" => false, "message" => "帳號與密碼為必填"]);
     exit;
 }
 
-// 取得使用者資料
-$sql = "SELECT * FROM login_info WHERE professor_accoutnumber = ?";
+// 查詢資料庫
+$sql = "SELECT * FROM login_info WHERE professor_accountnumber = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// 若有符合的帳號
 if ($result->num_rows === 1) {
     $user = $result->fetch_assoc();
 
-    // ✅ 比對密碼（目前為明碼比對）
     if ($password === $user['professor_password']) {
+        $_SESSION['user'] = $user['professor_accountnumber'];
 
-        // 產生隨機驗證碼
-        $verification_code = strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 6));
+        $teacher_id = $user['teacher_ID']; // ✅ 從資料表中取得 teacher_ID
 
-        // 將驗證碼更新到資料庫
-        $update_sql = "UPDATE login_info SET verification_code = ? WHERE professor_accoutnumber = ?";
-        $update_stmt = $conn->prepare($update_sql);
-        $update_stmt->bind_param("ss", $verification_code, $username);
-        $update_stmt->execute();
-        $update_stmt->close();
-
-        // 設定 Session，暫時標示為待驗證
-        $_SESSION['pending_user'] = $username;
-
-        // 寄送驗證碼 Email
-        $to = $user['email'];
-        $subject = "教授系統登入驗證碼";
-        $message = "您好，您的驗證碼為：$verification_code\n\n請在系統中輸入以完成登入。";
-        $headers = "From: noreply@yourdomain.com"; // 記得替換為實際寄件人
-
-        if (mail($to, $subject, $message, $headers)) {
-            header("Location: ediview.html");
+        // ✅ 根據 teacher_ID 開頭判斷角色
+        if (str_starts_with($teacher_id, 'T')) {
+            header("Location: /professor_web/ediview.html");
+            exit;
+        } elseif (str_starts_with($teacher_id, 'A')) {
+            header("Location: /professor_web/background.html");
             exit;
         } else {
-            header("Location: login.html?error=mailfail");
+            echo json_encode(["success" => false, "message" => "無效的教師代碼"]);
             exit;
         }
     }
 }
 
-// ❌ 登入失敗
-header("Location: login.html?error=invalid");
+echo json_encode(["success" => false, "message" => "帳號或密碼錯誤"]);
 exit;
 ?>

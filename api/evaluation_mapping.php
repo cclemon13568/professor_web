@@ -1,3 +1,4 @@
+<!-- 評價 -->
 <?php
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
