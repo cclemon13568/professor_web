@@ -1,0 +1,379 @@
+body {
+    margin: 0; /* 移除瀏覽器預設的邊距 */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 使用更常見且適合後台介面的字體 */
+    background-color: #f4f7f6; /* 頁面整體背景色，淺色系增加舒適感 */
+    color: #333; /* 頁面主要文字顏色 */
+}
+
+.container {
+    display: flex; /* 使用 Flexbox 佈局，使側邊欄和主要內容並排 */
+    min-height: 100vh; /* 最小高度為視窗的100%，確保內容不足時也能佔滿整個視窗高度 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 給主要內容區域一個輕微的陰影，增加立體感 */
+}
+
+.sidebar {
+    width: 250px; /* 側邊欄寬度，比原先稍寬，提供更多空間給選單項目 */
+    background-color: #6a7da4; /* 側邊欄背景色，這裡選擇了一個相對較深的藍灰色，常見於後台管理介面 */
+    color: #ecf0f1; /* 側邊欄文字顏色，與深色背景形成良好對比 */
+    padding: 20px; /* 側邊欄內部邊距 */
+    box-shadow: 2px 0 5px #2F4F76FF; /* 側邊欄右側陰影，使其與主要內容區塊分離 */
+    display: flex; /* 使用 Flexbox 佈局側邊欄內部元素 */
+    flex-direction: column; /* 內部元素垂直排列 */
+}
+
+.sidebar h2 {
+    font-size: 22px; /* 側邊欄標題字體大小，比內文稍大 */
+    margin-bottom: 30px; /* 標題下方留白 */
+    color: #fff; /* 標題顏色，與側邊欄背景形成鮮明對比 */
+    text-align: center; /* 標題文字置中 */
+    border-bottom: 1px solid #2F4F76FF; /* 標題下方的分隔線，顏色稍暗 */
+    padding-bottom: 15px; /* 分隔線與標題之間的距離 */
+}
+
+.sidebar ul {
+    list-style: none; /* 移除列表項的預設點或數字 */
+    padding: 0; /* 移除列表的預設內邊距 */
+    flex-grow: 1; /* 允許列表佔據側邊欄內剩餘的所有垂直空間 */
+}
+
+.sidebar ul li {
+    margin: 10px 0; /* 列表項上下外邊距 */
+    padding: 12px 15px; /* 列表項內邊距，增加點擊區域和視覺舒適度 */
+    cursor: pointer; /* 鼠標懸停時顯示手型，表示可點擊 */
+    transition: background-color 0.3s ease, color 0.3s ease; /* 背景色和文字顏色過渡效果，使懸停更流暢 */
+    border-radius: 4px; /* 列表項圓角 */
+    display: flex; /* 使用 Flexbox 佈局列表項內部（例如未來可能添加圖標） */
+    align-items: center; /* 垂直居中對齊內部元素 */
+}
+
+.sidebar ul li:hover {
+    background-color: #2F4F76FF; /* 鼠標懸停時的背景色，更深一些 */
+    color: #fff; /* 鼠標懸停時的文字顏色 */
+}
+
+/* 可選：為選中的菜單項添加樣式，使其突出顯示 */
+.sidebar ul li.active {
+    background-color: #1abc9c; /* 選中時的背景色，使用一個鮮明的點綴色 */
+    color: #fff; /* 選中時的文字顏色 */
+    font-weight: bold; /* 選中時文字加粗 */
+}
+
+.main-content {
+    flex: 1; /* 佔據 `container` 中除了側邊欄外的所有剩餘空間 */
+    display: flex; /* 使用 Flexbox 佈局主要內容區域 */
+    flex-direction: column; /* 內部元素垂直堆疊（標題和數據區） */
+    background-color: #ffffff; /* 主要內容區域的背景色，通常是白色 */
+    padding: 30px; /* 主要內容區域的內邊距 */
+}
+
+.main-content h1 {
+    font-size: 28px; /* 主要標題字體大小，顯眼 */
+    color: #2c3e50; /* 主要標題文字顏色，與側邊欄背景色協調 */
+    margin-bottom: 25px; /* 標題下方留白 */
+    border-bottom: 1px solid #eee; /* 標題下方的淺色分隔線 */
+    padding-bottom: 15px; /* 分隔線與標題之間的距離 */
+}
+
+#data-area {
+    margin-top: 0; /* 移除頂部外邊距，因為 H1 已經提供了足夠的間距 */
+    background-color: #fdfdfd; /* 數據顯示區塊的背景色，比主要內容區塊略微不同，增加層次感 */
+    border: 1px solid #e0e0e0; /* 數據顯示區塊的邊框 */
+    padding: 20px; /* 數據顯示區塊的內邊距 */
+    border-radius: 5px; /* 數據顯示區塊的圓角 */
+    min-height: 200px; /* 數據顯示區塊的最小高度，即使沒有內容也確保有足夠空間 */
+    flex-grow: 1; /* 允許數據顯示區塊佔據主要內容區域內剩餘的所有垂直空間 */
+    overflow-y: auto; /* 當內容超出高度時顯示垂直滾動條 */
+}
+
+/* --- 模態框 (Modal) 樣式 --- */
+
+/* 模態框容器 */
+.modal {
+    display: none; /* 確保模態框預設是隱藏的 */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+/* 模態框內容區塊 */
+.modal-content {
+     background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative; /* 確保關閉按鈕可以絕對定位 */
+
+    /* **關鍵改動：固定模態框尺寸並啟用內部滾動** */
+    width: 90%; /* 可以調整模態框的寬度，例如 90% */
+    max-width: 600px; /* 設定最大寬度，避免在寬螢幕上過大 */
+    height: 80%; /* 可以調整模態框的高度，例如 80% */
+    max-height: 700px; /* 設定最大高度 */
+
+    /* 啟用內部滾動 */
+    overflow-y: auto; /* 當內容超出高度時，顯示垂直滾動條 */
+    display: flex; /* 使用 flexbox 讓標題、內容和按鈕垂直排列 */
+    flex-direction: column;
+}
+/* 模態框標題 */
+#modal-title {
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+/* 關閉按鈕樣式 (保持不變或微調) */
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute; /* 相對於 .modal-content 定位 */
+    right: 15px;
+    top: 10px;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #333;
+    text-decoration: none;
+}
+
+/* **關鍵改動：調整表單內部元素佈局** */
+#data-form {
+    display: flex;
+    flex-direction: column; /* 讓 label 和 input 垂直堆疊 */
+    gap: 15px; /* 增加各欄位之間的間距 */
+    flex-grow: 1; /* 讓表單內容區域盡可能佔據剩餘空間 */
+    padding-bottom: 20px; /* 給底部按鈕留出一些空間 */
+}
+
+/* 表單標籤 */
+#data-form label {
+    display: block; /* 標籤獨佔一行 */
+    margin-bottom: 8px; /* 增加標籤與輸入框的間距 */
+    font-weight: bold;
+    color: #444;
+    font-size: 15px;
+}
+
+/* 表單輸入框、文本域、選擇框 */
+#data-form input[type="text"],
+#data-form input[type="number"],
+#data-form input[type="date"],
+#data-form input[type="datetime-local"],
+#data-form textarea,
+#data-form select {
+    width: calc(100% - 20px); /* 寬度佔滿容器，並扣除左右內邊距 */
+    padding: 10px; /* 增加內邊距 */
+    margin-bottom: 20px; /* 增加輸入框之間的間距 */
+    border: 1px solid #ccc;
+    border-radius: 6px; /* 圓角 */
+    box-sizing: border-box; /* 確保內邊距和邊框不增加元素總寬度 */
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#data-form input:focus,
+#data-form textarea:focus,
+#data-form select:focus {
+    border-color: #6a7da4; /* 聚焦時邊框變色 */
+    box-shadow: 0 0 5px rgba(106, 125, 164, 0.5); /* 聚焦時添加陰影 */
+    outline: none; /* 移除預設外框 */
+}
+
+#data-form textarea {
+    min-height: 100px; /* 文本域最小高度 */
+    resize: vertical; /* 允許垂直拖動大小 */
+}
+
+/* 按鈕容器樣式 (調整為靠右且固定在底部) */
+.form-buttons {
+    display: flex;
+    justify-content: flex-end; /* 按鈕靠右 */
+    gap: 10px; /* 按鈕間距 */
+    margin-top: 20px; /* 與上方表單內容的間距 */
+    padding-top: 15px; /* 按鈕與上方邊界的間距 */
+    border-top: 1px solid #eee; /* 分隔線 */
+    /* 確保按鈕固定在模態框底部，即使內容滾動 */
+    position: sticky;
+    bottom: 0;
+    background-color: #fefefe; /* 與模態框內容背景色一致 */
+    z-index: 100; /* 確保在滾動時蓋住其他內容 */
+}
+
+/* 表單按鈕 */
+.form-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease; /* 添加過渡效果 */
+}
+
+/* 儲存按鈕 */
+.form-buttons button[type="submit"] {
+    background-color: #28a745; /* 綠色 */
+    color: white;
+}
+
+.form-buttons button[type="submit"]:hover {
+    background-color: #218838; /* 深綠 */
+    transform: translateY(-1px); /* 輕微上移效果 */
+}
+
+/* 取消按鈕 */
+.form-buttons .cancel-btn {
+    background-color: #6c757d; /* 灰色 */
+    color: white;
+}
+
+.form-buttons .cancel-btn:hover {
+    background-color: #5a6268; /* 深灰 */
+    transform: translateY(-1px);
+}
+
+/* 淡入動畫 */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 控制面板和表格樣式增強 (用於 data-area 內的表格) --- */
+
+.control-panel {
+    display: flex;
+    justify-content: flex-start; /* 保持左對齊 */
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 10px; /* 元素間距 */
+}
+
+.control-panel button {
+    padding: 8px 15px;
+    background-color: #007bff; /* 藍色按鈕 */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.control-panel button:hover {
+    background-color: #0056b3;
+}
+
+.control-panel input[type="text"] {
+    flex-grow: 1; /* 讓輸入框佔據更多空間 */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 15px;
+}
+
+/* 表格樣式增強 */
+#data-area table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* 給表格添加輕微陰影 */
+    background-color: #fff; /* 表格背景色 */
+}
+
+#data-area table th,
+#data-area table td {
+    border: 1px solid #e9ecef; /* 更淺的邊框顏色 */
+    padding: 12px 15px; /* 增加單元格內邊距 */
+    text-align: left;
+    font-size: 15px;
+    vertical-align: middle; /* 內容垂直居中 */
+}
+
+#data-area table th {
+    background-color: #e2e6ea; /* 表頭背景色，與側邊欄色系協調 */
+    color: #333;
+    font-weight: bold;
+    text-transform: uppercase; /* 表頭文字大寫 */
+}
+
+#data-area table tbody tr:nth-child(even) {
+    background-color: #f8f9fa; /* 偶數行背景色 */
+}
+
+#data-area table tbody tr:hover {
+    background-color: #e9f0f6; /* 懸停時的背景色 */
+    cursor: pointer; /* 顯示為可點擊 */
+}
+
+/* 表格內操作按鈕 */
+.action-buttons {
+    display: flex;
+    gap: 5px; /* 按鈕間距 */
+}
+
+.action-buttons button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.action-buttons .edit-btn {
+    background-color: #ffc107; /* 黃色 */
+    color: #333;
+}
+
+.action-buttons .edit-btn:hover {
+    background-color: #e0a800;
+}
+
+.action-buttons .delete-btn {
+    background-color: #dc3545; /* 紅色 */
+    color: white;
+}
+
+.action-buttons .delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* 響應式設計：小螢幕調整 */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* 小螢幕下側邊欄和內容垂直堆疊 */
+    }
+
+    .sidebar {
+        width: 100%; /* 側邊欄全寬 */
+        padding: 15px;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+
+    .modal-content {
+        width: 95%; /* 模態框在小螢幕下更寬 */
+        margin: 10% auto;
+    }
+
+    .control-panel {
+        flex-direction: column; /* 查詢控制面板垂直堆疊 */
+        align-items: stretch;
+    }
+
+    .control-panel input[type="text"] {
+        width: 100%;
+    }
+}
