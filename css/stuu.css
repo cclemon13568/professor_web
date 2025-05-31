@@ -1,0 +1,177 @@
+/* css/study.css */
+
+/* 確保這個規則存在，用於 JS 隱藏多餘行 */
+.hidden-row {
+    display: none;
+}
+
+/* 主要內容區域的佈局 (改為區塊佈局) */
+.main-content-wrapper {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+/* 左欄和右欄的樣式 (改為佔據整行) */
+.column-left,
+.column-right {
+    width: 100%; /* 設定為 100% 寬度 */
+    background-color: #f8f9fa; /* 淺灰色背景，作為整個區塊的底色 */
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 區塊整體的輕微陰影 */
+    margin-bottom: 20px; /* 為區塊之間增加間距 */
+}
+
+.column-left h2,
+.column-right h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+    font-size: 1.8rem;
+    font-weight: bold;
+    border-bottom: 2px solid #6B7EA5; /* 標題下方的藍色線改為 #6B7EA5 */
+    padding-bottom: 10px;
+}
+
+/* 表格基本樣式，確保沒有內置邊框 */
+.publications-section table,
+.projects-section table {
+    width: 100%;
+    border-collapse: collapse; /* 移除表格內邊框 */
+    margin-bottom: 15px;
+}
+
+/* 隱藏表格的表頭，因為我們將樣式應用在 tr 上 */
+.publications-section thead,
+.projects-section thead {
+    display: none;
+}
+
+/* 將每一行 (tr) 變成一個卡片 */
+.publications-section tbody tr,
+.projects-section tbody tr {
+    display: block; /* 使 tr 像一個區塊元素 */
+    margin-bottom: 15px; /* 卡片之間的間距 */
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #fff; /* 卡片內部白色背景 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 卡片本身的陰影 */
+    transition: transform 0.2s ease-in-out; /* 添加 hover 動畫 */
+}
+
+.publications-section tbody tr:hover,
+.projects-section tbody tr:hover {
+    transform: translateY(-3px); /* hover 時輕微上移 */
+}
+
+/* 調整 td 內容的樣式以符合卡片內部的佈局 */
+.publications-section tbody td,
+.projects-section tbody td {
+    border: none; /* 移除 td 的邊框 */
+    padding: 0; /* 移除 td 的內邊距 */
+    text-align: left;
+    vertical-align: top;
+    line-height: 1.5; /* 行高調整 */
+}
+
+/* 論文部分的特定樣式 */
+.publications-section tbody tr td:first-child .paper-title-span {
+    font-weight: bold;
+    color: #6B7EA5; /* 深藍色改為 #6B7EA5 */
+    font-size: 1.1em;
+    display: block; /* 論文名稱獨佔一行 */
+    margin-bottom: 5px;
+}
+
+.publications-section tbody tr td .paper-authors-span,
+.publications-section tbody tr td .paper-journal-span,
+.publications-section tbody tr td .paper-link-span {
+    font-size: 0.95em;
+    color: #555;
+    display: block;
+    margin-top: 3px;
+}
+
+/* 研究計畫部分的特定樣式 */
+.projects-section tbody tr td .project-id-span {
+    font-weight: bold;
+    color: #6B7EA5; /* 深藍色改為 #6B7EA5 */
+    font-size: 1.1em;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.projects-section tbody tr td .project-role-span,
+.projects-section tbody tr td .project-period-span,
+.projects-section tbody tr td .project-organization-span,
+.projects-section tbody tr td .project-proof-span {
+    font-size: 0.95em;
+    color: #555;
+    display: block;
+    margin-top: 3px;
+}
+
+/* 按鈕樣式 */
+.custom-button-wrapper {
+    margin-top: 30px; /* 增加按鈕與上方內容的距離 */
+    text-align: center;
+}
+
+.custom-button-wrapper .btn {
+    padding: 10px 25px;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    /* Bootstrap 預設的 btn-secondary 顏色通常是灰色，但這裡我們不直接修改它 */
+    /* 如果您需要按鈕背景色也是 #6B7EA5，則需要覆蓋 Bootstrap 樣式 */
+    /* 例如: */
+    /* background-color: #6B7EA5; */
+    /* border-color: #6B7EA5; */
+    /* color: #fff; */
+}
+
+/* 載入中/無資料提示文字 */
+.text-muted.text-center {
+    padding: 20px;
+    font-size: 1.1em;
+    color: #6c757d;
+}
+
+.text-danger.text-center {
+    padding: 20px;
+    font-size: 1.1em;
+    color: #dc3545;
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+    .main-content-wrapper {
+        padding: 10px;
+    }
+
+    .column-left,
+    .column-right {
+        margin-bottom: 20px;
+    }
+}
+
+.custom-full-width-footer {
+    width: 100%;             /* 關鍵：確保頁腳佔滿整個頁面寬度 */
+    /* 因為 Bootstrap 的 .container 會限制寬度，我們將直接對 footer 應用這個 */
+    background-color: #6B7EA5 !important; /* 使用 !important 確保覆蓋 *//* 比 navbar 稍微深一點的頁腳背景色 */
+    color: #eee;            /* 頁腳文字顏色 */
+    padding: 20px 0;         /* 上下內邊距，左右為0確保填滿 */
+    text-align: center;      /* 文字居中 */
+    box-sizing: border-box;  /* 確保 padding 不增加總寬度 */
+    margin-top: auto;        /* 將 footer 推到底部 (配合 body 的 flex) */
+
+    /* 移除 Bootstrap 可能對 .container 施加的圓角等影響，確保是直角邊緣 */
+    border-radius: 0;
+}
+/* 如果 footer 內部有 .container，可以這樣確保其內容居中 */
+.custom-full-width-footer .container {
+    padding-left: 15px; /* 根據 Bootstrap 預設的 container 內邊距設定 */
+    padding-right: 15px;
+    
+}
