@@ -74,6 +74,21 @@ const modulesConfig = {
             word: { label: '敏感詞', type: 'text' }
         },
         actions: ['edit', 'delete'] // 敏感詞也應該可以編輯、刪除
+    },
+
+    responds: { // 新增的回應管理模組
+        title: '回應管理',
+        apiEndpoint: 'http://localhost/professor_web/api/responds.php',
+        fields: {
+            respond_ID: { label: '回應ID', type: 'text' }, // 讓 respond_ID 成為主鍵並只讀
+            question_ID: { label: '問題ID', type: 'text' }, // 指向主留言，可能也設為只讀
+            respond_content: { label: '回應內容', type: 'textarea' }, // 新增回應內容欄位
+            parent_respond_ID: { label: '父回應ID', type: 'text', optional: true }, // 可以是 null，設為可選
+            created_at: { label: '創建時間', type: 'text', readOnly: true } // 可能也需要顯示
+        },
+        // 注意：這裡的 actions 是針對表格中每一行數據的操作
+        // 如果您想編輯嵌套的回覆，後端 GET 需要以扁平化形式返回數據
+        actions: ['delete']
     }
 };
 
@@ -391,6 +406,11 @@ function generateFormFields(moduleName, itemData, mode) {
         const label = fieldConfig.label;
         const type = fieldConfig.type;
         const readOnly = fieldConfig.readOnly;
+
+        // **新增邏輯：在 'add' 模式下，如果模組是 'appointment' 且欄位是 'office_location' 或 'status'，則跳過生成**
+        if (mode === 'add' && moduleName === 'appointment' && (fieldKey === 'office_location' || fieldKey === 'status')) {
+            return; // 跳過此欄位的生成
+        }
 
         let inputTag = '';
         const currentValue = itemData[fieldKey] !== undefined ? itemData[fieldKey] : '';
