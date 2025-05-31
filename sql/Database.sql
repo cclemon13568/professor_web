@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： localhost:3306
--- 產生時間： 2025 年 05 月 31 日 13:46
+-- 產生時間： 2025 年 05 月 31 日 14:43
 -- 伺服器版本： 10.11.11-MariaDB-0ubuntu0.24.04.2
 -- PHP 版本： 8.3.6
 
@@ -512,7 +512,6 @@ ALTER TABLE `external_experience`
 --
 ALTER TABLE `login_info`
   ADD PRIMARY KEY (`professor_accountnumber`),
-  ADD KEY `fk_verification_email` (`verification_code`),
   ADD KEY `fk_login_email` (`email`);
 
 --
