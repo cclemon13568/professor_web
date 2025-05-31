@@ -1,4 +1,4 @@
-<?php
+<?php 
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
@@ -28,9 +28,9 @@ $result = $stmt->get_result();
 $response["external_experience"] = $result->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 
-// ✅ 論文資訊（聯集 publication + paper_info）
+// ✅ 論文資訊（publication + paper_info，移除 paper_link）
 $pub_sql = "
-    SELECT p.paper_ID, p.paper_topic, p.paper_authors, p.paper_year, p.paper_link
+    SELECT p.paper_ID, p.paper_topic, p.paper_authors, p.paper_year
     FROM publication pub
     JOIN paper_info p ON pub.paper_ID = p.paper_ID
     WHERE pub.teacher_ID = ?
@@ -42,9 +42,9 @@ $result = $stmt->get_result();
 $response["publications"] = $result->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 
-// ✅ 研究計畫（聯集 participation + project_info）
+// ✅ 研究計畫（participation + project_info，移除 project_proof）
 $project_sql = "
-    SELECT pj.project_ID, pj.project_role, pj.project_period, pj.project_organization, pj.project_proof
+    SELECT pj.project_ID, pj.project_role, pj.project_period, pj.project_organization
     FROM participation pa
     JOIN project_info pj ON pa.project_ID = pj.project_ID
     WHERE pa.teacher_ID = ?
