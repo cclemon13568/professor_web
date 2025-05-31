@@ -186,3 +186,191 @@ header {
     padding-right: 15px;
     
 }
+/* ==================================== */
+/* 基礎設定 (會影響整個頁面佈局)         */
+/* ==================================== */
+body {
+    margin: 0;
+    padding: 0;
+    /* 確保 body 是一個 Flex 容器，用於 sticky footer 效果 */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* 至少佔滿整個視窗高度 */
+
+    /* 圖片中的背景色看起來偏深 */
+    background-color: #ffffff;
+    color: #131111; /* 預設文字顏色 */
+    font-family: 'Segoe UI', Arial, sans-serif; /* 範例字體 */
+}
+
+/* 確保 header 撐開，不被 main-content-wrapper 的 flex 影響 */
+header {
+    flex-shrink: 0; /* 防止 header 縮小 */
+}
+
+/* ==================================== */
+/* 主要內容區塊的容器 (兩欄布局)         */
+/* 類似圖片中的整體內容區域，水平居中並限制寬度 */
+/* ==================================== */
+.main-content-wrapper {
+    display: flex;              /* 讓內部左右兩個區塊並排 */
+    justify-content: center;    /* 將內容塊水平居中 */
+    align-items: flex-start;    /* 讓內容塊從頂部對齊 */
+    gap: 30px;                  /* 左右兩個內容塊之間的間距 */
+    padding: 30px 20px;         /* 內容與視窗邊緣的內外邊距，上下稍大 */
+    box-sizing: border-box;     /* 確保 padding 不會增加總寬度 */
+
+    /* 限制整個主內容區塊的最大寬度，並使其在頁面中居中 */
+    max-width: 1200px;          /* 您可以根據需求調整這個最大寬度 */
+    margin: 0 auto;             /* 自動左右外邊距，實現水平居中 */
+
+    /* 讓主內容區塊彈性增長，將 footer 推到底部 */
+    flex-grow: 1;
+}
+
+/* 確保響應式設計：在小螢幕上將兩欄堆疊 */
+@media (max-width: 768px) {
+    .main-content-wrapper {
+        flex-direction: column; /* 垂直堆疊 */
+        align-items: stretch;   /* 讓子元素填滿寬度 */
+        gap: 20px;              /* 垂直間距 */
+    }
+}
+
+
+/* ==================================== */
+/* 左右兩個內容欄的樣式 (模擬圖片中的區塊) */
+/* ==================================== */
+.column-left,
+.column-right {
+    background-color: #6B7EA5; /* 圖片中區塊的背景色 */
+    color: #fff;               /* 文字顏色 */
+    padding: 20px;
+    border-radius: 8px;        /* 輕微圓角 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 輕微陰影增加立體感 */
+    flex: 1;                   /* 讓兩個區塊彈性佔據可用空間 */
+    min-width: 280px;          /* 確保在縮小時有最小寬度 */
+}
+
+/* 針對較大螢幕，可以給左右欄設定最大寬度，以控制它們的比例 */
+@media (min-width: 769px) {
+    .column-left {
+        max-width: 500px; /* 左欄最大寬度 */
+    }
+    .column-right {
+        max-width: 400px; /* 右欄最大寬度，可能比左欄稍窄 */
+    }
+}
+
+
+/* 圖片中標題的樣式 (例如「最新論文」或「研究方向與瀏覽排行」) */
+.main-content-wrapper h2 {
+    font-size: 1.6em;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #ffffff;
+    border-bottom: 1px solid #444; /* 底部線條 */
+    padding-bottom: 10px;
+    text-align: center; /* 標題居中 */
+}
+
+/* 論文條目區塊的樣式 (模仿圖片中的每個內容塊) */
+.paper-entry-block,
+.ranking-item-block {
+    background-color: #fdfdfd; /* 內容條目的背景色 */
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    line-height: 1.5;
+    font-size: 0.95em;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.paper-entry-block:last-child,
+.ranking-item-block:last-child {
+    margin-bottom: 0; /* 最後一個條目不需要底部邊距 */
+}
+
+.paper-entry-block:hover,
+.ranking-item-block:hover {
+    background-color: #d7d5d5f8; /* 滑鼠懸停效果 */
+}
+
+.hidden { /*隱藏非顯示的論文*/
+    display: none !important;
+}
+
+/* 論文標題和細節的樣式 */
+.paper-entry-block .paper-title {
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 5px;
+}
+.paper-entry-block .paper-details {
+    font-size: 0.85em;
+    color: #a0a0a0;
+    margin-bottom: 3px;
+}
+
+
+/* 右欄內容標題和細節的樣式 */
+.ranking-item-block h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: #000000;
+    font-size: 1.1em;
+}
+.ranking-item-block p {
+    margin: 0;
+    color: #c0c0c0;
+    font-size: 0.85em;
+}
+
+
+.btn-secondary {
+    background-color: #2f5077; /* 將這裡的顏色改為你想要的顏色 */
+    border-color: #2f5077; /* 建議邊框顏色也與背景色一致 */
+    color: #ffffff; /* 按鈕文字顏色，確保與背景有良好對比 */
+}
+
+.btn-secondary:hover {
+    background-color: #2e4e76; /* 滑鼠懸停時的顏色，可以稍微深一點 */
+    border-color: #2e4e76;
+}
+
+.btn-secondary:focus {
+    box-shadow: 0 0 0 0.25rem rgba(107, 126, 165, 0.5); /* 聚焦時的陰影顏色 */
+}
+
+.custom-button-wrapper {
+    display: flex;             /* Make the div a flex container */
+    justify-content: center;   /* Horizontally center its direct children (the button) */
+    /* align-items: center; */ /* Optional: Vertically center if the button has a fixed height, usually not needed here */
+    /* mt-4 will add margin-top */
+}
+
+
+/* ==================================== */
+/* Footer 樣式：左右填滿頁面           */
+/* ==================================== */
+.custom-full-width-footer {
+    width: 100%;             /* 關鍵：確保頁腳佔滿整個頁面寬度 */
+    /* 因為 Bootstrap 的 .container 會限制寬度，我們將直接對 footer 應用這個 */
+    background-color: #6B7EA5 !important; /* 使用 !important 確保覆蓋 *//* 比 navbar 稍微深一點的頁腳背景色 */
+    color: #eee;            /* 頁腳文字顏色 */
+    padding: 20px 0;         /* 上下內邊距，左右為0確保填滿 */
+    text-align: center;      /* 文字居中 */
+    box-sizing: border-box;  /* 確保 padding 不增加總寬度 */
+    margin-top: auto;        /* 將 footer 推到底部 (配合 body 的 flex) */
+
+    /* 移除 Bootstrap 可能對 .container 施加的圓角等影響，確保是直角邊緣 */
+    border-radius: 0;
+}
+/* 如果 footer 內部有 .container，可以這樣確保其內容居中 */
+.custom-full-width-footer .container {
+    padding-left: 15px; /* 根據 Bootstrap 預設的 container 內邊距設定 */
+    padding-right: 15px;
+    
+}
