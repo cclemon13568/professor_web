@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： localhost:3306
--- 產生時間： 2025 年 05 月 31 日 15:32
+-- 產生時間： 2025 年 05 月 31 日 16:19
 -- 伺服器版本： 10.11.11-MariaDB-0ubuntu0.24.04.2
 -- PHP 版本： 8.3.6
 
@@ -185,15 +185,16 @@ CREATE TABLE `login_info` (
   `professor_accountnumber` varchar(20) NOT NULL,
   `professor_password` varchar(50) DEFAULT NULL,
   `verification_code` char(20) DEFAULT NULL,
-  `email` char(20) DEFAULT NULL
+  `email` char(20) DEFAULT NULL,
+  `teacher_ID` char(15) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `login_info`
 --
 
-INSERT INTO `login_info` (`professor_accountnumber`, `professor_password`, `verification_code`, `email`) VALUES
-('P101', 'testpass123', NULL, 'leejs@fcu.edu.tw');
+INSERT INTO `login_info` (`professor_accountnumber`, `professor_password`, `verification_code`, `email`, `teacher_ID`) VALUES
+('P101', 'testpass123', NULL, 'leejs@fcu.edu.tw', NULL);
 
 -- --------------------------------------------------------
 
@@ -502,7 +503,9 @@ ALTER TABLE `external_experience`
 -- 資料表索引 `login_info`
 --
 ALTER TABLE `login_info`
-  ADD PRIMARY KEY (`professor_accountnumber`);
+  ADD PRIMARY KEY (`professor_accountnumber`),
+  ADD KEY `fk_login_teacherID` (`teacher_ID`),
+  ADD KEY `fk_login_email` (`email`);
 
 --
 -- 資料表索引 `message_board`
@@ -652,6 +655,13 @@ ALTER TABLE `evaluation_mapping`
 --
 ALTER TABLE `external_experience`
   ADD CONSTRAINT `external_experience_ibfk_1` FOREIGN KEY (`teacher_ID`) REFERENCES `personal_info` (`teacher_ID`) ON DELETE CASCADE;
+
+--
+-- 資料表的限制式 `login_info`
+--
+ALTER TABLE `login_info`
+  ADD CONSTRAINT `fk_login_email` FOREIGN KEY (`email`) REFERENCES `personal_info` (`teacher_email`),
+  ADD CONSTRAINT `fk_login_teacherID` FOREIGN KEY (`teacher_ID`) REFERENCES `personal_info` (`teacher_ID`);
 
 --
 -- 資料表的限制式 `participation`
