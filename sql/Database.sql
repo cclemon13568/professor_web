@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： localhost:3306
--- 產生時間： 2025 年 05 月 29 日 17:40
+-- 產生時間： 2025 年 05 月 31 日 13:46
 -- 伺服器版本： 10.11.11-MariaDB-0ubuntu0.24.04.2
 -- PHP 版本： 8.3.6
 
@@ -56,18 +56,17 @@ INSERT INTO `appointment_info` (`appointment_ID`, `office_location`, `appoint_Da
 
 CREATE TABLE `appointment_mapping` (
   `teacher_ID` char(15) NOT NULL,
-  `appointment_ID` char(15) NOT NULL,
-  `id` int(11) NOT NULL
+  `appointment_ID` char(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `appointment_mapping`
 --
 
-INSERT INTO `appointment_mapping` (`teacher_ID`, `appointment_ID`, `id`) VALUES
-('T002', 'A001(test)', 1),
-('T002', 'A002(test)', 2),
-('T002', 'A003(test)', 3);
+INSERT INTO `appointment_mapping` (`teacher_ID`, `appointment_ID`) VALUES
+('T002', 'A001(test)'),
+('T002', 'A002(test)'),
+('T002', 'A003(test)');
 
 -- --------------------------------------------------------
 
@@ -152,18 +151,17 @@ INSERT INTO `evaluation` (`evaluate_ID`, `student_ID`, `course_period`, `evaluat
 
 CREATE TABLE `evaluation_mapping` (
   `course_ID` char(15) NOT NULL,
-  `evaluate_ID` char(15) NOT NULL,
-  `id` int(11) NOT NULL
+  `evaluate_ID` char(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `evaluation_mapping`
 --
 
-INSERT INTO `evaluation_mapping` (`course_ID`, `evaluate_ID`, `id`) VALUES
-('CS001', 'E001(test)', 1),
-('CS001', 'E002(test)', 2),
-('CS002', 'E003(test)', 3);
+INSERT INTO `evaluation_mapping` (`course_ID`, `evaluate_ID`) VALUES
+('CS001', 'E001(test)'),
+('CS001', 'E002(test)'),
+('CS002', 'E003(test)');
 
 -- --------------------------------------------------------
 
@@ -242,18 +240,17 @@ CREATE TABLE `paper_info` (
   `paper_ID` char(15) NOT NULL,
   `paper_topic` varchar(500) DEFAULT NULL,
   `paper_authors` varchar(1000) DEFAULT NULL,
-  `paper_year` varchar(50) DEFAULT NULL,
-  `paper_link` varchar(300) DEFAULT NULL
+  `paper_year` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `paper_info`
 --
 
-INSERT INTO `paper_info` (`paper_ID`, `paper_topic`, `paper_authors`, `paper_year`, `paper_link`) VALUES
-('1', 'Diverse Machine Learning-Based Malicious Detection for Industrial Control System', 'Chen, Y.C., Cheng, C.H., Lin, T.W., Lee, J.S*', '2025', 'Accepted by Electronics, 14, 2025-04. (SSCI, SCIE)'),
-('2', 'Unconsciously Continuous Authentication Protocol in Zero-trust Architecture based on Behavioral Biometrics', NULL, '2025', 'Accepted by IEEE Transactions on Reliability, 000, 2025-02. (SCIE)'),
-('3', 'ML-based Intrusion Detection System for Precise APT Cyber-clustering', NULL, '2024', 'Computers & Secuirty, vol. 149, 2024-11. (SCIE)');
+INSERT INTO `paper_info` (`paper_ID`, `paper_topic`, `paper_authors`, `paper_year`) VALUES
+('1', 'Diverse Machine Learning-Based Malicious Detection for Industrial Control System', 'Chen, Y.C., Cheng, C.H., Lin, T.W., Lee, J.S*', '2025'),
+('2', 'Unconsciously Continuous Authentication Protocol in Zero-trust Architecture based on Behavioral Biometrics', NULL, '2025'),
+('3', 'ML-based Intrusion Detection System for Precise APT Cyber-clustering', NULL, '2024');
 
 -- --------------------------------------------------------
 
@@ -307,20 +304,19 @@ CREATE TABLE `project_info` (
   `project_ID` varchar(50) NOT NULL,
   `project_role` varchar(50) NOT NULL,
   `project_period` varchar(20) DEFAULT NULL,
-  `project_organization` varchar(100) DEFAULT NULL,
-  `project_proof` varchar(300) NOT NULL
+  `project_organization` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `project_info`
 --
 
-INSERT INTO `project_info` (`project_ID`, `project_role`, `project_period`, `project_organization`, `project_proof`) VALUES
-('NSTC110-9999-E-020-020', '主持人', '2022-05~2023-04', '產業合作計畫', '證明文件E.pdf'),
-('NSTC111-1234-E-001-001', '主持人', '2023-01~2023-12', '教育部計畫', '證明文件C.pdf'),
-('NSTC112-2221-E-035-050-MY3', '主持人', '2024-08~2025-07', '國科會計畫(25)', '證明文件A.pdf'),
-('NSTC112-2221-E-035-051-MY3', '共同主持', '2023-10~2024-07', '國科會計畫(24)', '證明文件B.pdf'),
-('NSTC113-5678-E-045-010', '協同主持', '2025-01~2026-12', '科技部專案', '證明文件D.pdf');
+INSERT INTO `project_info` (`project_ID`, `project_role`, `project_period`, `project_organization`) VALUES
+('NSTC110-9999-E-020-020', '主持人', '2022-05~2023-04', '產業合作計畫'),
+('NSTC111-1234-E-001-001', '主持人', '2023-01~2023-12', '教育部計畫'),
+('NSTC112-2221-E-035-050-MY3', '主持人', '2024-08~2025-07', '國科會計畫(25)'),
+('NSTC112-2221-E-035-051-MY3', '共同主持', '2023-10~2024-07', '國科會計畫(24)'),
+('NSTC113-5678-E-045-010', '協同主持', '2025-01~2026-12', '科技部專案');
 
 -- --------------------------------------------------------
 
@@ -475,7 +471,6 @@ ALTER TABLE `appointment_info`
 --
 ALTER TABLE `appointment_mapping`
   ADD PRIMARY KEY (`teacher_ID`,`appointment_ID`),
-  ADD UNIQUE KEY `id` (`id`),
   ADD KEY `appointment_ID` (`appointment_ID`);
 
 --
@@ -503,7 +498,6 @@ ALTER TABLE `evaluation`
 --
 ALTER TABLE `evaluation_mapping`
   ADD PRIMARY KEY (`course_ID`,`evaluate_ID`),
-  ADD UNIQUE KEY `id` (`id`),
   ADD KEY `evaluate_ID` (`evaluate_ID`);
 
 --
@@ -593,22 +587,10 @@ ALTER TABLE `teacher_major`
 --
 
 --
--- 使用資料表自動遞增(AUTO_INCREMENT) `appointment_mapping`
---
-ALTER TABLE `appointment_mapping`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
 -- 使用資料表自動遞增(AUTO_INCREMENT) `campus_experience`
 --
 ALTER TABLE `campus_experience`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-
---
--- 使用資料表自動遞增(AUTO_INCREMENT) `evaluation_mapping`
---
-ALTER TABLE `evaluation_mapping`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `external_experience`
