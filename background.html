@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>管理後台</title>
+  <link href="css/back.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <h2>後台管理功能</h2>
+      <!-- 側邊選單 -->
+      <ul>
+        <li onclick="loadModule('message_board')">留言管理</li>
+        <li onclick="loadModule('appointment')">預約管理</li>
+        <li onclick="loadModule('evaluation')">評論管理</li>
+        <li onclick="loadModule('course_info')">課程管理</li>
+        <li onclick="loadModule('sensitive_words')">敏感詞管理</li> </ul>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <h1 id="module-title">請選擇功能</h1>
+      <div id="data-area">資料將顯示在這裡</div>
+    </main>
+  </div>
+  <script src="js/app.js"></script>
+</body>
+</html>
