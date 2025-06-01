@@ -74,21 +74,6 @@ const modulesConfig = {
             word: { label: '敏感詞', type: 'text' }
         },
         actions: ['edit', 'delete'] // 敏感詞也應該可以編輯、刪除
-    },
-
-    responds: { // 新增的回應管理模組
-        title: '回應管理',
-        apiEndpoint: 'http://localhost/professor_web/api/responds.php',
-        fields: {
-            respond_ID: { label: '回應ID', type: 'text' }, // 讓 respond_ID 成為主鍵並只讀
-            question_ID: { label: '問題ID', type: 'text' }, // 指向主留言，可能也設為只讀
-            respond_content: { label: '回應內容', type: 'textarea' }, // 新增回應內容欄位
-            parent_respond_ID: { label: '父回應ID', type: 'text', optional: true }, // 可以是 null，設為可選
-            created_at: { label: '創建時間', type: 'text', readOnly: true } // 可能也需要顯示
-        },
-        // 注意：這裡的 actions 是針對表格中每一行數據的操作
-        // 如果您想編輯嵌套的回覆，後端 GET 需要以扁平化形式返回數據
-        actions: ['delete']
     }
 };
 
@@ -233,6 +218,16 @@ async function loadModule(moduleName) {
     const liElement = document.querySelector(`.sidebar ul li[onclick*="loadModule('${moduleName}')"]`);
     if (liElement) {
         liElement.classList.add('active');
+    }
+
+    // 新增：點選其他欄位時收起教師名單摺疊區塊
+    const teacherList = document.getElementById('teacher-list');
+    if (teacherList) {
+        teacherList.style.display = 'none';
+    }
+    const teacherMenu = document.getElementById('teacher-menu');
+    if (teacherMenu) {
+        teacherMenu.classList.remove('active');
     }
 
     try {
@@ -407,11 +402,6 @@ function generateFormFields(moduleName, itemData, mode) {
         const type = fieldConfig.type;
         const readOnly = fieldConfig.readOnly;
 
-        // **新增邏輯：在 'add' 模式下，如果模組是 'appointment' 且欄位是 'office_location' 或 'status'，則跳過生成**
-        if (mode === 'add' && moduleName === 'appointment' && (fieldKey === 'office_location' || fieldKey === 'status')) {
-            return; // 跳過此欄位的生成
-        }
-
         let inputTag = '';
         const currentValue = itemData[fieldKey] !== undefined ? itemData[fieldKey] : '';
 
@@ -526,6 +516,103 @@ async function handleFormSubmit(moduleName) {
         loadModule(moduleName); // 重新載入數據
     } catch (error) {
         alert(`操作失敗：${error.message}`);
+    }
+}
+
+// 教師資訊管理摺疊展開/收合
+async function toggleTeacherList() {
+    // 移除所有 li 的 active 樣式
+    document.querySelectorAll('.sidebar ul li').forEach(li => li.classList.remove('active'));
+    // 給教師資訊管理 li 加上 active
+    const teacherMenu = document.getElementById('teacher-menu');
+    if (teacherMenu) teacherMenu.classList.add('active');
+
+    const list = document.getElementById('teacher-list');
+    if (list.style.display === 'none' || list.style.display === '') {
+        // 展開時載入教師名單
+        await loadTeacherNames();
+        list.style.display = 'block';
+    } else {
+        list.style.display = 'none';
+    }
+}
+
+// 從API取得教師名單並渲染
+async function loadTeacherNames() {
+    const list = document.getElementById('teacher-list');
+    list.innerHTML = '<li style="color:#fff; padding:5px 15px;">載入中...</li>';
+    try {
+        const res = await fetch('api/teacher_info_get.php');
+        const json = await res.json();
+        const teachers = (json && json.success && Array.isArray(json.teachers)) ? json.teachers : [];
+        if (teachers.length === 0) {
+            list.innerHTML = '<li style="color:#fff; padding:5px 15px;">查無教師資料</li>';
+        } else {
+            list.innerHTML = '';
+            teachers.forEach(t => {
+                const li = document.createElement('li');
+                li.textContent = t.teacher_name || '(無名教師)';
+                li.style.cursor = 'pointer';
+                li.style.color = '#fff';
+                li.style.padding = '5px 15px';
+                li.onclick = (e) => {
+                    e.stopPropagation();
+                    showTeacherDetail(t.teacher_ID, t.teacher_name);
+                };
+                list.appendChild(li);
+            });
+        }
+    } catch {
+        list.innerHTML = '<li style="color:#fff; padding:5px 15px;">載入失敗</li>';
+    }
+}
+
+// 顯示教師詳細資料（以三個表格呈現）
+async function showTeacherDetail(teacher_ID, teacher_name) {
+    moduleTitleElement.textContent = `教師資訊 - ${teacher_name}`;
+    dataArea.innerHTML = '<p>載入中...</p>';
+    try {
+        const res = await fetch(`api/teacher_info_get.php?teacher_ID=${encodeURIComponent(teacher_ID)}`);
+        const json = await res.json();
+        if (json && json.success && json.data) {
+            const t = json.data;
+            // 1. personal_info 表格
+            let personalInfoHtml = `<h2>基本資料</h2><table><tbody>`;
+            // 過濾掉 teacher_ID, teacher_name, majors, degrees
+            for (const key in t) {
+                if (key === 'majors' || key === 'degrees') continue;
+                personalInfoHtml += `<tr><th>${key}</th><td>${t[key]}</td></tr>`;
+            }
+            personalInfoHtml += `</tbody></table>`;
+
+            // 2. teacher_major 表格
+            let majorHtml = `<h2>專長</h2><table><thead><tr><th>major</th></tr></thead><tbody>`;
+            if (Array.isArray(t.majors) && t.majors.length > 0) {
+                t.majors.forEach(m => {
+                    majorHtml += `<tr><td>${m}</td></tr>`;
+                });
+            } else {
+                majorHtml += `<tr><td>無資料</td></tr>`;
+            }
+            majorHtml += `</tbody></table>`;
+
+            // 3. teacher_degree 表格
+            let degreeHtml = `<h2>學歷</h2><table><thead><tr><th>degree</th></tr></thead><tbody>`;
+            if (Array.isArray(t.degrees) && t.degrees.length > 0) {
+                t.degrees.forEach(d => {
+                    degreeHtml += `<tr><td>${d}</td></tr>`;
+                });
+            } else {
+                degreeHtml += `<tr><td>無資料</td></tr>`;
+            }
+            degreeHtml += `</tbody></table>`;
+
+            dataArea.innerHTML = personalInfoHtml + majorHtml + degreeHtml;
+        } else {
+            dataArea.innerHTML = '<p>查無詳細資料</p>';
+        }
+    } catch {
+        dataArea.innerHTML = '<p>載入失敗</p>';
     }
 }
 

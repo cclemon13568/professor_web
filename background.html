@@ -16,7 +16,8 @@
         <li onclick="loadModule('evaluation')">評論管理</li>
         <li onclick="loadModule('course_info')">課程管理</li>
         <li onclick="loadModule('sensitive_words')">敏感詞管理</li>
-        <li onclick="loadModule('responds')">回應管理</li>
+        <li id="teacher-menu" onclick="toggleTeacherList()">教師資訊管理</li>
+        <ul id="teacher-list" style="display:none; background:#5a6b8a; border-radius:4px; margin-left:10px; margin-top:5px; padding:5px 0;"></ul>
       </ul>
     </aside>
     <main class="main-content">

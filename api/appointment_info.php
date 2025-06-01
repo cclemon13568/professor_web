@@ -76,19 +76,9 @@ switch ($method) {
         // 新增預約
         $data = json_decode(file_get_contents("php://input"), true);
 
-        // **強制設定 office_location 的預設值，忽略前端傳入的值**
-        $office_location = "E405(test)";
-        // 如果您想確保即使前端傳了 office_location，也只用預設值，可以加上這行：
-        // unset($data['office_location']); // 這一行您之前已經有了，如果希望徹底忽略前端傳入，建議保留
-
-        // **強制設定 status 的預設值為 2，忽略前端傳入的值**
-        $status = 2; // 預設狀態為「審查中」
-        // 如果您想確保即使前端傳了 status，也只用預設值，可以加上這行：
-        // unset($data['status']);
-
-
-        // 檢查必要欄位是否存在且不為空 ( office_location 和 status 已從此處移除 )
+        // 檢查必要欄位是否存在且不為空
         $required_fields = [
+            'office_location',
             'appoint_Date',
             'student_ID',
             'student_Name',
@@ -110,6 +100,13 @@ switch ($method) {
                 'message' => '缺少或欄位為空：' . implode(', ', $missing_fields)
             ]);
             exit;
+        }
+
+        if (!isset($data['status']) || $data['status'] === '') {
+            $data['status'] = 2;
+        } else {
+            // 確保 status 是整數，以防從前端傳來的是字串
+            $data['status'] = (int)$data['status'];
         }
 
         // 自動生成 appointment_ID (如果沒有提供)
@@ -146,7 +143,7 @@ switch ($method) {
         }
         $data['appointment_ID'] = $newID;
 
-        // 敏感字檢查
+         // 敏感字檢查
         $combinedText = $data['appointment_ID'] . ' ' . $data['problem_description'];
         $violations = checkSensitiveWords($conn, $combinedText);
 
@@ -201,11 +198,11 @@ switch ($method) {
         }
         mysqli_stmt_bind_param(
             $stmt,
-            "sssisssss", // 注意這裡的類型 'i' for status
+            "sssisssss",
             $data['appointment_ID'],
-            $office_location, // 使用強制設定的 $office_location 變數
+            $data['office_location'],
             $data['appoint_Date'],
-            $status,          // 使用強制設定的 $status 變數
+            $data['status'],
             $data['student_ID'],
             $data['student_Name'],
             $data['student_email'],
@@ -305,19 +302,13 @@ switch ($method) {
         ];
 
         foreach ($allowed_fields as $field => $type) {
-            // 只有當 $data 中存在該欄位時才進行更新
             if (isset($data[$field])) {
                 $fields[] = "$field = ?";
                 $types .= $type;
                 if ($field === 'status') {
                     $values[] = (int)$data[$field];
                 } else {
-                    // 對於 office_location，如果傳入空字串，我們希望設為 NULL
-                    if ($field === 'office_location' && trim($data[$field]) === '') {
-                        $values[] = null; // 設為 NULL
-                    } else {
-                        $values[] = $data[$field];
-                    }
+                    $values[] = $data[$field];
                 }
             }
         }

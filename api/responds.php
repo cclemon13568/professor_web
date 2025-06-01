@@ -9,59 +9,83 @@ $method = $_SERVER['REQUEST_METHOD'];
 switch ($method) {
     case 'GET':
         if (isset($_GET['question_ID'])) {
-            // 這部分邏輯保留，用於前端展示單一留言的詳情頁，其中包含嵌套回覆
-            // 例如：當用戶點擊某個主留言，想看它和它所有的回覆時
+            // 取得單筆留言及其回覆
             $question_ID = $_GET['question_ID'];
 
             $stmt1 = $conn->prepare("SELECT * FROM message_board WHERE question_ID = ?");
-            if ($stmt1 === false) { /* Error handling */ }
             $stmt1->bind_param("s", $question_ID);
             $stmt1->execute();
             $msgResult = $stmt1->get_result()->fetch_assoc();
-            $stmt1->close();
 
-            if (!$msgResult) { http_response_code(404); echo json_encode(['status' => 'error', 'message' => '留言不存在']); exit; }
+            if (!$msgResult) {
+                http_response_code(404);
+                echo json_encode(['status' => 'error', 'message' => '留言不存在']);
+                exit;
+            }
 
+            // 取得所有回覆
             $stmt2 = $conn->prepare("SELECT * FROM responds WHERE question_ID = ? ORDER BY created_at ASC");
-            if ($stmt2 === false) { /* Error handling */ }
             $stmt2->bind_param("s", $question_ID);
             $stmt2->execute();
             $allReplies = $stmt2->get_result()->fetch_all(MYSQLI_ASSOC);
-            $stmt2->close();
 
+            // 回覆巢狀處理
             $replyMap = [];
-            foreach ($allReplies as $reply) { $reply['children'] = []; $replyMap[$reply['respond_ID']] = $reply; }
+            foreach ($allReplies as $reply) {
+                $reply['children'] = [];
+                $replyMap[$reply['respond_ID']] = $reply;
+            }
 
             $nestedReplies = [];
             foreach ($replyMap as $id => &$reply) {
-                if (!empty($reply['parent_respond_ID'])) {
-                    $parentId = $reply['parent_respond_ID'];
-                    if (isset($replyMap[$parentId])) {
-                        $replyMap[$parentId]['children'][] = &$reply;
-                    }
-                } else {
-                    $nestedReplies[] = &$reply;
+            if ($reply['parent_respond_ID'] !== null) {
+                $parentId = $reply['parent_respond_ID'];
+                if (isset($replyMap[$parentId])) {
+                    $replyMap[$parentId]['children'][] = &$reply;
                 }
+            } else {
+                $nestedReplies[] = &$reply;
             }
-            unset($reply);
+        }
+
 
             $msgResult['responds'] = $nestedReplies;
             echo json_encode($msgResult);
-
         } else {
-            // 這部分邏輯將用於「回應管理」頁面，獲取所有回覆的扁平列表
-            // 不包含主留言的數據，也不進行嵌套處理，因為後台管理表格通常只顯示回覆本身的數據
-            $stmt_all_responds = $conn->prepare("SELECT * FROM responds ORDER BY created_at DESC"); // 通常按時間倒序
-            if ($stmt_all_responds === false) {
-                http_response_code(500);
-                echo json_encode(['status' => 'error', 'message' => '資料庫準備查詢所有回覆失敗: ' . $conn->error]);
-                exit;
-            }
-            $stmt_all_responds->execute();
-            $allResponds = $stmt_all_responds->get_result()->fetch_all(MYSQLI_ASSOC);
-            $stmt_all_responds->close();
+            // 取得所有留言與其回覆
+            $stmt_all = $conn->prepare("SELECT * FROM message_board ORDER BY question_ID");
+            $stmt_all->execute();
+            $allMessages = $stmt_all->get_result()->fetch_all(MYSQLI_ASSOC);
 
-            echo json_encode($allResponds); // 直接返回所有回覆的扁平列表
+            foreach ($allMessages as &$msg) {
+                $stmt2 = $conn->prepare("SELECT * FROM responds WHERE question_ID = ? ORDER BY created_at ASC");
+                $stmt2->bind_param("s", $msg['question_ID']);
+                $stmt2->execute();
+                $allReplies = $stmt2->get_result()->fetch_all(MYSQLI_ASSOC);
+
+                // 回覆巢狀處理
+                $replyMap = [];
+                foreach ($allReplies as $reply) {
+                    $reply['children'] = [];
+                    $replyMap[$reply['respond_ID']] = $reply;
+                }
+
+                $nestedReplies = [];
+                foreach ($replyMap as $id => &$reply) {
+                    if (!empty($reply['parent_respond_ID'])) {
+                        $parentId = $reply['parent_respond_ID'];
+                        if (isset($replyMap[$parentId])) {
+                            $replyMap[$parentId]['children'][] = &$reply;
+                        }
+                    } else {
+                        $nestedReplies[] = &$reply;
+                    }
+                }
+
+                $msg['responds'] = $nestedReplies;
+            }
+
+            echo json_encode($allMessages);
         }
         break;
 
@@ -78,9 +102,7 @@ switch ($method) {
 
         $question_ID = $data['question_ID'];
         $respond_content = trim($data['respond_content']);
-        // 將 parent_respond_ID 處理為 null，如果它不存在或為空
-        $parent_respond_ID = isset($data['parent_respond_ID']) && !empty($data['parent_respond_ID']) ? (int)$data['parent_respond_ID'] : null;
-
+        $parent_respond_ID = isset($data['parent_respond_ID']) ? $data['parent_respond_ID'] : null;
 
         // 空字串檢查
         if ($respond_content === '') {
@@ -103,11 +125,6 @@ switch ($method) {
 
         // 檢查 question_ID 是否存在
         $stmt = $conn->prepare("SELECT 1 FROM message_board WHERE question_ID = ?");
-        if ($stmt === false) {
-            http_response_code(500);
-            echo json_encode(['success' => 'error', 'message' => '資料庫準備驗證主留言失敗: ' . $conn->error]);
-            exit;
-        }
         $stmt->bind_param("s", $question_ID);
         $stmt->execute();
         $stmt->store_result();
@@ -117,16 +134,10 @@ switch ($method) {
             echo json_encode(['success' => 'error', 'message' => "question_ID={$question_ID} 的留言不存在"]);
             exit;
         }
-        $stmt->close();
 
-        // 檢查 parent_respond_ID 是否存在（如果有提供且不為 null）
+        // 檢查 parent_respond_ID 是否存在（如果有提供）
         if (!is_null($parent_respond_ID)) {
             $stmt = $conn->prepare("SELECT 1 FROM responds WHERE respond_ID = ?");
-            if ($stmt === false) {
-                http_response_code(500);
-                echo json_encode(['success' => 'error', 'message' => '資料庫準備驗證父回覆失敗: ' . $conn->error]);
-                exit;
-            }
             $stmt->bind_param("i", $parent_respond_ID);
             $stmt->execute();
             $stmt->store_result();
@@ -135,30 +146,22 @@ switch ($method) {
                 http_response_code(404);
                 echo json_encode([
                     'success' => 'error',
-                    'message' => "parent_respond_ID={$parent_respond_ID} 的回覆不存在" // 修正錯誤訊息
+                    'message' => "respond_ID={$parent_respond_ID} 的回覆不存在"
                 ]);
                 exit;
             }
-            $stmt->close();
         }
 
-        // 新增回覆：由於 respond_ID 是 AUTO_INCREMENT，不需要在 INSERT 中指定它
+        // 新增回覆
         $stmt = $conn->prepare("INSERT INTO responds (question_ID, respond_content, parent_respond_ID) VALUES (?, ?, ?)");
-        if ($stmt === false) {
-            http_response_code(500);
-            echo json_encode(['success' => 'error', 'message' => '資料庫準備新增回覆失敗: ' . $conn->error]);
-            exit;
-        }
-        $stmt->bind_param("ssi", $question_ID, $respond_content, $parent_respond_ID); // 注意這裡的類型
+        $stmt->bind_param("ssi", $question_ID, $respond_content, $parent_respond_ID);
 
         if ($stmt->execute()) {
-            // 獲取資料庫自動生成的 respond_ID
-            echo json_encode(['success' => 'success', 'message' => '回覆已新增', 'respond_ID' => $conn->insert_id]);
+            echo json_encode(['success' => 'success', 'message' => '回覆已新增']);
         } else {
             http_response_code(500);
-            echo json_encode(['success' => 'error', 'message' => '回覆新增失敗: ' . $stmt->error]);
+            echo json_encode(['success' => 'error', 'message' => '回覆新增失敗']);
         }
-        $stmt->close();
         break;
 
 
