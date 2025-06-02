@@ -2,6 +2,14 @@
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
+// Include PHPMailer classes
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require_once('../libs/PHPMailer/src/PHPMailer.php');
+require_once('../libs/PHPMailer/src/SMTP.php');
+require_once('../libs/PHPMailer/src/Exception.php');
+
 if (!$conn) {
     http_response_code(500);
     echo json_encode(['error' => 'Database connection failed']);
@@ -76,9 +84,19 @@ switch ($method) {
         // 新增預約
         $data = json_decode(file_get_contents("php://input"), true);
 
-        // 檢查必要欄位是否存在且不為空
+        // **強制設定 office_location 的預設值，忽略前端傳入的值**
+        $office_location = "E405(test)";
+        // 如果您想確保即使前端傳了 office_location，也只用預設值，可以加上這行：
+        // unset($data['office_location']); // 這一行您之前已經有了，如果希望徹底忽略前端傳入，建議保留
+
+        // **強制設定 status 的預設值為 2，忽略前端傳入的值**
+        $status = 2; // 預設狀態為「審查中」
+        // 如果您想確保即使前端傳了 status，也只用預設值，可以加上這行：
+        // unset($data['status']);
+
+
+        // 檢查必要欄位是否存在且不為空 ( office_location 和 status 已從此處移除 )
         $required_fields = [
-            'office_location',
             'appoint_Date',
             'student_ID',
             'student_Name',
@@ -100,13 +118,6 @@ switch ($method) {
                 'message' => '缺少或欄位為空：' . implode(', ', $missing_fields)
             ]);
             exit;
-        }
-
-        if (!isset($data['status']) || $data['status'] === '') {
-            $data['status'] = 2;
-        } else {
-            // 確保 status 是整數，以防從前端傳來的是字串
-            $data['status'] = (int)$data['status'];
         }
 
         // 自動生成 appointment_ID (如果沒有提供)
@@ -143,7 +154,7 @@ switch ($method) {
         }
         $data['appointment_ID'] = $newID;
 
-         // 敏感字檢查
+        // 敏感字檢查
         $combinedText = $data['appointment_ID'] . ' ' . $data['problem_description'];
         $violations = checkSensitiveWords($conn, $combinedText);
 
@@ -198,11 +209,11 @@ switch ($method) {
         }
         mysqli_stmt_bind_param(
             $stmt,
-            "sssisssss",
+            "sssisssss", // 注意這裡的類型 'i' for status
             $data['appointment_ID'],
-            $data['office_location'],
+            $office_location, // 使用強制設定的 $office_location 變數
             $data['appoint_Date'],
-            $data['status'],
+            $status,          // 使用強制設定的 $status 變數
             $data['student_ID'],
             $data['student_Name'],
             $data['student_email'],
@@ -253,30 +264,30 @@ switch ($method) {
         $data = json_decode(file_get_contents("php://input"), true);
 
         if (empty($data['appointment_ID'])) {
-        // 自動生成 appointment_ID
-        $result = mysqli_query($conn, "SELECT appointment_ID FROM appointment_info ORDER BY appointment_ID DESC LIMIT 1");
-        if ($result && $row = mysqli_fetch_assoc($result)) {
-            // 取出最大ID的數字部分，假設格式是 A001、A002
-            $lastID = $row['appointment_ID'];
-            $num = intval(substr($lastID, 1)) + 1;
-            $newID = 'A' . str_pad($num, 3, '0', STR_PAD_LEFT);
-        } else {
-            $newID = 'A001'; // 如果表中無資料，從A001開始
+            http_response_code(400);
+            echo json_encode([
+                "success" => false,
+                "message" => "請提供 appointment_ID 以供更新"
+            ]);
+            exit;
         }
-        $data['appointment_ID'] = $newID;
-    }
 
         $appointment_ID = $data['appointment_ID'];
 
-        // 檢查資料庫是否有該 appointment_ID（情況二）
-        $checkStmt = mysqli_prepare($conn, "SELECT COUNT(*) FROM appointment_info WHERE appointment_ID = ?");
-        mysqli_stmt_bind_param($checkStmt, "s", $appointment_ID);
-        mysqli_stmt_execute($checkStmt);
-        mysqli_stmt_bind_result($checkStmt, $count);
-        mysqli_stmt_fetch($checkStmt);
-        mysqli_stmt_close($checkStmt);
+        // --- Start Email Integration ---
 
-        if ($count == 0) {
+        // 1. Fetch current appointment details (especially for old status, date, location, and student email)
+        $old_appointment_info = null;
+        $stmt_fetch_old = mysqli_prepare($conn, "SELECT status, appoint_Date, office_location, student_email FROM appointment_info WHERE appointment_ID = ?");
+        if ($stmt_fetch_old) {
+            mysqli_stmt_bind_param($stmt_fetch_old, "s", $appointment_ID);
+            mysqli_stmt_execute($stmt_fetch_old);
+            $result_old = mysqli_stmt_get_result($stmt_fetch_old);
+            $old_appointment_info = mysqli_fetch_assoc($result_old);
+            mysqli_stmt_close($stmt_fetch_old);
+        }
+
+        if (!$old_appointment_info) {
             http_response_code(404);
             echo json_encode([
                 "success" => false,
@@ -284,6 +295,14 @@ switch ($method) {
             ]);
             exit;
         }
+
+        $old_status = $old_appointment_info['status'];
+        $appoint_Date = $old_appointment_info['appoint_Date'];
+        $office_location = $old_appointment_info['office_location'];
+        $student_email = $old_appointment_info['student_email'];
+
+        // --- End Email Integration Prep ---
+
 
         // 動態組合更新欄位（排除 appointment_ID）
         $fields = [];
@@ -302,13 +321,19 @@ switch ($method) {
         ];
 
         foreach ($allowed_fields as $field => $type) {
+            // 只有當 $data 中存在該欄位時才進行更新
             if (isset($data[$field])) {
                 $fields[] = "$field = ?";
                 $types .= $type;
                 if ($field === 'status') {
                     $values[] = (int)$data[$field];
                 } else {
-                    $values[] = $data[$field];
+                    // 對於 office_location，如果傳入空字串，我們希望設為 NULL
+                    if ($field === 'office_location' && trim($data[$field]) === '') {
+                        $values[] = null; // 設為 NULL
+                    } else {
+                        $values[] = $data[$field];
+                    }
                 }
             }
         }
@@ -329,10 +354,12 @@ switch ($method) {
         $values[] = $appointment_ID;
 
         $stmt = mysqli_prepare($conn, $sql);
+
+        // Use call_user_func_array for binding parameters if you're on PHP < 5.6
+        // For PHP 5.6+, you can directly use `...$values`
         mysqli_stmt_bind_param($stmt, $types, ...$values);
 
         if (!mysqli_stmt_execute($stmt)) {
-            // 情況四：欄位長度錯誤、SQL錯誤
             http_response_code(500);
             echo json_encode([
                 "success" => false,
@@ -342,6 +369,59 @@ switch ($method) {
         }
 
         mysqli_stmt_close($stmt);
+
+        // --- Start Email Integration ---
+
+        // Check if status was changed from '2' (審查中) to '1' or '0'
+        $new_status = isset($data['status']) ? (int)$data['status'] : $old_status; // Get new status if provided, else use old one
+        if ($old_status === 2 && ($new_status === 1 || $new_status === 0)) {
+            $mail = new PHPMailer(true);
+            try {
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->Username = 'lyfish0316@gmail.com'; // Your Gmail address
+                $mail->Password = 'jzbb uoex awqk azsi'; // Your App Password
+                $mail->SMTPSecure = 'tls';
+                $mail->Port = 587;
+                $mail->CharSet = 'UTF-8';
+                $mail->Encoding = 'base64';
+
+                $mail->setFrom('lyfish0316@gmail.com', '教授系統');
+                $mail->addAddress($student_email); // Send to student's email
+
+                $subject = "";
+                $body = "";
+
+                if ($new_status === 1) {
+                    $subject = "您的預約面談已成功";
+                    $body = "親愛的同學，您的預約面談已成功。\n\n";
+                    $body .= "預約時間：" . $appoint_Date . "\n";
+                    $body .= "預約地點：" . $office_location . "\n\n";
+                    $body .= "請準時前往面談。";
+                } elseif ($new_status === 0) {
+                    $subject = "您的預約面談已失敗";
+                    $body = "親愛的同學，很抱歉通知您，您的預約面談已失敗。\n\n";
+                    $body .= "預約時間：" . $appoint_Date . "\n";
+                    $body .= "預約地點：" . $office_location . "\n\n";
+                    $body .= "如有疑問，請聯繫相關人員。";
+                }
+
+                $mail->Subject = $subject;
+                $mail->Body = $body;
+
+                $mail->send();
+                // You might log this success, but for the API response, it's generally fine to just continue.
+            } catch (Exception $e) {
+                // Log the email sending error, but don't fail the API request if the database update was successful.
+                error_log("Error sending email for appointment ID {$appointment_ID}: " . $mail->ErrorInfo);
+                // Optionally, you could add a message to the success response about the email failing.
+                // $email_send_message = " 但郵件寄送失敗：" . $mail->ErrorInfo;
+            }
+        }
+
+        // --- End Email Integration ---
+
 
         // 處理 appointment_mapping 的更新（如果有的話）
         if (isset($data['appointment_mapping']) && is_array($data['appointment_mapping'])) {
@@ -362,7 +442,7 @@ switch ($method) {
         // 更新成功回應
         echo json_encode([
             "success" => true,
-            "message" => "更新成功"
+            "message" => "更新成功" . ($email_send_message ?? '')
         ]);
         break;
 
