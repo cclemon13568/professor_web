@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const showMoreProjectsBtn = document.getElementById('showMoreProjectsBtn');
 
     // 設定預設顯示的行數
-    const DEFAULT_VISIBLE_ROWS = 3;
+    const DEFAULT_VISIBLE_ROWS = 2;
 
     /**
      * 通用的表格「展開/收回」功能函數
@@ -133,12 +133,19 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await fetchData(`api/teacher_extended_info.php?teacher_ID=${encodeURIComponent(id)}`, 'GET');
 
             const extendedData = data.data; // 確保取得 data 屬性，因為您的 API 返回 { success: true, data: {...} }
+            
+            console.log("從API獲取的論文資料:", extendedData.publications);
+            console.log("從API獲取的研究計畫資料:", extendedData.projects);
+            // 確認這裡的陣列長度是否包含你資料庫中所有筆數
+            console.log("論文資料筆數:", extendedData.publications ? extendedData.publications.length : 0);
+            console.log("研究計畫資料筆數:", extendedData.projects ? extendedData.projects.length : 0);
 
             // --- 填充論文資訊 (Publications) ---
             if (publicationsTableBody) {
                 publicationsTableBody.innerHTML = ''; // 清空載入中提示
                 if (extendedData.publications && extendedData.publications.length > 0) {
                     extendedData.publications.forEach(pub => {
+                        console.log("正在渲染論文:", pub.paper_ID); // 用於除錯
                         const tr = document.createElement('tr');
                         // 確保這裡的 `paper_link` 有值才生成連結
                         tr.innerHTML = `

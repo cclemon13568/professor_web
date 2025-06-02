@@ -1,228 +1,190 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>教授個人系網</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="css/index.css" rel="stylesheet">
-  <link href="css/question_box.css" rel="stylesheet">
-  <link href="css/custom_layout.css" rel="stylesheet">
-
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>教授個人系網</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
+    <link href="css/question_box.css" rel="stylesheet">
+    <link href="css/custom_layout.css" rel="stylesheet">
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container">
-      <a class="navbar-brand" href="#">教授個人網頁</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="index.html">自我介紹</a></li>
-          <li class="nav-item"><a class="nav-link" href="study.html">研究方向</a></li>
-          <li class="nav-item"><a class="nav-link" href="course.html">課程資訊</a></li>
-          <li class="nav-item"><a class="nav-link" href="meeting.html">預約面談</a></li>
-          <li class="nav-item"><a class="nav-link" href="Discussion.html">討論區</a></li>
-          <li class="nav-item"><a class="nav-link" href="indexx.html">測試區</a></li>
-          <li class="nav-item"><a class="nav-link" href="stuuu.html">測試區研究</a></li>
-          <li class="nav-item">
-            <a class="btn btn-outline-light ms-3" href="login.html">登入</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Header -->
-  <header class="bg-light py-5 text-center">
-    <img src="images/lee.png" style="max-width: 300px; height: auto;" alt="教授照片">
-    <div class="conecinfo">
-      <h1 class="fw-bold"><strong>李榮三教授</strong></h1>
-      <p class="text-muted">國立中正大學 資訊工程系</p>
-      <p><strong>聯絡信箱：</strong><a href="https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcSHwCwSVGvxTqVxZNgQTtTGmHzLrjjGjvlljdssXVHWRRsQrfLBQHzNHTmgZWTGdpfBfdPlX" >leejs@fcu.edu.tw</a>
-      </p>
-      <p><strong>分機號碼 : </strong>#3767</p>
-      <p><strong>實驗室 : </strong>資訊安全實驗室</p>
-
-    </div>
-  </header>
-
-
-
-
-
-<!-- 學歷與專長雙欄區塊 -->
-<section id="profile-section" class="py-5">
-  <div class="container">
-    <div class="row">
-      <!-- 左欄：學歷 -->
-      <div class="col-md-6 mb-4 mb-md-0">
-        <div id="education" class="h-100 d-flex flex-column justify-content-center">
-          <h3 class="mb-4 text-center"><strong>學歷</strong></h3>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">博士　國立中正大學 資訊工程學系</li>
-            <li class="list-group-item">學士　國立中正大學 資訊工程學系</li>
-          </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">教授個人網頁</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">自我介紹</a></li>
+                    <li class="nav-item"><a class="nav-link" href="study.html">研究方向</a></li>
+                    <li class="nav-item"><a class="nav-link" href="course.html">課程資訊</a></li>
+                    <li class="nav-item"><a class="nav-link" href="meeting.html">預約面談</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Discussion.html">討論區</a></li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light ms-3" href="login.html">登入</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
-      <!-- 右欄：專長 -->
-      <div class="col-md-6">
-        <div id="specialty" class="h-100 d-flex flex-column justify-content-center">
-          <h3 class="mb-4 text-center"><strong>專長</strong></h3>
-          <div class="specialty-list">
-            <ul>
-              <li class="list-group">資訊安全</li>
-              <li class="list-group">密碼學</li>
-              <li class="list-group">人工智慧應用</li>
-              <li class="list-group">資料庫系統</li>
-              <li class="list-group">網路協定設計</li>
-              <!-- 依實際專長增減 -->
-            </ul>
-          </div>
+    </nav>
+
+    <header class="bg-light py-5 text-center">
+        <img src="images/lee.png" style="max-width: 300px; height: auto;" alt="教授照片" id="teacherPhoto">
+        <div class="conecinfo">
+            <h1 class="fw-bold"><strong id="teacherName"></strong></h1>
+            
+            <p><strong>聯絡信箱：</strong><a id="teacherEmail" href="#"></a></p>
+            <p><strong>實驗室 : </strong><span id="teacherLab"></span></p>
+            <p><strong>自我介紹 : </strong><span id="teacher_intro"></span></p>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+    </header>
 
+    <section id="profile-section" class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-4 mb-md-0">
+                    <div id="education" class="h-100 d-flex flex-column justify-content-center">
+                        <h3 class="mb-4 text-center"><strong>學歷</strong></h3>
+                        <ul id="educationList" class="list-group list-group-flush">
+                            </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div id="specialty" class="h-100 d-flex flex-column justify-content-center">
+                        <h3 class="mb-4 text-center"><strong>專長</strong></h3>
+                        <div class="specialty-list">
+                            <ul id="specialtyList">
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <section id="experience" class="py-5">
+        <div class="container">
+            <h3 class="mb-4 text-center"><strong>校內外經歷</strong></h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>校內經歷</h5>
+                    <ul id="inExperienceList">
+                        </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5>校外經歷</h5>
+                    <ul id="outExperienceList">
+                        </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- Experience Section -->
-<section id="experience" class="py-5">
-  <div class="container">
-    <h3 class="mb-4 text-center"><strong>校內外經歷</strong></h3>
-    <div class="row">
-      <div class="col-md-6">
-        <h5>校內經歷</h5>
-        <ul>
-          <li>資訊工程學系 教授</li>
-          <li>資訊工程學系 系主任</li>
-          <li>資訊安全實驗室 主任</li>
-          <!-- 依實際經歷增減 -->
-        </ul>
-      </div>
-      <div class="col-md-6">
-        <h5>校外經歷</h5>
-        <ul>
-          <li>參與政府資安政策白皮書撰寫計畫</li>
-          <li>國際資安研討會專題演講</li>
-          <li>科技公司資安顧問</li>
-          <!-- 依實際經歷增減 -->
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<section id="timetable" class="py-5 bg-light">
-    <div class="container">
-        <h3 class="mb-4 text-center"><strong>課程表</strong></h3> <div class="table-responsive"> <table class="table table-hover schedule-table">
-                <thead>
-                    <tr>
-                        <th></th> <th>星期一</th>
-                        <th>星期二</th>
-                        <th>星期三</th>
-                        <th>星期四</th>
-                        <th>星期五</th>
-                        <th>星期六</th>
-                        <th>星期日</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>第一節<br>08:10~09:00</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                    </tr>
-                    <tr class="highlight-row"> <td>第二節<br>09:10~10:00</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>網路安全實務與社<br>會<br>資訊四合</td>
-                        <td>-</td>
-                    </tr>
-                    <tr>
-                        <td>第三節<br>10:10~11:00</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>網路安全實務與社<br>會<br>資訊四合</td>
-                        <td>-</td>
-                    </tr>
-                    <tr class="highlight-row">
-                        <td>第四節<br>11:10~12:00</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>網路安全實務與社<br>會<br>資訊四合</td>
-                        <td>-</td>
-                    </tr>
-                    <tr>
-                        <td>第五節<br>12:10~13:00</td>
-                        <td>-</td>
-                        <td>專題研究(一)<br>資訊三丁<br>專題研究(一)<br>資訊三丙<br>專題研究(一)</td>
-                        <td>專題研究(一)<br>資訊三丁<br>專題研究(一)<br>資訊三丙<br>專題研究(一)</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                    </tr>
+    <section id="timetable" class="py-5 bg-light">
+        <div class="container">
+            <h3 class="mb-4 text-center"><strong>課程表</strong></h3>
+            <div class="table-responsive">
+                <table class="table table-hover schedule-table">
+                    <thead>
+                        <tr>
+                            <th></th> <th>星期一</th>
+                            <th>星期二</th>
+                            <th>星期三</th>
+                            <th>星期四</th>
+                            <th>星期五</th>
+                            <th>星期六</th>
+                            <th>星期日</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>第一節<br>08:10~09:00</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td>第二節<br>09:10~10:00</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>網路安全實務與社<br>會<br>資訊四合</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>第三節<br>10:10~11:00</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>網路安全實務與社<br>會<br>資訊四合</td>
+                            <td>-</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td>第四節<br>11:10~12:00</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>網路安全實務與社<br>會<br>資訊四合</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>第五節<br>12:10~13:00</td>
+                            <td>-</td>
+                            <td>專題研究(一)<br>資訊三丁<br>專題研究(一)<br>資訊三丙<br>專題研究(一)</td>
+                            <td>專題研究(一)<br>資訊三丁<br>專題研究(一)<br>資訊三丙<br>專題研究(一)</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
                     </tbody>
-            </table>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-primary text-white text-center py-3">
+        <div class="container">
+            <small>&copy; 2025 李榮三教授 | 逢甲大學</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/indexx.js"></script>
+
+    <div id="floating-question-button">
+        <button id="question-icon-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-6h2v6zm-1-8c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
+            </svg>
+        </button>
+        <div id="question-modal" class="hidden">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h3>提問</h3>
+                <textarea id="question-textarea" placeholder="請輸入您的問題..."></textarea>
+                <button id="send-question-button" class="btn btn-primary">發送</button>
+                <div id="question-response" class="hidden mt-2">
+                    <p><strong>回覆：</strong></p>
+                    <div id="response-text"></div>
+                </div>
+            </div>
         </div>
     </div>
-</section>
-
-
-
-  <!-- Footer -->
-  <footer class="bg-primary text-white text-center py-3">
-    <div class="container">
-      <small>&copy; 2025 李榮三教授 | 逢甲大學</small>
-    </div>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/index.js"></script>
-
-
-  <!-- Question button -->
-  <div id="floating-question-button">
-    <!-- 顯示浮動圖示 -->
-    <button id="question-icon-button">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-6h2v6zm-1-8c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
-      </svg>
-    </button>
-    <div id="question-modal" class="hidden">
-      <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <h3>提問</h3>
-        <textarea id="question-textarea" placeholder="請輸入您的問題..."></textarea>
-        <button id="send-question-button" class="btn btn-primary">發送</button>
-        <div id="question-response" class="hidden mt-2">
-          <p><strong>回覆：</strong></p>
-          <div id="response-text"></div>
-        </div>
-      </div>
-    </div>
-  </div>
 
 </body>
 </html>

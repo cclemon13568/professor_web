@@ -1,0 +1,205 @@
+/* 手機螢幕（小於 768px） */
+@media (max-width: 768px) {
+    header img {
+        max-width: 100%; /* 圖片寬度自適應 */
+    }
+
+    header h1 {
+        font-size: 2rem; /* 縮小標題字體大小 */
+    }
+
+    .navbar {
+        max-width: 100%; /* 導覽列寬度填滿螢幕 */
+        padding: 10px; /* 減少內邊距 */
+    }
+
+    .nav-link {
+        font-size: 1rem; /* 縮小導覽連結字體大小 */
+        margin: 0 5px; /* 減少連結間距 */
+    }
+}
+
+/* 平板螢幕（768px 至 1024px） */
+@media (min-width: 768px) and (max-width: 1024px) {
+    header img {
+        max-width: 600px; /* 限制圖片寬度 */
+    }
+
+    header h1 {
+        font-size: 2.5rem; /* 調整標題字體大小 */
+    }
+
+    .navbar {
+        max-width: 90%; /* 導覽列寬度為螢幕的 90% */
+    }
+}
+/*網頁大小調整*/
+
+
+/* /////////////////////////////////////////////////////////// */
+
+/*瀏覽列*/
+
+
+/*色塊區*/
+.navbar {
+    background-color: #fafafa;
+    width: 100%; /* 填滿整條 X 軸 */
+    margin: 0; /* 移除外邊距 */
+    border-radius: 0; /* 移除圓角 */
+    padding: 10px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加陰影 */
+}
+
+/* 左上網頁標題 */
+.navbar-brand {
+    font-size: 1.5rem; /* 調整品牌名稱的字體大小 */
+    font-weight: bold; /* 加粗品牌名稱 */
+}
+
+.nav-link {
+    font-size: 1.1rem; /* 調整導覽連結的字體大小 */
+    margin: 0 10px; /* 增加連結之間的間距 */
+}
+
+.navbar-toggler {
+    border: none; /* 移除切換按鈕的邊框 */
+    background-color: rgba(255, 255, 255, 0.2); /* 添加透明背景 */
+}
+
+/*點選瀏覽列後的效果*/
+.nav-link.active {
+    font-weight: bold;
+    color: #fff !important;
+    background-color: #2f5077;
+    border-radius: 5px;
+}
+
+
+.navbar .btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* 輕微亮一點 */
+    color: rgba(255, 255, 255, 0.85); /* 提高文字亮度 */
+    border-color: rgba(255, 255, 255, 0.85);
+}
+
+
+.navbar .btn-login:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加懸浮陰影 */
+    transform: translateY(-2px); /* 輕微上移效果（可選） */
+}
+
+.navbar-dark.bg-primary {
+    background-color: #6B7EA5 !important; /* 紅色背景 */
+    width: 100%; /* 填滿整條 X 軸 */
+    margin: 0; /* 移除外邊距 */
+    border-radius: 0; /* 移除圓角 */
+}
+
+
+/*瀏覽列end*/
+
+
+/* /////////////////////////////////////////////////////////// */
+
+
+/*header 最上塊區 老師照片*/
+
+header {
+    background-color: #fafafa;
+    display: flex; /* 啟用 Flexbox 佈局 */
+    align-items: center; /* 垂直置中對齊子元素 */
+    justify-content: center; /* 水平置中 header 內的元素 */
+    padding: 20px; /* 可調整 header 的內邊距 */
+    flex-direction: row; /* 預設水平排列 */
+}
+
+header img {
+    max-width: 250px; /* 將圖片的最大寬度設為 300px */
+    height: auto; /* 確保圖片比例不變 */
+    border-radius: 15px; /* 設定鈍角半徑 */
+    margin-right: 50px; /* 圖片和文字之間的間距 */
+}
+
+header .conecinfo p {
+    margin-bottom: 5px;
+}
+
+header .conecinfo a {
+    color: #6B7EA5; /* 參考 Bootstrap 的連結顏色 */
+    text-decoration: none;
+}
+
+header .conecinfo a:hover {
+    text-decoration: underline;
+}
+
+header .conecinfo {
+    text-align: left;
+    line-height: 1.6;
+    
+}
+
+/*header end*/
+
+/* /////////////////////////////////////////////////////////// */
+
+/*送出評價的美編*/送出評價的美編*/
+
+.evaluation-form .btn-primary {
+    background-color: #6B7EA5;
+    border: none;
+}
+.evaluation-form .btn-primary:hover {
+    background-color: #4d6187;
+}
+.show-more-btn {
+    background-color: #6B7EA5;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 4px 18px;
+    margin: 12px auto 0 auto;
+    display: block;
+    font-size: 0.95rem;
+    font-weight: bold;
+    transition: background 0.2s;
+    cursor: pointer;
+}
+.show-more-btn:hover {
+    background-color: #4d6187;
+}
+.eval-hidden {
+    display: none;
+}
+/*送出評價 按鈕美編*/
+.evaluation-form .btn-primary {
+    background-color: #6B7EA5;
+    border: none;
+}
+.evaluation-form .btn-primary:hover {
+    background-color: #4d6187;
+}
+
+
+
+
+/* /////////////////////////////////////////////////////////// */
+
+/*底部的邊*/
+
+footer.bg-primary {
+    background-color: #6B7EA5 !important; /*rgb(168, 32, 32)*/
+}
+
+#about {
+    border-top: 2px solid #000; /* 設定橫線的粗細與顏色 */
+    padding-top: 20px; /* 增加上方內邊距，讓內容與橫線有間距 */
+}
+
+.container {
+    line-height: 2;
+}
+
+
+
+/* /////////////////////////////////////////////////////////// */

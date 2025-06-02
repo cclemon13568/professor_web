@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ====== 導覽列互動效果 ======
+    // ====== 這裡是你要加的導覽列互動效果 ======
     const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
     const currentPage = window.location.pathname.split("/").pop();
     navLinks.forEach(link => {

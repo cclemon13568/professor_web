@@ -33,6 +33,21 @@ switch ($method) {
             }
 
             mysqli_stmt_close($stmt);
+        } else if (isset($_GET['course_ID'])) {
+        $course_ID = $_GET['course_ID'];
+        $stmt = mysqli_prepare($conn, "
+            SELECT e.*, em.course_ID
+            FROM evaluation e
+            LEFT JOIN evaluation_mapping em ON e.evaluate_ID = em.evaluate_ID
+            WHERE em.course_ID = ?
+        ");
+        mysqli_stmt_bind_param($stmt, "s", $course_ID);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        echo json_encode($data);
+        mysqli_stmt_close($stmt);
+
         } else {
             // 查全部資料並加上 course_ID
             $query = "
