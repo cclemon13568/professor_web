@@ -194,7 +194,7 @@ CREATE TABLE `login_info` (
 --
 
 INSERT INTO `login_info` (`professor_accountnumber`, `professor_password`, `verification_code`, `email`, `teacher_ID`) VALUES
-('P101', 'testpass123', NULL, 'codepalce@gmail.com', NULL);
+('P101', 'testpass123', NULL, 'codepalce316@gmail.com', NULL);
 
 -- --------------------------------------------------------
 
