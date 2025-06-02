@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： localhost:3306
--- 產生時間： 2025 年 06 月 02 日 04:12
+-- 產生時間： 2025 年 06 月 02 日 12:10
 -- 伺服器版本： 10.11.11-MariaDB-0ubuntu0.24.04.2
 -- PHP 版本： 8.3.6
 
@@ -44,9 +44,9 @@ CREATE TABLE `appointment_info` (
 --
 
 INSERT INTO `appointment_info` (`appointment_ID`, `office_location`, `appoint_Date`, `status`, `student_ID`, `student_Name`, `student_email`, `course_ID`, `problem_description`) VALUES
-('A001(test)', 'E405(test)', '2025-05-21 00:00:00', 0, 'S001(test)', '王小明(test)', 'guokido99@gmail.com', 'CS001', '想詢問專題方向與資料蒐集方式(test)'),
-('A002(test)', 'E406(test)', '2025-05-22 00:00:00', 1, 'S002(test)', '林小華(test)', 'guomy97@gmail.com', 'CS002', '不確定作業需求內容與評分標準(test)'),
-('A003(test)', 'E405(test)', '2025-05-23 00:00:00', 2, 'S003(test)', '張大同(test)', 'any12355@gmail.com', 'CS001', '想更改期末報告主題(test)');
+('A001(test)', 'E405(test)', '2025-05-21 00:00:00', 0, 'S001(test)', '王小明(test)', 'wangxm@example.com', 'CS001', '想詢問專題方向與資料蒐集方式(test)'),
+('A002(test)', 'E406(test)', '2025-05-22 00:00:00', 1, 'S002(test)', '林小華(test)', 'lish@example.com', 'CS002', '不確定作業需求內容與評分標準(test)'),
+('A003(test)', 'E405(test)', '2025-05-23 00:00:00', 2, 'S003(test)', '張大同(test)', 'chendh@example.com', 'CS001', '想更改期末報告主題(test)');
 
 -- --------------------------------------------------------
 
@@ -185,7 +185,7 @@ CREATE TABLE `login_info` (
   `professor_accountnumber` varchar(20) NOT NULL,
   `professor_password` varchar(50) DEFAULT NULL,
   `verification_code` char(20) DEFAULT NULL,
-  `email` char(50) DEFAULT NULL,
+  `email` char(20) DEFAULT NULL,
   `teacher_ID` char(15) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -194,7 +194,7 @@ CREATE TABLE `login_info` (
 --
 
 INSERT INTO `login_info` (`professor_accountnumber`, `professor_password`, `verification_code`, `email`, `teacher_ID`) VALUES
-('P101', 'testpass123', NULL, 'codepalce316@gmail.com', NULL);
+('P101', 'testpass123', NULL, 'leejs@fcu.edu.tw', NULL);
 
 -- --------------------------------------------------------
 
@@ -207,20 +207,19 @@ CREATE TABLE `message_board` (
   `question_name` varchar(100) DEFAULT NULL,
   `question_department` varchar(100) DEFAULT NULL,
   `question_title` text DEFAULT NULL,
-  `question_content` text DEFAULT NULL,
-  `popular_question` varchar(10) DEFAULT NULL
+  `question_content` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `message_board`
 --
 
-INSERT INTO `message_board` (`question_ID`, `question_name`, `question_department`, `question_title`, `question_content`, `popular_question`) VALUES
-('Q001(test)', '學生A(test)', '資訊工程系(test)', '專題報告格式是否有統一規定？(test)', '我即將開始撰寫專題研究報告，想知道是否有標準的格式可遵循，例如封面格式、字體大小、頁數限制等。(test)', '是(test)'),
-('Q002(test)', '學生B(test)', '資管系(test)', '可以使用AI工具協助撰寫報告嗎？(test)', '我們課堂上要寫期末報告，如果使用像 ChatGPT 的工具產生內容，這樣算違規嗎？可以接受嗎？(test)', '否(test)'),
-('Q003(test)', '學生C(test)', '電子系(test)', '選修課的加退選時間是什麼時候？(test)', '請問下學期選修課的加退選時間如何查詢？是否會公告在學校系統？(test)', '是(test)'),
-('Q004(test)', '學生D(test)', '機械系(test)', '請假會不會影響期末成績？(test)', '因為有家庭因素，這學期可能需請幾次假，想知道是否會對出席率或成績造成影響。(test)', '否(test)'),
-('Q005(test)', '學生E(test)', '外文系(test)', '期末報告能以影片形式繳交嗎？(test)', '我有拍攝一段影片作為報告內容，比傳統書面報告更具體、生動，不知道老師是否接受影片作為繳交形式？(test)', '否(test)');
+INSERT INTO `message_board` (`question_ID`, `question_name`, `question_department`, `question_title`, `question_content`) VALUES
+('Q001(test)', '學生A(test)', '資訊工程系(test)', '專題報告格式是否有統一規定？(test)', '我即將開始撰寫專題研究報告，想知道是否有標準的格式可遵循，例如封面格式、字體大小、頁數限制等。(test)'),
+('Q002(test)', '學生B(test)', '資管系(test)', '可以使用AI工具協助撰寫報告嗎？(test)', '我們課堂上要寫期末報告，如果使用像 ChatGPT 的工具產生內容，這樣算違規嗎？可以接受嗎？(test)'),
+('Q003(test)', '學生C(test)', '電子系(test)', '選修課的加退選時間是什麼時候？(test)', '請問下學期選修課的加退選時間如何查詢？是否會公告在學校系統？(test)'),
+('Q004(test)', '學生D(test)', '機械系(test)', '請假會不會影響期末成績？(test)', '因為有家庭因素，這學期可能需請幾次假，想知道是否會對出席率或成績造成影響。(test)'),
+('Q005(test)', '學生E(test)', '外文系(test)', '期末報告能以影片形式繳交嗎？(test)', '我有拍攝一段影片作為報告內容，比傳統書面報告更具體、生動，不知道老師是否接受影片作為繳交形式？(test)');
 
 -- --------------------------------------------------------
 
@@ -273,7 +272,7 @@ INSERT INTO `participation` (`teacher_ID`, `project_ID`) VALUES
 CREATE TABLE `personal_info` (
   `teacher_ID` char(15) NOT NULL,
   `teacher_name` varchar(25) DEFAULT NULL,
-  `teacher_email` varchar(50) DEFAULT NULL,
+  `teacher_email` varchar(25) DEFAULT NULL,
   `teacher_intro` text DEFAULT NULL,
   `office_location` varchar(25) DEFAULT NULL,
   `office_hours` varchar(25) DEFAULT NULL
@@ -284,7 +283,7 @@ CREATE TABLE `personal_info` (
 --
 
 INSERT INTO `personal_info` (`teacher_ID`, `teacher_name`, `teacher_email`, `teacher_intro`, `office_location`, `office_hours`) VALUES
-('T002', '李榮三', 'codepalce316@gmail.com', '資安領域的先驅，專精人工智慧資安應用，引領未來科技發展。研究成果不僅在學術界備受矚目，更在產業界產生深遠影響。', '資訊安全實驗室', '星期一、四、五 12:10~13:00(test)');
+('T002', '李榮三', 'leejs@fcu.edu.tw', '資安領域的先驅，專精人工智慧資安應用，引領未來科技發展。研究成果不僅在學術界備受矚目，更在產業界產生深遠影響。', '資訊安全實驗室', '星期一、四、五 12:10~13:00(test)');
 
 -- --------------------------------------------------------
 
@@ -341,33 +340,34 @@ CREATE TABLE `responds` (
   `question_ID` varchar(10) DEFAULT NULL,
   `respond_content` text DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `parent_respond_ID` int(11) DEFAULT NULL
+  `parent_respond_ID` int(11) DEFAULT NULL,
+  `is_teacher_response` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `responds`
 --
 
-INSERT INTO `responds` (`respond_ID`, `question_ID`, `respond_content`, `created_at`, `parent_respond_ID`) VALUES
-(1, 'Q001(test)', '請參考教務處公告的專題報告格式說明文件。(test)', '2025-05-25 08:29:16', NULL),
-(2, 'Q001(test)', '也可參考前屆學長姐的報告作為參考範例。(test)', '2025-05-25 08:29:16', NULL),
-(3, 'Q002(test)', 'AI 工具僅限用於語言潤飾，內容應為原創。(test)', '2025-05-25 08:29:16', NULL),
-(4, 'Q002(test)', '部分老師可能接受，但需事先取得同意。(test)', '2025-05-25 08:29:16', NULL),
-(5, 'Q003(test)', '加退選時間通常於開學前後公告，請密切注意教務處網站或校務系統。(test)', '2025-05-25 08:29:16', NULL),
-(6, 'Q003(test)', '建議也可詢問導師或系辦確認正確時間。(test)', '2025-05-25 08:29:16', NULL),
-(7, 'Q004(test)', '出席狀況可能影響平時成績，請事先與授課老師溝通請假原因。(test)', '2025-05-25 08:29:16', NULL),
-(8, 'Q004(test)', '有些課程會計算出席率，應避免無故缺課。(test)', '2025-05-25 08:29:16', NULL),
-(9, 'Q005(test)', '依據課綱要求，如未註明可使用影片，則應繳交書面報告。(test)', '2025-05-25 08:29:16', NULL),
-(10, 'Q005(test)', '如需影片輔助，可事先詢問授課老師是否接受。(test)', '2025-05-25 08:29:16', NULL),
-(11, 'Q001(test)', '哪裡可以找到前屆的報告範例呢？(test)', '2025-05-30 04:00:00', 2),
-(12, 'Q002(test)', '所以老師如果允許的話可以用 AI 幫寫嗎？(test)', '2025-05-30 04:01:00', 4),
-(13, 'Q003(test)', '開學前會寄 email 通知嗎？(test)', '2025-05-30 04:02:00', 5),
-(14, 'Q004(test)', '請問只請假一次還會影響成績嗎？(test)', '2025-05-30 04:03:00', 7),
-(15, 'Q005(test)', '影片報告需要加字幕嗎？(test)', '2025-05-30 04:04:00', 10),
-(16, 'Q001(test)', '請問公告的格式可以用繁體中文嗎？(test)', '2025-05-30 04:05:00', 1),
-(17, 'Q001(test)', '我去年就是照教務處的格式交的，沒問題(test)', '2025-05-30 04:06:00', 1),
-(18, 'Q004(test)', '缺課三次老師就會扣分，建議還是要請假(test)', '2025-05-30 04:07:00', 8),
-(19, 'Q005(test)', '我有用影片交過一次，但老師說要附文字稿(test)', '2025-05-30 04:08:00', 9);
+INSERT INTO `responds` (`respond_ID`, `question_ID`, `respond_content`, `created_at`, `parent_respond_ID`, `is_teacher_response`) VALUES
+(1, 'Q001(test)', '請參考教務處公告的專題報告格式說明文件。(test)', '2025-05-25 08:29:16', NULL, 1),
+(2, 'Q001(test)', '也可參考前屆學長姐的報告作為參考範例。(test)', '2025-05-25 08:29:16', NULL, 1),
+(3, 'Q002(test)', 'AI 工具僅限用於語言潤飾，內容應為原創。(test)', '2025-05-25 08:29:16', NULL, 1),
+(4, 'Q002(test)', '部分老師可能接受，但需事先取得同意。(test)', '2025-05-25 08:29:16', NULL, 1),
+(5, 'Q003(test)', '加退選時間通常於開學前後公告，請密切注意教務處網站或校務系統。(test)', '2025-05-25 08:29:16', NULL, 1),
+(6, 'Q003(test)', '建議也可詢問導師或系辦確認正確時間。(test)', '2025-05-25 08:29:16', NULL, 1),
+(7, 'Q004(test)', '出席狀況可能影響平時成績，請事先與授課老師溝通請假原因。(test)', '2025-05-25 08:29:16', NULL, 1),
+(8, 'Q004(test)', '有些課程會計算出席率，應避免無故缺課。(test)', '2025-05-25 08:29:16', NULL, 1),
+(9, 'Q005(test)', '依據課綱要求，如未註明可使用影片，則應繳交書面報告。(test)', '2025-05-25 08:29:16', NULL, 1),
+(10, 'Q005(test)', '如需影片輔助，可事先詢問授課老師是否接受。(test)', '2025-05-25 08:29:16', NULL, 1),
+(11, 'Q001(test)', '哪裡可以找到前屆的報告範例呢？(test)', '2025-05-30 04:00:00', 2, 0),
+(12, 'Q002(test)', '所以老師如果允許的話可以用 AI 幫寫嗎？(test)', '2025-05-30 04:01:00', 4, 0),
+(13, 'Q003(test)', '開學前會寄 email 通知嗎？(test)', '2025-05-30 04:02:00', 5, 0),
+(14, 'Q004(test)', '請問只請假一次還會影響成績嗎？(test)', '2025-05-30 04:03:00', 7, 0),
+(15, 'Q005(test)', '影片報告需要加字幕嗎？(test)', '2025-05-30 04:04:00', 10, 0),
+(16, 'Q001(test)', '請問公告的格式可以用繁體中文嗎？(test)', '2025-05-30 04:05:00', 1, 0),
+(17, 'Q001(test)', '我去年就是照教務處的格式交的，沒問題(test)', '2025-05-30 04:06:00', 1, 0),
+(18, 'Q004(test)', '缺課三次老師就會扣分，建議還是要請假(test)', '2025-05-30 04:07:00', 8, 0),
+(19, 'Q005(test)', '我有用影片交過一次，但老師說要附文字稿(test)', '2025-05-30 04:08:00', 9, 0);
 
 -- --------------------------------------------------------
 
