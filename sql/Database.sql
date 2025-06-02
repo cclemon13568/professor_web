@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： localhost:3306
--- 產生時間： 2025 年 05 月 31 日 16:19
+-- 產生時間： 2025 年 06 月 02 日 04:12
 -- 伺服器版本： 10.11.11-MariaDB-0ubuntu0.24.04.2
 -- PHP 版本： 8.3.6
 
@@ -194,7 +194,7 @@ CREATE TABLE `login_info` (
 --
 
 INSERT INTO `login_info` (`professor_accountnumber`, `professor_password`, `verification_code`, `email`, `teacher_ID`) VALUES
-('P101', 'testpass123', NULL, 'leejs@fcu.edu.tw', 'T002');
+('P101', 'testpass123', NULL, 'leejs@fcu.edu.tw', NULL);
 
 -- --------------------------------------------------------
 
@@ -284,7 +284,7 @@ CREATE TABLE `personal_info` (
 --
 
 INSERT INTO `personal_info` (`teacher_ID`, `teacher_name`, `teacher_email`, `teacher_intro`, `office_location`, `office_hours`) VALUES
-('T002', '李榮三', 'leejs@fcu.edu.tw', '資安領域的先驅，專精人工智慧資安應用，引領未來科技發展。研究成果不僅在學術界備受矚目，更在產業界產生深遠影響。', 'E405(test)', '星期一、四、五 12:10~1300(test)');
+('T002', '李榮三', 'leejs@fcu.edu.tw', '資安領域的先驅，專精人工智慧資安應用，引領未來科技發展。研究成果不僅在學術界備受矚目，更在產業界產生深遠影響。', '資訊安全實驗室', '星期一、四、五 12:10~13:00(test)');
 
 -- --------------------------------------------------------
 
