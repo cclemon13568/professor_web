@@ -284,7 +284,7 @@ CREATE TABLE `personal_info` (
 --
 
 INSERT INTO `personal_info` (`teacher_ID`, `teacher_name`, `teacher_email`, `teacher_intro`, `office_location`, `office_hours`) VALUES
-('T002', '李榮三', 'codepalce@gmail.com', '資安領域的先驅，專精人工智慧資安應用，引領未來科技發展。研究成果不僅在學術界備受矚目，更在產業界產生深遠影響。', '資訊安全實驗室', '星期一、四、五 12:10~13:00(test)');
+('T002', '李榮三', 'codepalce316@gmail.com', '資安領域的先驅，專精人工智慧資安應用，引領未來科技發展。研究成果不僅在學術界備受矚目，更在產業界產生深遠影響。', '資訊安全實驗室', '星期一、四、五 12:10~13:00(test)');
 
 -- --------------------------------------------------------
 
