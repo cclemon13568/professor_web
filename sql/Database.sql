@@ -185,7 +185,7 @@ CREATE TABLE `login_info` (
   `professor_accountnumber` varchar(20) NOT NULL,
   `professor_password` varchar(50) DEFAULT NULL,
   `verification_code` char(20) DEFAULT NULL,
-  `email` char(20) DEFAULT NULL,
+  `email` char(50) DEFAULT NULL,
   `teacher_ID` char(15) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -273,7 +273,7 @@ INSERT INTO `participation` (`teacher_ID`, `project_ID`) VALUES
 CREATE TABLE `personal_info` (
   `teacher_ID` char(15) NOT NULL,
   `teacher_name` varchar(25) DEFAULT NULL,
-  `teacher_email` varchar(25) DEFAULT NULL,
+  `teacher_email` varchar(50) DEFAULT NULL,
   `teacher_intro` text DEFAULT NULL,
   `office_location` varchar(25) DEFAULT NULL,
   `office_hours` varchar(25) DEFAULT NULL
