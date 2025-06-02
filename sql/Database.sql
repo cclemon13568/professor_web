@@ -44,9 +44,9 @@ CREATE TABLE `appointment_info` (
 --
 
 INSERT INTO `appointment_info` (`appointment_ID`, `office_location`, `appoint_Date`, `status`, `student_ID`, `student_Name`, `student_email`, `course_ID`, `problem_description`) VALUES
-('A001(test)', 'E405(test)', '2025-05-21 00:00:00', 0, 'S001(test)', '王小明(test)', 'wangxm@example.com', 'CS001', '想詢問專題方向與資料蒐集方式(test)'),
-('A002(test)', 'E406(test)', '2025-05-22 00:00:00', 1, 'S002(test)', '林小華(test)', 'lish@example.com', 'CS002', '不確定作業需求內容與評分標準(test)'),
-('A003(test)', 'E405(test)', '2025-05-23 00:00:00', 2, 'S003(test)', '張大同(test)', 'chendh@example.com', 'CS001', '想更改期末報告主題(test)');
+('A001(test)', 'E405(test)', '2025-05-21 00:00:00', 0, 'S001(test)', '王小明(test)', 'guokido99@gmail.com', 'CS001', '想詢問專題方向與資料蒐集方式(test)'),
+('A002(test)', 'E406(test)', '2025-05-22 00:00:00', 1, 'S002(test)', '林小華(test)', 'guomy97@gmail.com', 'CS002', '不確定作業需求內容與評分標準(test)'),
+('A003(test)', 'E405(test)', '2025-05-23 00:00:00', 2, 'S003(test)', '張大同(test)', 'any12355@gmail.com', 'CS001', '想更改期末報告主題(test)');
 
 -- --------------------------------------------------------
 
@@ -194,7 +194,7 @@ CREATE TABLE `login_info` (
 --
 
 INSERT INTO `login_info` (`professor_accountnumber`, `professor_password`, `verification_code`, `email`, `teacher_ID`) VALUES
-('P101', 'testpass123', NULL, 'leejs@fcu.edu.tw', NULL);
+('P101', 'testpass123', NULL, 'codepalce@gmail.com', NULL);
 
 -- --------------------------------------------------------
 
@@ -284,7 +284,7 @@ CREATE TABLE `personal_info` (
 --
 
 INSERT INTO `personal_info` (`teacher_ID`, `teacher_name`, `teacher_email`, `teacher_intro`, `office_location`, `office_hours`) VALUES
-('T002', '李榮三', 'leejs@fcu.edu.tw', '資安領域的先驅，專精人工智慧資安應用，引領未來科技發展。研究成果不僅在學術界備受矚目，更在產業界產生深遠影響。', '資訊安全實驗室', '星期一、四、五 12:10~13:00(test)');
+('T002', '李榮三', 'codepalce@gmail.com', '資安領域的先驅，專精人工智慧資安應用，引領未來科技發展。研究成果不僅在學術界備受矚目，更在產業界產生深遠影響。', '資訊安全實驗室', '星期一、四、五 12:10~13:00(test)');
 
 -- --------------------------------------------------------
 
