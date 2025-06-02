@@ -1,3 +1,5 @@
+console.log('indexx.js loaded');
+
 document.addEventListener("DOMContentLoaded", () => {
     // 瀏覽列互動效果
     const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
@@ -20,10 +22,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const teacherPhone = document.getElementById('teacherPhone');
     const teacherLab = document.getElementById('teacherLab');
     const teacherSelfIntroduction = document.getElementById('teacher_intro');
-    // 新增校內、校外經歷 DOM 元素
+    // 校內、校外經歷 DOM 元素
     const teacherExpIn = document.getElementById('inExperienceList');
     const teacherExpOut = document.getElementById('outExperienceList');
-
     // 學歷和專長 DOM 元素
     const educationList = document.getElementById('educationList');
     const specialtyList = document.getElementById('specialtyList');
@@ -31,50 +32,55 @@ document.addEventListener("DOMContentLoaded", () => {
     // 設定要查詢的教師 ID
     const teacherId = 'T002';
 
+    // 經歷列表渲染（如需展示更多功能可用此函式）
+    function renderExperienceList(list, container, moreBtnId, type) {
+        container.innerHTML = '';
+        let showCount = 3;
+        const moreBtn = document.getElementById(moreBtnId);
+        if (moreBtn) moreBtn.remove();
 
-function renderExperienceList(list, container, moreBtnId, type) {
-    container.innerHTML = '';
-    let showCount = 3;
-    const moreBtn = document.getElementById(moreBtnId);
-    if (moreBtn) moreBtn.remove();
+        if (Array.isArray(list) && list.length > 0) {
+            list.forEach((exp, idx) => {
+                const li = document.createElement('li');
+                li.textContent = exp.experience;
+                if (idx >= showCount) {
+                    li.style.display = 'none';
+                    li.classList.add('exp-hidden');
+                }
+                container.appendChild(li);
+            });
 
-    if (Array.isArray(list) && list.length > 0) {
-        list.forEach((exp, idx) => {
-            const li = document.createElement('li');
-            li.textContent = exp.experience;
-            if (idx >= showCount) {
-                li.style.display = 'none';
-                li.classList.add('exp-hidden');
+            if (list.length > showCount) {
+                const btn = document.createElement('button');
+                btn.textContent = '展示更多';
+                btn.className = 'btn btn-link p-0';
+                btn.id = moreBtnId;
+                btn.onclick = function () {
+                    const hiddenItems = container.querySelectorAll('.exp-hidden');
+                    hiddenItems.forEach(item => item.style.display = '');
+                    btn.style.display = 'none';
+                };
+                container.parentNode.appendChild(btn);
             }
+        } else {
+            const li = document.createElement('li');
+            li.className = 'text-muted';
+            li.textContent = type === 'in' ? '無校內經歷' : '無校外經歷';
             container.appendChild(li);
-        });
-
-        if (list.length > showCount) {
-            const btn = document.createElement('button');
-            btn.textContent = '展示更多';
-            btn.className = 'btn btn-link p-0';
-            btn.id = moreBtnId;
-            btn.onclick = function () {
-                const hiddenItems = container.querySelectorAll('.exp-hidden');
-                hiddenItems.forEach(item => item.style.display = '');
-                btn.style.display = 'none';
-            };
-            container.parentNode.appendChild(btn);
         }
-    } else {
-        const li = document.createElement('li');
-        li.className = 'text-muted';
-        li.textContent = type === 'in' ? '無校內經歷' : '無校外經歷';
-        container.appendChild(li);
     }
-}
-
-
 
     /**
      * 同時取得教師基本資料與經歷資料
      */
     async function fetchTeacherAllInfo(id) {
+
+            console.log('teacherName:', teacherName);
+            console.log('teacherEmail:', teacherEmail);
+            console.log('teacherLab:', teacherLab);
+            console.log('teacherSelfIntroduction:', teacherSelfIntroduction);
+            console.log('educationList:', educationList);
+            console.log('specialtyList:', specialtyList);
         // 初始載入提示
         if (teacherName) teacherName.textContent = '載入中...';
         if (teacherEmail) teacherEmail.textContent = '載入中...';
@@ -99,11 +105,10 @@ function renderExperienceList(list, container, moreBtnId, type) {
             const coreData = await coreRes.json();
             const extData = await extRes.json();
 
-            console.log('extData:', extData);
-
+            console.log('coreData', coreData); // <-- 這就是你問的位置，它已經在這裡了！
             // 處理基本資料
-            if (coreData.error) {
-                const errorMessage = `資料載入失敗: ${coreData.error}`;
+            if (!coreData.success) {
+                const errorMessage = `資料載入失敗: ${coreData.message || '未知錯誤'}`;
                 if (teacherName) teacherName.textContent = '資料載入失敗';
                 if (teacherEmail) teacherEmail.textContent = '';
                 if (teacherPhone) teacherPhone.textContent = '';
@@ -112,20 +117,22 @@ function renderExperienceList(list, container, moreBtnId, type) {
                 if (educationList) educationList.innerHTML = `<li class="list-group-item text-danger">${errorMessage}</li>`;
                 if (specialtyList) specialtyList.innerHTML = `<li class="list-group text-danger">${errorMessage}</li>`;
             } else {
-                if (teacherName) teacherName.textContent = coreData.teacher_name || 'N/A';
+                // 個人資訊
+               // 個人資訊
+                if (teacherName) teacherName.textContent = coreData.data.teacher_name || 'N/A';
                 if (teacherEmail) {
-                    teacherEmail.textContent = coreData.teacher_email || 'N/A';
-                    teacherEmail.href = `mailto:${coreData.teacher_email}` || '#';
+                    teacherEmail.textContent = coreData.data.teacher_email || 'N/A';
+                    teacherEmail.href = coreData.data.teacher_email ? `mailto:${coreData.data.teacher_email}` : '#';
                 }
-                if (teacherPhone) teacherPhone.textContent = coreData.phone || 'N/A';
-                if (teacherLab) teacherLab.textContent = coreData.office_location || 'N/A';
-                if (teacherSelfIntroduction) teacherSelfIntroduction.textContent = coreData.teacher_intro || 'N/A';
+                if (teacherPhone) teacherPhone.textContent = coreData.data.phone || 'N/A'; // 注意這裡
+                if (teacherLab) teacherLab.textContent = coreData.data.office_location || 'N/A';
+                if (teacherSelfIntroduction) teacherSelfIntroduction.textContent = coreData.data.teacher_intro || 'N/A';
 
                 // 學歷
                 if (educationList) {
                     educationList.innerHTML = '';
-                    if (coreData.degrees && coreData.degrees.length > 0) {
-                        coreData.degrees.forEach(degree => {
+                    if (coreData.data.degrees && coreData.data.degrees.length > 0) {
+                        coreData.data.degrees.forEach(degree => {
                             const li = document.createElement('li');
                             li.className = 'list-group-item';
                             li.textContent = degree;
@@ -142,8 +149,8 @@ function renderExperienceList(list, container, moreBtnId, type) {
                 // 專長
                 if (specialtyList) {
                     specialtyList.innerHTML = '';
-                    if (coreData.majors && coreData.majors.length > 0) {
-                        coreData.majors.forEach(major => {
+                    if (coreData.data.majors && coreData.data.majors.length > 0) {
+                        coreData.data.majors.forEach(major => {
                             const li = document.createElement('li');
                             li.className = 'list-group';
                             li.textContent = major;
@@ -159,14 +166,13 @@ function renderExperienceList(list, container, moreBtnId, type) {
             }
 
             // 處理校內經歷
-            // 處理校內經歷
             if (teacherExpIn) {
                 teacherExpIn.innerHTML = '';
                 const campusList = extData.data && extData.data.campus_experience ? extData.data.campus_experience : [];
                 if (Array.isArray(campusList) && campusList.length > 0) {
                     campusList.forEach(exp => {
                         const li = document.createElement('li');
-                        li.textContent = exp.experience; // 注意：exp 是物件，要取 experience 欄位
+                        li.textContent = exp.experience;
                         teacherExpIn.appendChild(li);
                     });
                 } else {
@@ -184,7 +190,7 @@ function renderExperienceList(list, container, moreBtnId, type) {
                 if (Array.isArray(externalList) && externalList.length > 0) {
                     externalList.forEach(exp => {
                         const li = document.createElement('li');
-                        li.textContent = exp.experience; // 注意：exp 是物件，要取 experience 欄位
+                        li.textContent = exp.experience;
                         teacherExpOut.appendChild(li);
                     });
                 } else {
