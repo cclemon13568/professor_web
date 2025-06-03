@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>管理後台</title>
-  <link href="css/back.css" rel="stylesheet">
+  <link href="css/back.css?v=<?= time() ?>" rel="stylesheet">
 </head>
+
 <body>
   <div class="container">
     <aside class="sidebar">
@@ -17,7 +18,7 @@
         <li onclick="loadModule('course_info')">課程管理</li>
         <li onclick="loadModule('sensitive_words')">敏感詞管理</li>
         <li id="teacher-menu" onclick="toggleTeacherList()">教師資訊管理</li>
-        <ul id="teacher-list" style="display:none; background:#5a6b8a; border-radius:4px; margin-left:10px; margin-top:5px; padding:5px 0;"></ul>
+        <ul id="teacher-list"></ul>
       </ul>
     </aside>
     <main class="main-content">
@@ -25,6 +26,6 @@
       <div id="data-area">資料將顯示在這裡</div>
     </main>
   </div>
-  <script src="js/app.js"></script>
+  <script src="js/app.js?v=<?= time() ?>"></script>
 </body>
 </html>

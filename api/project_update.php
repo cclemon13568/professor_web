@@ -2,10 +2,14 @@
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
-$project_ID = $_POST['project_ID'] ?? '';
-$project_role = $_POST['project_role'] ?? null;
-$project_period = $_POST['project_period'] ?? null;
-$project_organization = $_POST['project_organization'] ?? null;
+// ✅ 解析 JSON 輸入
+$input = json_decode(file_get_contents('php://input'), true);
+
+// ✅ 取得欄位
+$project_ID = $input['project_ID'] ?? '';
+$project_role = $input['project_role'] ?? null;
+$project_period = $input['project_period'] ?? null;
+$project_organization = $input['project_organization'] ?? null;
 
 // ✅ 檢查 project_ID 是否提供
 if (empty($project_ID)) {
@@ -48,4 +52,3 @@ if ($update_stmt->execute()) {
 
 $update_stmt->close();
 $conn->close();
-?>

@@ -2,19 +2,23 @@
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
-$paper_id = $_POST['paper_ID'] ?? '';
+// ✅ 解析 JSON 輸入
+$input = json_decode(file_get_contents('php://input'), true);
+
+// ✅ 抓取 paper_ID
+$paper_id = $input['paper_ID'] ?? '';
 if (empty($paper_id)) {
     echo json_encode(["success" => false, "message" => "缺少 paper_ID"]);
     exit;
 }
 
-// 刪除 publication 關聯
+// ✅ 刪除 publication 關聯
 $stmt_pub = $conn->prepare("DELETE FROM publication WHERE paper_ID = ?");
 $stmt_pub->bind_param("s", $paper_id);
 $stmt_pub->execute();
 $stmt_pub->close();
 
-// 刪除 paper_info
+// ✅ 刪除 paper_info
 $stmt_info = $conn->prepare("DELETE FROM paper_info WHERE paper_ID = ?");
 $stmt_info->bind_param("s", $paper_id);
 
@@ -26,4 +30,3 @@ if ($stmt_info->execute()) {
 
 $stmt_info->close();
 $conn->close();
-?>

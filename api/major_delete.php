@@ -1,8 +1,16 @@
 <?php
+// 關閉錯誤輸出，避免污染 JSON 回應
+ini_set('display_errors', 0);
+
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
-// 取得 id（從 POST 傳入）
+// ✅ 解析 JSON 輸入資料
+if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
+    $_POST = json_decode(file_get_contents('php://input'), true) ?? [];
+}
+
+// 取得 id（從 JSON POST 傳入）
 $ID = $_POST['id'] ?? '';
 if (!is_numeric($ID)) {
     echo json_encode(['success' => false, 'message' => '缺少或無效的 id']);

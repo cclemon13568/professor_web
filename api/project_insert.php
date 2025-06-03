@@ -2,14 +2,17 @@
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
-// 接收 POST 參數
-$teacher_id = $_POST['teacher_ID'] ?? '';
-$project_ID = $_POST['project_ID'] ?? '';
-$project_role = $_POST['project_role'] ?? '';
-$project_period = $_POST['project_period'] ?? '';
-$project_organization = $_POST['project_organization'] ?? '';
+// ✅ 解析 JSON 輸入
+$input = json_decode(file_get_contents('php://input'), true);
 
-// ✅ 檢查必要欄位
+// ✅ 取得參數
+$teacher_id = $input['teacher_ID'] ?? '';
+$project_ID = $input['project_ID'] ?? '';
+$project_role = $input['project_role'] ?? '';
+$project_period = $input['project_period'] ?? '';
+$project_organization = $input['project_organization'] ?? '';
+
+// ✅ 驗證必要欄位
 if (empty($teacher_id) || empty($project_ID)) {
     echo json_encode(["success" => false, "message" => "teacher_ID 與 project_ID 為必填"]);
     exit;
@@ -36,4 +39,3 @@ if ($stmt_part->execute()) {
 
 $stmt_part->close();
 $conn->close();
-?>

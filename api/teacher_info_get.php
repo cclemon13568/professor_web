@@ -42,26 +42,32 @@ if ($result->num_rows > 0) {
     $data = $result->fetch_assoc();
     $teacher_id = $data['teacher_ID']; // 確保有 teacher_ID 可供查詢子表格
 
-    // ✅ teacher_major（專長）
+    // ✅ teacher_major（專長）含 id
     $majors = [];
-    $stmt_major = $conn->prepare("SELECT major FROM teacher_major WHERE teacher_ID = ?");
+    $stmt_major = $conn->prepare("SELECT id, major FROM teacher_major WHERE teacher_ID = ?");
     $stmt_major->bind_param("s", $teacher_id);
     $stmt_major->execute();
     $result_major = $stmt_major->get_result();
     while ($row = $result_major->fetch_assoc()) {
-        $majors[] = $row['major'];
+        $majors[] = [
+            "id" => $row['id'],
+            "major" => $row['major']
+        ];
     }
     $stmt_major->close();
     $data['majors'] = $majors;
 
-    // ✅ teacher_degree（學歷）
+    // ✅ teacher_degree（學歷）含 id
     $degrees = [];
-    $stmt_degree = $conn->prepare("SELECT degree FROM teacher_degree WHERE teacher_ID = ?");
+    $stmt_degree = $conn->prepare("SELECT id, degree FROM teacher_degree WHERE teacher_ID = ?");
     $stmt_degree->bind_param("s", $teacher_id);
     $stmt_degree->execute();
     $result_degree = $stmt_degree->get_result();
     while ($row = $result_degree->fetch_assoc()) {
-        $degrees[] = $row['degree'];
+        $degrees[] = [
+            "id" => $row['id'],
+            "degree" => $row['degree']
+        ];
     }
     $stmt_degree->close();
     $data['degrees'] = $degrees;

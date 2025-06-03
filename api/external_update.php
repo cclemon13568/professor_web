@@ -2,9 +2,14 @@
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
-$id = $_POST['id'] ?? '';
-$experience = $_POST['experience'] ?? '';
+// ✅ 解析 JSON 輸入
+$input = json_decode(file_get_contents('php://input'), true);
 
+// ✅ 取得資料
+$id = $input['id'] ?? '';
+$experience = $input['experience'] ?? '';
+
+// ✅ 驗證欄位
 if (!is_numeric($id)) {
     echo json_encode(['success' => false, 'message' => '缺少或無效的 id']);
     exit;
@@ -15,6 +20,7 @@ if (empty($experience)) {
 }
 $id = (int)$id;
 
+// ✅ 執行更新
 $sql = "UPDATE external_experience SET experience = ? WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("si", $experience, $id);
@@ -31,4 +37,3 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
-?>

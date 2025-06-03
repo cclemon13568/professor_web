@@ -2,7 +2,11 @@
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
-$id = $_POST['id'] ?? '';
+// ✅ 解析 JSON 輸入
+$input = json_decode(file_get_contents('php://input'), true);
+
+// ✅ 取得 id
+$id = $input['id'] ?? '';
 
 if (!is_numeric($id)) {
     echo json_encode(['success' => false, 'message' => '缺少或無效的 id']);
@@ -10,6 +14,7 @@ if (!is_numeric($id)) {
 }
 $id = (int)$id;
 
+// ✅ 執行刪除
 $stmt = $conn->prepare("DELETE FROM external_experience WHERE id = ?");
 $stmt->bind_param("i", $id);
 
@@ -25,4 +30,3 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
-?>

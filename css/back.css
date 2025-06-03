@@ -351,18 +351,17 @@ body {
 /* 教師名單摺疊區塊樣式 */
 #teacher-list {
     display: none;
-    background: #f7e7b5; /* 明顯的底色，黃色系凸顯 */
+    background: #2F4F76FF; /* 深藍色底色 */
     border-radius: 8px;
     margin-left: 10px;
     margin-top: 5px;
     padding: 10px 0;
     list-style: none;
-    box-shadow: 0 2px 12px rgba(50, 50, 0, 0.12), 0 0 0 2px #ffe082 inset; /* 陰影與內框 */
-    border: 1.5px solid #ffe082;
+    box-shadow: 0 2px 12px rgba(47, 79, 118, 0.12), 0 0 0 2px #3a5a8c inset; /* 深藍色陰影與內框 */
 }
 
 #teacher-list li {
-    color: #6a4c00;
+    color: #fff; /* 白色字 */
     cursor: pointer;
     padding: 7px 18px;
     border-radius: 4px;
@@ -373,8 +372,8 @@ body {
 }
 
 #teacher-list li:hover {
-    background: #ffe082;
-    color: #333;
+    background: #4666a3; /* 深藍色 hover */
+    color: #fff;
 }
 
 /* 響應式設計：小螢幕調整 */

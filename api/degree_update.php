@@ -2,9 +2,14 @@
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
-$id = $_POST['id'] ?? '';
-$degree = $_POST['degree'] ?? '';
+// ✅ 解析 JSON 輸入
+$input = json_decode(file_get_contents('php://input'), true);
 
+// ✅ 取得參數
+$id = $input['id'] ?? '';
+$degree = $input['degree'] ?? '';
+
+// ✅ 驗證資料
 if (!is_numeric($id)) {
     echo json_encode(["success" => false, "message" => "缺少或無效的 id"]);
     exit;
@@ -15,6 +20,7 @@ if (empty($degree)) {
 }
 $id = (int)$id;
 
+// ✅ 執行更新
 $sql = "UPDATE teacher_degree SET degree = ? WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("si", $degree, $id);

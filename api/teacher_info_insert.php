@@ -1,9 +1,16 @@
 <?php
-// 資料庫連線
+// 關閉 PHP 預設錯誤輸出，避免污染 JSON 輸出
+ini_set('display_errors', 0);
+
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
-// 接收表單資料
+// ✅ 如果是 JSON 輸入，從 php://input 解析 JSON
+if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
+    $_POST = json_decode(file_get_contents('php://input'), true) ?? [];
+}
+
+// 接收資料
 $id       = $_POST['teacher_ID']       ?? '';
 $name     = $_POST['teacher_name']     ?? '';
 $email    = $_POST['teacher_email']    ?? '';
@@ -17,14 +24,18 @@ if (empty($id)) {
     exit;
 }
 
+// ✅ 使用 prepared statement 防止 SQL injection
 $sql = "INSERT INTO personal_info (teacher_ID, teacher_name, teacher_email, teacher_intro, office_location, office_hours)
-        VALUES ('$id', '$name', '$email', '$intro', '$location', '$hours')";
+        VALUES (?, ?, ?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ssssss", $id, $name, $email, $intro, $location, $hours);
 
-if ($conn->query($sql)) {
+if ($stmt->execute()) {
     echo json_encode(["success" => true, "message" => "新增成功"]);
 } else {
-    echo json_encode(["success" => false, "message" => $conn->error]);
+    echo json_encode(["success" => false, "message" => "新增失敗：" . $stmt->error]);
 }
 
+$stmt->close();
 $conn->close();
 ?>

@@ -2,7 +2,11 @@
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
-$project_ID = $_POST['project_ID'] ?? '';
+// ✅ 解析 JSON 輸入
+$input = json_decode(file_get_contents('php://input'), true);
+
+// ✅ 取得 project_ID
+$project_ID = $input['project_ID'] ?? '';
 if (empty($project_ID)) {
     echo json_encode(["success" => false, "message" => "缺少 project_ID"]);
     exit;
@@ -26,4 +30,3 @@ if ($stmt_info->execute()) {
 
 $stmt_info->close();
 $conn->close();
-?>

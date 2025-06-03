@@ -2,16 +2,21 @@
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
-$teacher_id = $_POST['teacher_ID'] ?? '';
-$experience = $_POST['experience'] ?? '';
-$id = $_POST['id'] ?? null; // optional
+// ✅ 解析 JSON 輸入
+$input = json_decode(file_get_contents('php://input'), true);
 
+// ✅ 取得參數
+$teacher_id = $input['teacher_ID'] ?? '';
+$experience = $input['experience'] ?? '';
+$id = $input['id'] ?? null; // optional
+
+// ✅ 驗證必要欄位
 if (empty($teacher_id) || empty($experience)) {
     echo json_encode(["success" => false, "message" => "teacher_ID 與 experience 為必填"]);
     exit;
 }
 
-// 若未提供 id，自動產生
+// ✅ 若未提供 id，自動產生
 if (empty($id)) {
     $query = "SELECT MAX(id) AS max_id FROM external_experience";
     $result = $conn->query($query);
@@ -27,6 +32,7 @@ if (empty($id)) {
     $id = (int)$id;
 }
 
+// ✅ 執行新增
 $sql = "INSERT INTO external_experience (id, teacher_ID, experience) VALUES (?, ?, ?)";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("iss", $id, $teacher_id, $experience);
@@ -39,4 +45,3 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
-?>

@@ -2,18 +2,21 @@
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
-// 取得參數
-$teacher_id = $_POST['teacher_ID'] ?? '';
-$degree = $_POST['degree'] ?? '';
-$id = $_POST['id'] ?? null; // 可選參數
+// ✅ 解析 JSON 輸入
+$input = json_decode(file_get_contents('php://input'), true);
 
-// 驗證欄位
+// ✅ 取得參數
+$teacher_id = $input['teacher_ID'] ?? '';
+$degree = $input['degree'] ?? '';
+$id = $input['id'] ?? null;
+
+// ✅ 驗證欄位
 if (empty($teacher_id) || empty($degree)) {
     echo json_encode(["success" => false, "message" => "teacher_ID 與 degree 為必填"]);
     exit;
 }
 
-// 若未提供 id，則自動產生
+// ✅ 若未提供 id，自動產生
 if (empty($id)) {
     $query = "SELECT MAX(id) AS max_id FROM teacher_degree";
     $result = $conn->query($query);
@@ -30,15 +33,22 @@ if (empty($id)) {
     $id = (int)$id;
 }
 
-// 執行新增
+// ✅ 執行新增
 $sql = "INSERT INTO teacher_degree (id, teacher_ID, degree) VALUES (?, ?, ?)";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("iss", $id, $teacher_id, $degree);
 
 if ($stmt->execute()) {
-    echo json_encode(["success" => true, "message" => "新增成功", "new_id" => $id]);
+    echo json_encode([
+        "success" => true,
+        "message" => "新增成功",
+        "new_id" => $id
+    ]);
 } else {
-    echo json_encode(["success" => false, "message" => "新增失敗：" . $stmt->error]);
+    echo json_encode([
+        "success" => false,
+        "message" => "新增失敗：" . $stmt->error
+    ]);
 }
 
 $stmt->close();

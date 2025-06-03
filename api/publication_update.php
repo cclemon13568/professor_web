@@ -2,11 +2,14 @@
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
-// 接收參數
-$paper_id      = $_POST['paper_ID'] ?? '';
-$paper_topic   = $_POST['paper_topic'] ?? null;
-$paper_authors = $_POST['paper_authors'] ?? null;
-$paper_year    = $_POST['paper_year'] ?? null;
+// ✅ 解析 JSON 輸入
+$input = json_decode(file_get_contents('php://input'), true);
+
+// ✅ 接收參數
+$paper_id      = $input['paper_ID'] ?? '';
+$paper_topic   = $input['paper_topic'] ?? null;
+$paper_authors = $input['paper_authors'] ?? null;
+$paper_year    = $input['paper_year'] ?? null;
 
 // ✅ 檢查必要欄位
 if (empty($paper_id)) {

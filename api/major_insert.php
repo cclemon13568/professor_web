@@ -1,7 +1,16 @@
 <?php
+// 關閉 HTML 錯誤輸出避免污染 JSON
+ini_set('display_errors', 1);
+
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
+// ✅ 支援接收 application/json 格式的輸入
+if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
+    $_POST = json_decode(file_get_contents('php://input'), true) ?? [];
+}
+
+// 取得輸入資料
 $teacher_id = $_POST['teacher_ID'] ?? '';
 $major = $_POST['major'] ?? '';
 $id = $_POST['id'] ?? null; // optional
@@ -26,7 +35,7 @@ if (empty($id)) {
         }
     }
 } else {
-    $id = (int)$id; // 強制轉換成 int，避免 injection 或格式錯誤
+    $id = (int)$id; // 強制轉為整數
 }
 
 // ✅ 執行新增

@@ -14,7 +14,7 @@ const modulesConfig = {
             question_content: { label: '問題內容', type: 'textarea', canTruncate: true }, // 設置為 textarea 且可截斷
             popular_question: { label: '熱門問題', type: 'text' } // 考慮使用 select 類型實現 是/否
         },
-        actions: ['edit', 'delete']
+        actions: ['delete']
     },
     appointment: {
         title: '預約管理',
@@ -348,8 +348,6 @@ if (!modal) {
 
 const dataForm = document.getElementById('data-form');
 const modalTitle = document.getElementById('modal-title');
-const formButtonsContainer = dataForm.querySelector('.form-buttons');
-
 
 // 打開新增資料模態框
 function openAddModal(moduleName, initialData = {}) {
@@ -393,7 +391,6 @@ function generateFormFields(moduleName, itemData, mode) {
     let formHtml = '';
 
     // 將按鈕容器從表單中移除，以便重新生成字段
-    const buttonsHtml = formButtonsContainer.outerHTML;
     dataForm.innerHTML = ''; // 清空表單內容
 
     Object.keys(config.fields).forEach(fieldKey => {
@@ -474,9 +471,14 @@ function generateFormFields(moduleName, itemData, mode) {
         `;
     });
 
+    formHtml += `
+        <div class="form-buttons">
+            <button type="submit">儲存</button>
+            <button type="button" class="cancel-btn" onclick="closeModal()">取消</button>
+        </div>
+    `;
+
     dataForm.innerHTML = formHtml;
-    // 重新添加按鈕
-    dataForm.appendChild(formButtonsContainer);
 
     // 重新綁定表單提交事件
     dataForm.onsubmit = function(e) {
@@ -567,57 +569,188 @@ async function loadTeacherNames() {
     }
 }
 
-// 顯示教師詳細資料（以三個表格呈現）
-async function showTeacherDetail(teacher_ID, teacher_name) {
-    moduleTitleElement.textContent = `教師資訊 - ${teacher_name}`;
-    dataArea.innerHTML = '<p>載入中...</p>';
-    try {
-        const res = await fetch(`api/teacher_info_get.php?teacher_ID=${encodeURIComponent(teacher_ID)}`);
-        const json = await res.json();
-        if (json && json.success && json.data) {
-            const t = json.data;
-            // 1. personal_info 表格
-            let personalInfoHtml = `<h2>基本資料</h2><table><tbody>`;
-            // 過濾掉 teacher_ID, teacher_name, majors, degrees
-            for (const key in t) {
-                if (key === 'majors' || key === 'degrees') continue;
-                personalInfoHtml += `<tr><th>${key}</th><td>${t[key]}</td></tr>`;
-            }
-            personalInfoHtml += `</tbody></table>`;
-
-            // 2. teacher_major 表格
-            let majorHtml = `<h2>專長</h2><table><thead><tr><th>major</th></tr></thead><tbody>`;
-            if (Array.isArray(t.majors) && t.majors.length > 0) {
-                t.majors.forEach(m => {
-                    majorHtml += `<tr><td>${m}</td></tr>`;
-                });
-            } else {
-                majorHtml += `<tr><td>無資料</td></tr>`;
-            }
-            majorHtml += `</tbody></table>`;
-
-            // 3. teacher_degree 表格
-            let degreeHtml = `<h2>學歷</h2><table><thead><tr><th>degree</th></tr></thead><tbody>`;
-            if (Array.isArray(t.degrees) && t.degrees.length > 0) {
-                t.degrees.forEach(d => {
-                    degreeHtml += `<tr><td>${d}</td></tr>`;
-                });
-            } else {
-                degreeHtml += `<tr><td>無資料</td></tr>`;
-            }
-            degreeHtml += `</tbody></table>`;
-
-            dataArea.innerHTML = personalInfoHtml + majorHtml + degreeHtml;
-        } else {
-            dataArea.innerHTML = '<p>查無詳細資料</p>';
-        }
-    } catch {
-        dataArea.innerHTML = '<p>載入失敗</p>';
-    }
-}
-
 // 初始化：頁面載入時載入第一個模組（留言管理）
 document.addEventListener('DOMContentLoaded', () => {
     // 預設載入第一個模組 (留言管理)
     loadModule('message_board'); 
+    loadTeacherNames();
+
+    // 綁定全局事件
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('edit-item')) {
+            const type = e.target.dataset.type;
+            const row = JSON.parse(e.target.dataset.row);
+            openSubTableModal(type, 'edit', row);
+        } else if (e.target.classList.contains('delete-item')) {
+            const type = e.target.dataset.type;
+            const id = e.target.dataset.id;
+            deleteSubTableRow(type, id);
+        }
+    });
 });
+
+let currentTeacherID = '';
+let currentTeacherName = '';
+
+const subTableApi = {
+    major: {
+        insert: 'api/major_insert.php',
+        update: 'api/major_update.php',
+        delete: 'api/major_delete.php',
+        fields: ['id', 'teacher_ID', 'major']
+    },
+    degree: {
+        insert: 'api/degree_insert.php',
+        update: 'api/degree_update.php',
+        delete: 'api/degree_delete.php',
+        fields: ['id', 'teacher_ID', 'degree']
+    },
+    campus: {
+        insert: 'api/campus_insert.php',
+        update: 'api/campus_update.php',
+        delete: 'api/campus_delete.php',
+        fields: ['id', 'teacher_ID', 'experience']
+    },
+    external: {
+        insert: 'api/external_insert.php',
+        update: 'api/external_update.php',
+        delete: 'api/external_delete.php',
+        fields: ['id', 'teacher_ID', 'experience']
+    },
+    publication: {
+        insert: 'api/publication_insert.php',
+        update: 'api/publication_update.php',
+        delete: 'api/publication_delete.php',
+        fields: ['paper_ID', 'teacher_ID', 'paper_topic', 'paper_authors', 'paper_year']
+    },
+    project: {
+        insert: 'api/project_insert.php',
+        update: 'api/project_update.php',
+        delete: 'api/project_delete.php',
+        fields: ['project_ID', 'teacher_ID', 'project_role', 'project_period', 'project_organization']
+    }
+};
+
+function openModal(title, formHtml, onSubmit) {
+    const modal = document.querySelector('.modal');
+    document.getElementById('modal-title').textContent = title;
+    const form = document.getElementById('data-form');
+    form.innerHTML = formHtml;
+    // 每次生成新的按鈕區塊
+    form.insertAdjacentHTML('beforeend', `
+        <div class="form-buttons">
+            <button type="submit">儲存</button>
+            <button type="button" class="cancel-btn" onclick="closeModal()">取消</button>
+        </div>
+    `);
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        await onSubmit();
+    };
+    modal.style.display = 'flex';
+}
+
+function generateSubtableFormFields(fields, data = {}) {
+    return fields.map(field => {
+        const value = data[field] || '';
+        const readonly = field === 'teacher_ID' ? 'readonly' : '';
+        return `<label>${field}：</label><input name="${field}" value="${value}" ${readonly} style="width:100%;">`;
+    }).join('');
+}
+
+function openSubTableModal(type, mode, row = {}) {
+    const config = subTableApi[type];
+    const title = mode === 'edit' ? `編輯 ${type}` : `新增 ${type}`;
+    const fields = config.fields;
+    const formHtml = generateSubtableFormFields(fields, row);
+
+    openModal(title, formHtml, async () => {
+        const formData = new FormData(document.getElementById('data-form'));
+        const payload = {};
+        fields.forEach(f => payload[f] = formData.get(f));
+        payload.teacher_ID = currentTeacherID;
+
+        const url = config[mode === 'edit' ? 'update' : 'insert'];
+        const res = await fetchData(url, 'POST', payload);
+        alert(res.message);
+        if (res.success) {
+            closeModal();
+            showTeacherDetail(currentTeacherID, currentTeacherName);
+        }
+    });
+}
+
+async function deleteSubTableRow(type, id) {
+    const config = subTableApi[type];
+    if (!confirm(`確定要刪除 ${type} 的資料 ID: ${id} 嗎？`)) return;
+    const res = await fetchData(config.delete, 'POST', { id });
+    alert(res.message);
+    if (res.success) showTeacherDetail(currentTeacherID, currentTeacherName);
+}
+
+// 教師詳細頁載入（略過重複代碼）
+async function showTeacherDetail(teacher_ID, teacher_name) {
+    currentTeacherID = teacher_ID;
+    currentTeacherName = teacher_name;
+    moduleTitleElement.textContent = `教師資訊 - ${teacher_name}`;
+    dataArea.innerHTML = '<p>載入中...</p>';
+
+    try {
+        const info = await fetchData(`api/teacher_info_get.php?teacher_ID=${teacher_ID}`);
+        const ext = await fetchData(`api/teacher_extended_info.php?teacher_ID=${teacher_ID}`);
+
+        if (!info.success || !ext.success) throw new Error('資料載入失敗');
+
+        let html = `<h2>基本資料</h2><table><tbody>`;
+        Object.entries(info.data).forEach(([k, v]) => {
+            if (k !== 'majors' && k !== 'degrees')
+                html += `<tr><th>${k}</th><td>${v}</td></tr>`;
+        });
+        html += `</tbody></table><div class="action-buttons">
+            <button onclick="openSubTableModal('info', 'edit', ${JSON.stringify(info.data).replace(/"/g, '&quot;')})">編輯</button>
+            <button onclick="deleteTeacher('${teacher_ID}', '${teacher_name}')">刪除</button>
+        </div>`;
+
+        const tables = [
+            { key: 'majors', label: '專長', type: 'major', data: info.data.majors },
+            { key: 'degrees', label: '學歷', type: 'degree', data: info.data.degrees },
+            { key: 'campus_experience', label: '校內經歷', type: 'campus', data: ext.data.campus_experience },
+            { key: 'external_experience', label: '校外經歷', type: 'external', data: ext.data.external_experience },
+            { key: 'publications', label: '論文', type: 'publication', data: ext.data.publications },
+            { key: 'projects', label: '研究計畫', type: 'project', data: ext.data.projects }
+        ];
+
+        for (const table of tables) {
+            html += `<h2>${table.label}</h2><table><thead><tr>`;
+            if (Array.isArray(table.data) && table.data.length > 0) {
+                Object.keys(table.data[0]).forEach(k => html += `<th>${k}</th>`);
+                html += `<th>操作</th></tr></thead><tbody>`;
+                table.data.forEach(row => {
+                    html += '<tr>';
+                    Object.values(row).forEach(v => html += `<td>${v}</td>`);
+                    html += `<td>
+                        <button class="edit-item" data-type="${table.type}" data-row='${JSON.stringify(row)}'>編輯</button>
+                        <button class="delete-item" data-type="${table.type}" data-id="${row.id || row.paper_ID || row.project_ID}">刪除</button>
+                    </td></tr>`;
+                });
+            } else {
+                html += `<tr><td colspan="100%">無資料</td></tr>`;
+            }
+            html += `</tbody></table><button onclick="openSubTableModal('${table.type}', 'add')">新增${table.label}</button>`;
+        }
+
+        dataArea.innerHTML = html;
+    } catch (err) {
+        dataArea.innerHTML = `<p>載入失敗：${err.message}</p>`;
+    }
+}
+
+async function deleteTeacher(id, name) {
+    if (!confirm(`確定刪除教師「${name}」嗎？`)) return;
+    const res = await fetchData('api/teacher_info_delete.php', 'POST', { teacher_ID: id });
+    alert(res.message);
+    if (res.success) {
+        dataArea.innerHTML = '<p>請選擇左側教師</p>';
+        await loadTeacherNames();
+    }
+}

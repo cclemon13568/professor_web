@@ -1,21 +1,29 @@
 <?php
+// 關閉 PHP 錯誤輸出到 HTML，避免汙染 JSON
+ini_set('display_errors', 0);
+
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
-// 取得 POST 傳入的 teacher_ID
+// ✅ 接收 JSON 輸入
+if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
+    $_POST = json_decode(file_get_contents('php://input'), true) ?? [];
+}
+
+// ✅ 取得 teacher_ID
 $teacher_id = $_POST['teacher_ID'] ?? '';
 if (empty($teacher_id)) {
     echo json_encode(["success" => false, "message" => "請提供 teacher_ID"]);
     exit;
 }
 
-// 所有要檢查的資料表與欄位
+// ✅ 檢查相關聯的資料表
 $related_tables = [
     'appointment_mapping'   => 'teacher_ID',
     'campus_experience'     => 'teacher_ID',
     'course_info'           => 'teacher_ID',
     'external_experience'   => 'teacher_ID',
-    'login_info'            => 'professor_accoutnumber', // 對應教師帳號
+    'login_info'            => 'professor_accountnumber',
     'participation'         => 'teacher_ID',
     'publication'           => 'teacher_ID',
     'teacher_degree'        => 'teacher_ID',
@@ -36,7 +44,6 @@ foreach ($related_tables as $table => $column) {
     }
 }
 
-// 若有任何表仍有資料，禁止刪除
 if (!empty($related_counts)) {
     $messages = [];
     foreach ($related_counts as $table => $count) {
@@ -51,7 +58,7 @@ if (!empty($related_counts)) {
     exit;
 }
 
-// ✅ 開始刪除 personal_info 中該老師資料
+// ✅ 執行刪除
 $stmt_delete = $conn->prepare("DELETE FROM personal_info WHERE teacher_ID = ?");
 $stmt_delete->bind_param("s", $teacher_id);
 
@@ -63,4 +70,3 @@ if ($stmt_delete->execute()) {
 
 $stmt_delete->close();
 $conn->close();
-?>

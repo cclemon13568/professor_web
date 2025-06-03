@@ -2,13 +2,19 @@
 include('../config/db.php');
 header('Content-Type: application/json; charset=utf-8');
 
-$id = $_POST['id'] ?? '';
+// ✅ 讀取 JSON 輸入
+$input = json_decode(file_get_contents('php://input'), true);
+
+// ✅ 取得 id 並檢查格式
+$id = $input['id'] ?? '';
+
 if (!is_numeric($id)) {
     echo json_encode(['success' => false, 'message' => '缺少或無效的 id']);
     exit;
 }
 $id = (int)$id;
 
+// ✅ 執行刪除
 $stmt = $conn->prepare("DELETE FROM teacher_degree WHERE id = ?");
 $stmt->bind_param("i", $id);
 
