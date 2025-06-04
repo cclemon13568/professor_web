@@ -183,12 +183,13 @@
 
 /*色塊區*/
 .navbar {
-    background-color: #fafafa;
-    width: 100%; 
-    margin: 0; 
-    border-radius: 0; 
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
     padding: 10px 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fafafa;
 }
 
 /* 左上網頁標題 */

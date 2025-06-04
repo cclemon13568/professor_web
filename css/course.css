@@ -9,7 +9,6 @@
     }
 
     .navbar {
-        max-width: 100%; /* 導覽列寬度填滿螢幕 */
         padding: 10px; /* 減少內邊距 */
     }
 
@@ -29,9 +28,7 @@
         font-size: 2.5rem; /* 調整標題字體大小 */
     }
 
-    .navbar {
-        max-width: 90%; /* 導覽列寬度為螢幕的 90% */
-    }
+    
 }
 /*網頁大小調整*/
 
@@ -43,12 +40,13 @@
 
 /*色塊區*/
 .navbar {
-    background-color: #fafafa;
-    width: 100%; /* 填滿整條 X 軸 */
-    margin: 0; /* 移除外邊距 */
-    border-radius: 0; /* 移除圓角 */
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
     padding: 10px 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加陰影 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fafafa;
 }
 
 /* 左上網頁標題 */

@@ -1,4 +1,3 @@
-
 /* 手機螢幕（小於 768px） */
 @media (max-width: 768px) {
     header img {
@@ -36,39 +35,34 @@
 }
 /*網頁大小調整*/
 
-
 /* /////////////////////////////////////////////////////////// */
 
 /*瀏覽列*/
-
-
-/*色塊區*/
 .navbar {
     background-color: #fafafa;
     width: 100%; /* 填滿整條 X 軸 */
-    margin: 0; /* 移除外邊距 */
-    border-radius: 0; /* 移除圓角 */
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0;
     padding: 10px 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加陰影 */
 }
 
-/* 左上網頁標題 */
 .navbar-brand {
-    font-size: 1.5rem; /* 調整品牌名稱的字體大小 */
-    font-weight: bold; /* 加粗品牌名稱 */
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
 .nav-link {
-    font-size: 1.1rem; /* 調整導覽連結的字體大小 */
-    margin: 0 10px; /* 增加連結之間的間距 */
+    font-size: 1.1rem;
+    margin: 0 10px;
 }
 
 .navbar-toggler {
-    border: none; /* 移除切換按鈕的邊框 */
-    background-color: rgba(255, 255, 255, 0.2); /* 添加透明背景 */
+    border: none;
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
-/*點選瀏覽列後的效果*/
 .nav-link.active {
     font-weight: bold;
     color: #fff !important;
@@ -76,49 +70,42 @@
     border-radius: 5px;
 }
 
-
 .navbar .btn-outline-light:hover {
-    background-color: rgba(255, 255, 255, 0.1); /* 輕微亮一點 */
-    color: rgba(255, 255, 255, 0.85); /* 提高文字亮度 */
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.85);
     border-color: rgba(255, 255, 255, 0.85);
 }
 
-
 .navbar .btn-login:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加懸浮陰影 */
-    transform: translateY(-2px); /* 輕微上移效果（可選） */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
 }
 
 .navbar-dark.bg-primary {
-    background-color: #6B7EA5 !important; /* 紅色背景 */
-    width: 100%; /* 填滿整條 X 軸 */
-    margin: 0; /* 移除外邊距 */
-    border-radius: 0; /* 移除圓角 */
+    background-color: #6B7EA5 !important;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
 }
-
-
 /*瀏覽列end*/
-
 
 /* /////////////////////////////////////////////////////////// */
 
-
 /*header 最上塊區 老師照片*/
-
 header {
     background-color: #fafafa;
-    display: flex; /* 啟用 Flexbox 佈局 */
-    align-items: center; /* 垂直置中對齊子元素 */
-    justify-content: center; /* 水平置中 header 內的元素 */
-    padding: 20px; /* 可調整 header 的內邊距 */
-    flex-direction: row; /* 預設水平排列 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    flex-direction: row;
 }
 
 header img {
-    max-width: 250px; /* 將圖片的最大寬度設為 300px */
-    height: auto; /* 確保圖片比例不變 */
-    border-radius: 15px; /* 設定鈍角半徑 */
-    margin-right: 50px; /* 圖片和文字之間的間距 */
+    max-width: 250px;
+    height: auto;
+    border-radius: 15px;
+    margin-right: 50px;
 }
 
 header .conecinfo p {
@@ -126,7 +113,7 @@ header .conecinfo p {
 }
 
 header .conecinfo a {
-    color: #007bff; /* 參考 Bootstrap 的連結顏色 */
+    color: #007bff;
     text-decoration: none;
 }
 
@@ -137,90 +124,62 @@ header .conecinfo a:hover {
 header .conecinfo {
     text-align: left;
     line-height: 1.6;
-    
 }
-
 /*header end*/
 
 /* /////////////////////////////////////////////////////////// */
 
 /* 內容區塊 */
-/* 專長區塊的內容容器樣式 */
 
 /* 專長區塊 (Expertise Section) 整體樣式 */
+#education,
 #specialty {
     background: #f5f7fa;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(107, 126, 165, 0.08);
     margin-bottom: 32px;
-    padding: 20px; /* 增加整體內邊距，讓內容與邊框有距離 */
-    text-align: center; /* 讓整個specialty區塊的文字默認置中 */
+    padding: 20px;
 }
 
-/* 專長區塊標題 */
+/* 專長區塊標題、學歷區塊標題 */
+#education h3,
 #specialty h3 {
-    /* 移除固定的 height 和 line-height，讓其自然高度 */
-    /* height: 50px; */
-    /* line-height: 50px; */
+    height: 50px;
+    line-height: 50px;
     color: #2f5077;
     font-weight: bold;
-    margin-right: -5px;
-    margin-bottom: 20px; /* 調整標題與內容間距 */
+    margin-bottom: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* 專長列表容器 */
 #specialty .specialty-list {
-    /* 移除ul的預設內外邊距，這是關鍵 */
     padding: 0;
     margin: 0;
-    list-style: none; /* 移除列表點 */
-    /* background: transparent; /* 您之前設定的，可以保留 */
-    /* border: none; /* 您之前設定的，可以保留 */
-    /* font-size: 1.1em; /* 您之前設定的，可以保留 */
-    /* color: #333; /* 您之前設定的，可以保留 */
+    list-style: none;
 }
 
 /* 專長列表項目 */
 #specialty .specialty-list li {
     font-size: 1.1em;
-    color: #333; /* 調整為深灰色，與標題文字視覺上更協調 */
-    line-height: 1.8; /* 調整行高 */
-    font-weight: normal; /* 設定字體粗細，保持與圖片一致 */
-    padding: 5px 0; /* 調整上下內邊距，減少列表項間距 */
-    text-align: center; /* 讓每個列表項的文字置中 */
-    margin-bottom: 5px; /* 列表項間距 */
+    color: #333;
+    line-height: 1.8;
+    font-weight: normal;
+    padding: 5px 0;
+    text-align: center;
+    margin-bottom: 5px;
 }
 
 #specialty .specialty-list li:last-child {
-    border-bottom: none; /* 最後一個不加虛線 */
-    margin-bottom: 0; /* 移除最後一個列表項的底部間距 */
+    border-bottom: none;
+    margin-bottom: 0;
 }
-
-/* 確保以下規則被移除，因為它可能不匹配您的HTML */
-/* #specialty .list-group {
-    background: transparent;
-    border: none;
-    font-size: 1.1em;
-    color: #333;
-} */
-
-/* /////////////////////////////////////////////////////////// */
-
-
 
 /* 學歷區塊 */
-#education {
-    background: #f5f7fa;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(107, 126, 165, 0.08);
-    margin-bottom: 32px;
-}
-#education h3 {
-    height: 50px;
-    line-height: 50px; /* 垂直置中標題 */
-    color: #2f5077;
-    font-weight: bold;
-}
+
+
 #education .list-group-item {
     background: transparent;
     border: none;
@@ -243,59 +202,57 @@ header .conecinfo {
     color: #6B7EA5;
     font-weight: bold;
     margin-bottom: 12px;
+    height: 40px;
+    line-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 }
 #experience ul {
     padding-left: 18px;
+    margin-top: 0;
 }
 #experience li {
     font-size: 1.05em;
     margin-bottom: 6px;
     color: #333;
 }
-
-#experience {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(107, 126, 165, 0.08);
-    margin-bottom: 32px;
-}
-
 #experience .row {
     display: flex;
-    align-items: center; /* 垂直置中內容 */
+    align-items: flex-start;
     padding-left: 50px;
 }
-
 #experience .col-md-6 {
     position: relative;
     margin-bottom: 24px;
-    padding-right: 40px;  /* 校內經歷右側留白 */
-    padding-left: 60px;   /* 校外經歷左側留白 */
+    padding-right: 40px;
+    padding-left: 60px;
+    display: flex;
+    flex-direction: column;
 }
-
 #experience .col-md-6:first-child::after {
     content: "";
     position: absolute;
     top: 10%;
-    right: -20px; /* 調整線條位置 */
+    right: -20px;
     width: 1px;
     height: 80%;
     background: #e0e6ed;
 }
 #experience .col-md-6:last-child {
     border-right: none;
-    padding-left: 280px;   /* 與校內經歷右側一致 */
+    padding-left: 280px;
 }
-
 
 /* /////////////////////////////////////////////////////////// */
 #profile-section .col-md-6 {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    height: 100%;
 }
 
 #profile-section #education,
+#profile-section #specialty,
 #profile-section #about {
     background: #f5f7fa;
     border-radius: 16px;
@@ -361,406 +318,20 @@ header .conecinfo {
     display: none;
 }
 
-
-
 /* /////////////////////////////////////////////////////////// */
 
 /*底部的邊*/
-
 footer.bg-primary {
-    background-color: #6B7EA5 !important; /*rgb(168, 32, 32)*/
+    background-color: #6B7EA5 !important;
 }
 
 #about {
-    border-top: 2px solid #000; /* 設定橫線的粗細與顏色 */
-    padding-top: 20px; /* 增加上方內邊距，讓內容與橫線有間距 */
+    border-top: 2px solid #000;
+    padding-top: 20px;
 }
 
 .container {
     line-height: 2;
 }
 
-
-
 /* /////////////////////////////////////////////////////////// */
-
-
-/* 手機螢幕（小於 768px） */
-@media (max-width: 768px) {
-    header img {
-        max-width: 100%; /* 圖片寬度自適應 */
-    }
-
-    header h1 {
-        font-size: 2rem; /* 縮小標題字體大小 */
-    }
-
-    .navbar {
-        max-width: 100%; /* 導覽列寬度填滿螢幕 */
-        padding: 10px; /* 減少內邊距 */
-    }
-
-    .nav-link {
-        font-size: 1rem; /* 縮小導覽連結字體大小 */
-        margin: 0 5px; /* 減少連結間距 */
-    }
-}
-
-/* 平板螢幕（768px 至 1024px） */
-@media (min-width: 768px) and (max-width: 1024px) {
-    header img {
-        max-width: 600px; /* 限制圖片寬度 */
-    }
-
-    header h1 {
-        font-size: 2.5rem; /* 調整標題字體大小 */
-    }
-
-    .navbar {
-        max-width: 90%; /* 導覽列寬度為螢幕的 90% */
-    }
-}
-/*網頁大小調整*/
-
-
-/* /////////////////////////////////////////////////////////// */
-
-/*瀏覽列*/
-
-
-/*色塊區*/
-.navbar {
-    background-color: #fafafa;
-    width: 100%; /* 填滿整條 X 軸 */
-    margin: 0; /* 移除外邊距 */
-    border-radius: 0; /* 移除圓角 */
-    padding: 10px 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加陰影 */
-}
-
-/* 左上網頁標題 */
-.navbar-brand {
-    font-size: 1.5rem; /* 調整品牌名稱的字體大小 */
-    font-weight: bold; /* 加粗品牌名稱 */
-}
-
-.nav-link {
-    font-size: 1.1rem; /* 調整導覽連結的字體大小 */
-    margin: 0 10px; /* 增加連結之間的間距 */
-}
-
-.navbar-toggler {
-    border: none; /* 移除切換按鈕的邊框 */
-    background-color: rgba(255, 255, 255, 0.2); /* 添加透明背景 */
-}
-
-/*點選瀏覽列後的效果*/
-.nav-link.active {
-    font-weight: bold;
-    color: #fff !important;
-    background-color: #2f5077;
-    border-radius: 5px;
-}
-
-
-.navbar .btn-outline-light:hover {
-    background-color: rgba(255, 255, 255, 0.1); /* 輕微亮一點 */
-    color: rgba(255, 255, 255, 0.85); /* 提高文字亮度 */
-    border-color: rgba(255, 255, 255, 0.85);
-}
-
-
-.navbar .btn-login:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加懸浮陰影 */
-    transform: translateY(-2px); /* 輕微上移效果（可選） */
-}
-
-.navbar-dark.bg-primary {
-    background-color: #6B7EA5 !important; /* 紅色背景 */
-    width: 100%; /* 填滿整條 X 軸 */
-    margin: 0; /* 移除外邊距 */
-    border-radius: 0; /* 移除圓角 */
-}
-
-
-/*瀏覽列end*/
-
-
-/* /////////////////////////////////////////////////////////// */
-
-
-/*header 最上塊區 老師照片*/
-
-header {
-    background-color: #fafafa;
-    display: flex; /* 啟用 Flexbox 佈局 */
-    align-items: center; /* 垂直置中對齊子元素 */
-    justify-content: center; /* 水平置中 header 內的元素 */
-    padding: 20px; /* 可調整 header 的內邊距 */
-    flex-direction: row; /* 預設水平排列 */
-}
-
-header img {
-    max-width: 250px; /* 將圖片的最大寬度設為 300px */
-    height: auto; /* 確保圖片比例不變 */
-    border-radius: 15px; /* 設定鈍角半徑 */
-    margin-right: 50px; /* 圖片和文字之間的間距 */
-}
-
-header .conecinfo p {
-    margin-bottom: 5px;
-}
-
-header .conecinfo a {
-    color: #007bff; /* 參考 Bootstrap 的連結顏色 */
-    text-decoration: none;
-}
-
-header .conecinfo a:hover {
-    text-decoration: underline;
-}
-
-header .conecinfo {
-    text-align: left;
-    line-height: 1.6;
-    
-}
-
-/*header end*/
-
-/* /////////////////////////////////////////////////////////// */
-
-/* 內容區塊 */
-/* 專長區塊的內容容器樣式 */
-
-/* 專長區塊 (Expertise Section) 整體樣式 */
-#specialty {
-    background: #f5f7fa;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(107, 126, 165, 0.08);
-    margin-bottom: 32px;
-    padding: 20px; /* 增加整體內邊距，讓內容與邊框有距離 */
-    text-align: center; /* 讓整個specialty區塊的文字默認置中 */
-}
-
-/* 專長區塊標題 */
-#specialty h3 {
-    /* 移除固定的 height 和 line-height，讓其自然高度 */
-    /* height: 50px; */
-    /* line-height: 50px; */
-    color: #2f5077;
-    font-weight: bold;
-    margin-right: -5px;
-    margin-bottom: 20px; /* 調整標題與內容間距 */
-}
-
-/* 專長列表容器 */
-#specialty .specialty-list {
-    /* 移除ul的預設內外邊距，這是關鍵 */
-    padding: 0;
-    margin: 0;
-    list-style: none; /* 移除列表點 */
-    /* background: transparent; /* 您之前設定的，可以保留 */
-    /* border: none; /* 您之前設定的，可以保留 */
-    /* font-size: 1.1em; /* 您之前設定的，可以保留 */
-    /* color: #333; /* 您之前設定的，可以保留 */
-}
-
-/* 專長列表項目 */
-#specialty .specialty-list li {
-    font-size: 1.1em;
-    color: #333; /* 調整為深灰色，與標題文字視覺上更協調 */
-    line-height: 1.8; /* 調整行高 */
-    font-weight: normal; /* 設定字體粗細，保持與圖片一致 */
-    padding: 5px 0; /* 調整上下內邊距，減少列表項間距 */
-    text-align: center; /* 讓每個列表項的文字置中 */
-    margin-bottom: 5px; /* 列表項間距 */
-}
-
-#specialty .specialty-list li:last-child {
-    border-bottom: none; /* 最後一個不加虛線 */
-    margin-bottom: 0; /* 移除最後一個列表項的底部間距 */
-}
-
-/* 確保以下規則被移除，因為它可能不匹配您的HTML */
-/* #specialty .list-group {
-    background: transparent;
-    border: none;
-    font-size: 1.1em;
-    color: #333;
-} */
-
-/* /////////////////////////////////////////////////////////// */
-
-
-
-/* 學歷區塊 */
-#education {
-    background: #f5f7fa;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(107, 126, 165, 0.08);
-    margin-bottom: 32px;
-}
-#education h3 {
-    height: 50px;
-    line-height: 50px; /* 垂直置中標題 */
-    color: #2f5077;
-    font-weight: bold;
-}
-#education .list-group-item {
-    background: transparent;
-    border: none;
-    font-size: 1.1em;
-    color: #333;
-}
-
-/* 校內外經歷區塊 */
-#experience {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(107, 126, 165, 0.08);
-    margin-bottom: 32px;
-}
-#experience h3 {
-    color: #2f5077;
-    font-weight: bold;
-}
-#experience h5 {
-    color: #6B7EA5;
-    font-weight: bold;
-    margin-bottom: 12px;
-}
-#experience ul {
-    padding-left: 18px;
-}
-#experience li {
-    font-size: 1.05em;
-    margin-bottom: 6px;
-    color: #333;
-}
-
-#experience {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(107, 126, 165, 0.08);
-    margin-bottom: 32px;
-}
-
-#experience .row {
-    display: flex;
-    align-items: center; /* 垂直置中內容 */
-    padding-left: 50px;
-}
-
-#experience .col-md-6 {
-    position: relative;
-    margin-bottom: 24px;
-    padding-right: 40px;  /* 校內經歷右側留白 */
-    padding-left: 60px;   /* 校外經歷左側留白 */
-}
-
-#experience .col-md-6:first-child::after {
-    content: "";
-    position: absolute;
-    top: 10%;
-    right: -20px; /* 調整線條位置 */
-    width: 1px;
-    height: 80%;
-    background: #e0e6ed;
-}
-#experience .col-md-6:last-child {
-    border-right: none;
-    padding-left: 280px;   /* 與校內經歷右側一致 */
-}
-
-
-/* /////////////////////////////////////////////////////////// */
-#profile-section .col-md-6 {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-#profile-section #education,
-#profile-section #about {
-    background: #f5f7fa;
-    border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(107, 126, 165, 0.10);
-    padding: 32px 24px;
-    height: 100%;
-}
-
-#profile-section h3 {
-    color: #2f5077;
-    font-weight: bold;
-    letter-spacing: 2px;
-    margin-bottom: 32px;
-}
-
-#profile-section .list-group-item {
-    background: #fff;
-    border: none;
-    font-size: 1.15em;
-    color: #2f5077;
-    margin-bottom: 16px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(107, 126, 165, 0.06);
-    display: flex;
-    align-items: center;
-    padding: 16px 20px;
-}
-#profile-section .list-group-item:last-child {
-    margin-bottom: 0;
-}
-#profile-section .list-group-item::before {
-    content: "🎓";
-    font-size: 1.3em;
-    margin-right: 16px;
-    color: #6B7EA5;
-}
-
-#profile-section .about-list-wrapper ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-#profile-section .about-list-wrapper li {
-    font-size: 1.1em;
-    margin-bottom: 12px;
-    color: #2f5077;
-    position: relative;
-    padding-left: 20px;
-}
-#profile-section .about-list-wrapper li::before {
-    content: "";
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background: #6B7EA5;
-    border-radius: 50%;
-    position: absolute;
-    left: 0;
-    top: 0.6em;
-}
-
-/* /////////////////////////////////////////////////////////// */
-
-/*底部的邊*/
-
-footer.bg-primary {
-    background-color: #6B7EA5 !important; /*rgb(168, 32, 32)*/
-}
-
-#about {
-    border-top: 2px solid #000; /* 設定橫線的粗細與顏色 */
-    padding-top: 20px; /* 增加上方內邊距，讓內容與橫線有間距 */
-}
-
-.container {
-    line-height: 2;
-}
-
-
-
-/* /////////////////////////////////////////////////////////// */
-
