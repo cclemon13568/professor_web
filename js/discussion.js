@@ -1,451 +1,254 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const btn = document.getElementById('showMoreBtn');
-    const more = document.getElementById('morePapers');
-    if (btn && more) {
-        btn.addEventListener('click', function () {
-            more.classList.remove('hidden');
-            this.style.display = 'none';
-        });
-    }
-
-    // 提問按鈕 (保持不變，但請確認 #question-icon-button 元素是否存在於您的 HTML 中)
-    const questionButton = document.getElementById('question-icon-button');
-    const questionModal = document.getElementById('question-modal');
-    const closeButton = document.querySelector('#question-modal .close-button');
-    const sendButton = document.getElementById('send-question-button');
-    const questionTextarea = document.getElementById('question-textarea');
-    const questionResponse = document.getElementById('question-response');
-    const responseText = document.getElementById('response-text');
-    const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
-    const loginButton = document.querySelector('.navbar-nav .btn-outline-light');
-
-    if (questionButton) {
-        questionButton.addEventListener('click', function() {
-            if (questionModal && questionModal.classList.contains('hidden')) {
-                questionModal.classList.remove('hidden');
-                responseText.textContent = '';
-                questionResponse.classList.add('hidden');
-            } else if (questionModal) {
-                questionModal.classList.add('hidden');
-                responseText.textContent = '';
-                questionResponse.classList.add('hidden');
-            }
-        });
-    } else {
-        console.warn("Element with ID 'question-icon-button' not found. Question modal functionality might be affected.");
-    }
-
-    if (closeButton) {
-        closeButton.addEventListener('click', function() {
-            if (questionModal) questionModal.classList.add('hidden');
-            responseText.textContent = '';
-            if (questionResponse) questionResponse.classList.add('hidden');
-        });
-    }
-
-    window.addEventListener('click', function(event) {
-        if (event.target === questionModal) {
-            if (questionModal) questionModal.classList.add('hidden');
-            responseText.textContent = '';
-            if (questionResponse) questionResponse.classList.add('hidden');
-        }
-    });
-
-    navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            if (questionModal && !questionModal.classList.contains('hidden')) {
-                questionModal.classList.add('hidden');
-                responseText.textContent = '';
-                questionResponse.classList.add('hidden');
-            }
-        });
-    });
-
-    if (loginButton) {
-        loginButton.addEventListener('click', function() {
-            if (questionModal && !questionModal.classList.contains('hidden')) {
-                questionModal.classList.add('hidden');
-                responseText.textContent = '';
-                questionResponse.classList.add('hidden');
-            }
-        });
-    }
-
-    if (sendButton) {
-        sendButton.addEventListener('click', function() {
-            const question = questionTextarea.value.trim();
-            if (question) {
-                console.log('發送問題:', question);
-                responseText.textContent = '您好，您的問題已收到，我們會盡快回覆。';
-                questionResponse.classList.remove('hidden');
-                questionTextarea.value = '';
-            } else {
-                alert('請輸入您的問題。');
-            }
-        });
-    }
-});
-
-//瀏覽列互動效果
-document.addEventListener("DOMContentLoaded", () => {
-    const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
-    const currentPage = window.location.pathname.split("/").pop(); // e.g. 'course.html'
-
-    navLinks.forEach(link => {
-        const linkHref = link.getAttribute("href");
-        if (linkHref === currentPage) {
-            link.classList.add("active");
-        } else {
-            link.classList.remove("active");
-        }
-    });
-});
-
-
-/*討論區問題發表與查看回覆*/
-document.addEventListener('DOMContentLoaded', function () {
-    const postButton = document.getElementById('post-button');
+    const API_BASE_URL = 'api';
     const board = document.querySelector('.discussion-board');
+    const postButton = document.getElementById('post-button');
 
-    // ** 模擬教授登入狀態的變數 **
-    let isProfessorLoggedIn = false;
-    const PROFESSOR_NAME = '李榮三教授'; // 教授的顯示名稱
-
-    // 獲取所有教授專屬的元素
-    const professorActionElements = document.querySelectorAll('.professor-action');
-    const loginToggleButton = document.getElementById('login-toggle-btn');
-
-    // *** 新增：切換教授登入狀態的函數 ***
-    function toggleProfessorMode() {
-        isProfessorLoggedIn = !isProfessorLoggedIn; // 切換狀態
-
-        professorActionElements.forEach(el => {
-            if (isProfessorLoggedIn) {
-                el.classList.remove('d-none'); // 顯示教授功能
-            } else {
-                el.classList.add('d-none'); // 隱藏教授功能
-            }
-        });
-
-        // 更新登入按鈕的文字
-        if (isProfessorLoggedIn) {
-            loginToggleButton.textContent = '登出 (模擬教授)';
-            loginToggleButton.classList.add('btn-warning'); // 教授動作按鈕變黃色
-            loginToggleButton.classList.remove('btn-outline-light');
-        } else {
-            loginToggleButton.textContent = '登入 (模擬教授)';
-            loginToggleButton.classList.remove('btn-warning');
-            loginToggleButton.classList.add('btn-outline-light');
-        }
-
-        console.log('教授模式:', isProfessorLoggedIn ? '開啟' : '關閉');
-    }
-
-    // 為模擬登入按鈕綁定事件
-    if (loginToggleButton) {
-        loginToggleButton.addEventListener('click', function(event) {
-            event.preventDefault(); // 阻止頁面跳轉
-            toggleProfessorMode();
-        });
-    }
-
-    // *** 初始載入時，預設為未登入狀態，隱藏教授功能 (可選，如果您希望預設是教授狀態，可以將此行移除) ***
-    toggleProfessorMode(); // 初始調用一次，確保介面正確
-
-    // *** 結束新增 ***
-
-    if (postButton && board) {
-        postButton.addEventListener('click', function () {
-            const title = document.getElementById('new-title').value.trim();
-            const content = document.getElementById('new-content').value.trim();
-            if (!title || !content) {
-                alert('請輸入標題和內容。');
+    // 取得所有留言
+    async function fetchThreads() {
+        board.innerHTML = '<div class="text-secondary">載入中...</div>';
+        try {
+            const res = await fetch(`${API_BASE_URL}/message_board.php`);
+            const data = await res.json();
+            board.innerHTML = '';
+            if (!Array.isArray(data) || data.length === 0) {
+                board.innerHTML = '<div class="text-muted">目前尚無留言。</div>';
                 return;
             }
+            // 依 question_ID 倒序顯示
+            data.sort((a, b) => b.question_ID.localeCompare(a.question_ID));
+            for (const thread of data) {
+                const threadDiv = await createThreadElement(thread);
+                board.appendChild(threadDiv);
+            }
+        } catch (e) {
+            board.innerHTML = '<div class="text-danger">留言載入失敗</div>';
+        }
+    }
 
-            const uniqueId = `thread-${Date.now()}`; // 使用時間戳作為簡單的唯一ID
+    // 建立留言元素（含回覆）
+    async function createThreadElement(thread) {
+        const div = document.createElement('div');
+        div.className = 'discussion-thread border rounded p-3 mb-4 bg-white shadow-sm';
 
-            const thread = document.createElement('div');
-            thread.className = 'discussion-thread';
-            thread.setAttribute('data-thread-id', uniqueId);
-            thread.innerHTML = `
-                <div class="thread-header d-flex justify-content-between">
-                    <h4>${title}</h4>
-                    <small>${getCurrentDate()} | <span class="user-name" data-original-name="${isProfessorLoggedIn ? PROFESSOR_NAME : '新使用者'}">${isProfessorLoggedIn ? PROFESSOR_NAME : '新使用者'}</span></small>
-                    <button class="btn btn-warning btn-sm professor-action ${isProfessorLoggedIn ? '' : 'd-none'} delete-thread-btn" data-thread-id="${uniqueId}">刪除問題</button>
+        // 主留言內容
+        div.innerHTML = `
+            <div class="thread-header d-flex justify-content-between align-items-center mb-2">
+                <div>
+                    <span class="thread-title fw-bold fs-4">${escapeHTML(thread.question_title)}</span>
+                    <div class="text-muted small mt-1">${escapeHTML(thread.question_department)} | ${escapeHTML(thread.question_name)}</div>
                 </div>
-                <div class="thread-body">
-                    <p>${content}</p>
-                    <button class="btn btn-outline-primary reply-btn" data-bs-toggle="collapse" data-bs-target="#reply-form-${uniqueId}">回覆</button>
-                    <a href="#" class="view-replies-link" data-target-replies="#allReplies-${uniqueId}">查看所有回覆</a>
-                    <div id="allReplies-${uniqueId}" class="replies-container collapse mt-2">
-                        </div>
-                    <div id="reply-form-${uniqueId}" class="collapse mt-2">
-                        <textarea class="form-control form-control-sm" rows="2" placeholder="回覆此問題..."></textarea>
-                        <button class="btn btn-sm btn-primary mt-1 send-reply-btn" data-parent-thread-id="${uniqueId}">發送</button>
+                <div>
+                    <span class="badge bg-secondary">${thread.question_ID}</span>
+                    <button class="btn btn-sm btn-outline-secondary ms-2 toggle-replies-btn">收起回覆</button>
+                </div>
+            </div>
+            <div class="thread-body mt-2">
+                <p class="thread-content fs-5">${escapeHTML(thread.question_content)}</p>
+            </div>
+            <div class="responds-list"></div>
+            <div class="respond-form mt-2"></div>
+        `;
+
+        // 取得回覆
+        const respondsListDiv = div.querySelector('.responds-list');
+        const respondFormDiv = div.querySelector('.respond-form');
+        let responds = [];
+        try {
+            const res = await fetch(`${API_BASE_URL}/responds.php?question_ID=${encodeURIComponent(thread.question_ID)}`);
+            const threadDetail = await res.json();
+            responds = threadDetail.responds || [];
+        } catch (e) {
+            respondsListDiv.innerHTML = '<div class="text-danger">回覆載入失敗</div>';
+        }
+
+        // 顯示所有回覆（巢狀）
+        respondsListDiv.appendChild(renderResponds(responds));
+
+        // 回覆表單（登入或登出都顯示）
+        respondFormDiv.appendChild(createRespondForm(thread.question_ID, null, () => fetchThreads()));
+
+        // 收起/展開主留言回覆
+        const toggleBtn = div.querySelector('.toggle-replies-btn');
+        toggleBtn.addEventListener('click', function () {
+            if (respondsListDiv.style.display === 'none') {
+                respondsListDiv.style.display = '';
+                toggleBtn.textContent = '收起回覆';
+            } else {
+                respondsListDiv.style.display = 'none';
+                toggleBtn.textContent = '展開回覆';
+            }
+        });
+
+        return div;
+    }
+
+    // 遞迴渲染回覆（巢狀）
+    function renderResponds(responds) {
+        const ul = document.createElement('ul');
+        ul.className = 'list-unstyled ms-2';
+        responds.forEach(respond => {
+            const li = document.createElement('li');
+            li.className = 'mb-3';
+
+            // 教師/一般回覆樣式
+            let respondClass = respond.is_teacher_response == 1
+                ? 'respond-card teacher-respond p-3 rounded mb-2'
+                : 'respond-card user-respond p-3 rounded mb-2';
+
+            li.innerHTML = `
+                <div class="${respondClass}">
+                    <div class="d-flex align-items-center mb-1">
+                        <span class="respond-content flex-grow-1">${escapeHTML(respond.respond_content)}</span>
+                        ${respond.is_teacher_response == 1
+                            ? '<span class="badge bg-warning text-dark ms-2">教師</span>'
+                            : '<span class="badge bg-light text-dark ms-2">一般</span>'
+                        }
+                        <button class="btn btn-sm btn-link text-primary ms-2 reply-btn" data-respond-id="${respond.respond_ID}" data-question-id="${respond.question_ID}">回覆</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-2 toggle-children-btn">收起</button>
                     </div>
                 </div>
-                <hr>
             `;
+            // 子回覆
+            if (respond.children && respond.children.length > 0) {
+                const childUl = renderResponds(respond.children);
+                childUl.classList.add('nested-replies-container');
+                li.appendChild(childUl);
 
-            board.insertBefore(thread, board.firstChild);
-
-            attachThreadEventListeners(thread); // 為新添加的討論串及其內部的回覆相關元素綁定事件監聽器
-
-            document.getElementById('new-title').value = '';
-            document.getElementById('new-content').value = '';
-        });
-    }
-
-    function attachThreadEventListeners(threadElement) {
-        const replyButton = threadElement.querySelector('.reply-btn');
-        if (replyButton) {
-            replyButton.addEventListener('click', function () {
-                const threadId = this.dataset.bsTarget.replace('#reply-form-', '');
-                const replyForm = threadElement.querySelector(`#reply-form-${threadId}`);
-                if (replyForm) {
-                    const bsCollapse = new bootstrap.Collapse(replyForm);
-                    bsCollapse.toggle();
-                }
-            });
-        }
-
-        const viewRepliesLink = threadElement.querySelector('.view-replies-link');
-        if (viewRepliesLink) {
-            viewRepliesLink.addEventListener('click', toggleReplies);
-        }
-
-        const sendReplyButton = threadElement.querySelector('.send-reply-btn');
-        if (sendReplyButton) {
-            sendReplyButton.addEventListener('click', function () {
-                const parentThreadId = this.dataset.parentThreadId;
-                const replyTextarea = threadElement.querySelector(`#reply-form-${parentThreadId} textarea`);
-                const replyContent = replyTextarea.value.trim();
-                if (replyContent) {
-                    // 使用當前時間戳和父ID生成唯一ID
-                    const newReplyId = `${parentThreadId}-${Date.now()}`;
-
-                    const repliesContainer = threadElement.querySelector(`#allReplies-${parentThreadId}`);
-                    const newReplyDiv = document.createElement('div');
-                    newReplyDiv.className = 'reply';
-                    newReplyDiv.setAttribute('data-reply-id', newReplyId);
-                    newReplyDiv.innerHTML = `
-                        <small class="d-flex align-items-center">
-                            <button class="btn btn-link btn-sm text-warning professor-action ${isProfessorLoggedIn ? '' : 'd-none'} delete-reply-btn me-2" data-reply-id="${newReplyId}">
-                                <i class="fas fa-trash-alt"></i>
-                                <span class="d-none d-md-inline">刪除</span>
-                            </button>
-                            <span class="user-name" data-original-name="${isProfessorLoggedIn ? PROFESSOR_NAME : '新回覆者'}">${isProfessorLoggedIn ? PROFESSOR_NAME : '新回覆者'}</span> (${getCurrentDate()})
-                        </small>
-                        <p>${replyContent}</p>
-                        <div class="reply-actions">
-                            <button class="btn btn-sm btn-outline-primary reply-to-reply-btn" data-reply-id="${newReplyId}">回覆</button>
-                            <a href="#" class="view-nested-replies-link" data-target-nested-replies="#nested-replies-${newReplyId}">查看回覆</a>
-                        </div>
-                        <div id="nested-replies-${newReplyId}" class="nested-replies-container"></div>
-                        <div id="reply-form-${newReplyId}" class="collapse mt-2">
-                            <textarea class="form-control form-control-sm" rows="2" placeholder="回覆此留言..."></textarea>
-                            <button class="btn btn-sm btn-primary mt-1 send-nested-reply-btn" data-parent-reply-id="${newReplyId}">發送</button>
-                        </div>
-                    `;
-                    repliesContainer.appendChild(newReplyDiv);
-                    replyTextarea.value = '';
-                    const bsCollapseForm = bootstrap.Collapse.getInstance(threadElement.querySelector(`#reply-form-${parentThreadId}`));
-                    bsCollapseForm.hide();
-
-                    attachReplyEventListeners(newReplyDiv); // 為新回覆綁定事件
-                } else {
-                    alert('請輸入您的回覆內容。');
-                }
-            });
-        }
-
-        // 為所有討論串內的刪除按鈕綁定事件
-        const deleteThreadButtons = threadElement.querySelectorAll('.delete-thread-btn');
-        deleteThreadButtons.forEach(button => {
-            button.removeEventListener('click', handleDeleteThread); // 避免重複綁定
-            button.addEventListener('click', handleDeleteThread);
-        });
-    }
-
-
-    function attachReplyEventListeners(replyElement) {
-        const replyToReplyButton = replyElement.querySelector('.reply-to-reply-btn');
-        if (replyToReplyButton) {
-            replyToReplyButton.addEventListener('click', function () {
-                const replyId = this.dataset.replyId;
-                let replyForm = replyElement.querySelector(`#reply-form-${replyId}`);
-
-                if (!replyForm) {
-                    // 如果表單不存在，則創建它
-                    replyForm = document.createElement('div');
-                    replyForm.id = `reply-form-${replyId}`;
-                    replyForm.className = `collapse mt-2`;
-                    replyForm.innerHTML = `
-                        <textarea class="form-control form-control-sm" rows="2" placeholder="請輸入您的回覆..."></textarea>
-                        <button class="btn btn-sm btn-primary mt-1 send-nested-reply-btn" data-parent-reply-id="${replyId}">發送回覆</button>
-                    `;
-                    this.parentNode.insertAdjacentElement('afterend', replyForm);
-                    new bootstrap.Collapse(replyForm, { toggle: false }).show();
-                } else {
-                    const bsCollapse = bootstrap.Collapse.getInstance(replyForm);
-                    if (bsCollapse) {
-                        bsCollapse.toggle();
+                // 收起/展開子回覆
+                const toggleBtn = li.querySelector('.toggle-children-btn');
+                toggleBtn.addEventListener('click', function () {
+                    if (childUl.style.display === 'none') {
+                        childUl.style.display = '';
+                        toggleBtn.textContent = '收起';
                     } else {
-                        new bootstrap.Collapse(replyForm, { toggle: false }).toggle();
+                        childUl.style.display = 'none';
+                        toggleBtn.textContent = '展開';
                     }
-                }
+                });
+            } else {
+                // 沒有子回覆時隱藏收起按鈕
+                li.querySelector('.toggle-children-btn').style.display = 'none';
+            }
+            // 回覆表單區塊（不論登入或登出都建立）
+            const replyFormDiv = document.createElement('div');
+            replyFormDiv.className = 'reply-form mt-1';
+            li.appendChild(replyFormDiv);
 
-                const sendButton = replyForm.querySelector('.send-nested-reply-btn');
-                if (sendButton) {
-                    sendButton.removeEventListener('click', handleSendNestedReply); // 避免重複綁定
-                    sendButton.addEventListener('click', handleSendNestedReply);
+            ul.appendChild(li);
+        });
+        return ul;
+    }
+
+    // 建立回覆表單
+    function createRespondForm(question_ID, parent_respond_ID, onSuccess) {
+        const form = document.createElement('form');
+        form.className = 'd-flex align-items-center gap-2';
+        form.innerHTML = `
+            <input type="text" class="form-control form-control-sm" placeholder="輸入回覆內容" maxlength="200" required>
+            <button type="submit" class="btn btn-sm btn-success">送出</button>
+        `;
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const content = form.querySelector('input').value.trim();
+            if (!content) {
+                alert('請輸入回覆內容');
+                return;
+            }
+            try {
+                const res = await fetch(`${API_BASE_URL}/responds.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        question_ID,
+                        respond_content: content,
+                        parent_respond_ID: parent_respond_ID,
+                        is_teacher_response: isLoggedIn() ? 1 : 0
+                    })
+                });
+                const result = await res.json();
+                if (result.success === 'success') {
+                    if (typeof onSuccess === 'function') onSuccess();
+                } else {
+                    alert(result.message || '回覆失敗');
                 }
-            });
+            } catch (e) {
+                alert('回覆失敗，請稍後再試');
+            }
+        });
+        return form;
+    }
+
+    // 判斷登入狀態
+    function isLoggedIn() {
+        return localStorage.getItem('isLoggedIn') === 'true';
+    }
+
+    // 處理回覆按鈕點擊（事件委派）
+    board.addEventListener('click', function (e) {
+        if (e.target.classList.contains('reply-btn')) {
+            const respondID = e.target.getAttribute('data-respond-id');
+            const questionID = e.target.getAttribute('data-question-id');
+            // 找到對應的 reply-form
+            const li = e.target.closest('li');
+            const replyFormDiv = li.querySelector('.reply-form');
+            // 避免重複插入
+            if (replyFormDiv.childElementCount === 0) {
+                replyFormDiv.appendChild(createRespondForm(questionID, respondID, () => fetchThreads()));
+            }
         }
+    });
 
-        const viewNestedRepliesLink = replyElement.querySelector('.view-nested-replies-link');
-        if (viewNestedRepliesLink) {
-            viewNestedRepliesLink.addEventListener('click', function (event) {
-                event.preventDefault();
-                const targetId = this.dataset.targetNestedReplies;
-                const nestedRepliesContainer = document.querySelector(targetId);
-                if (nestedRepliesContainer) {
-                    const bsCollapse = new bootstrap.Collapse(nestedRepliesContainer);
-                    bsCollapse.toggle();
-                    this.textContent = nestedRepliesContainer.classList.contains('show') ? '收起回覆' : '查看回覆';
+    // 防止 XSS
+    function escapeHTML(str) {
+        if (!str) return '';
+        return str.replace(/[<>&"]/g, c => ({
+            '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;'
+        }[c]));
+    }
+
+    // 發表新留言
+    if (postButton) {
+        postButton.addEventListener('click', async function () {
+            const name = document.getElementById('new-name').value.trim();
+            const dept = document.getElementById('new-dept').value.trim();
+            const title = document.getElementById('new-title').value.trim();
+            const content = document.getElementById('new-content').value.trim();
+            if (!name || !dept || !title || !content) {
+                alert('請完整填寫所有欄位');
+                return;
+            }
+            if (isLoggedIn()) {
+                alert('登入狀態下無法發表問題，請先登出！');
+                return;
+            }
+            try {
+                const res = await fetch(`${API_BASE_URL}/message_board.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        question_name: name,
+                        question_department: dept,
+                        question_title: title,
+                        question_content: content,
+                        popular_question: '0'
+                    })
+                });
+                const result = await res.json();
+                if (result.status === 'success') {
+                    alert('留言已發布！');
+                    document.getElementById('new-name').value = '';
+                    document.getElementById('new-dept').value = '';
+                    document.getElementById('new-title').value = '';
+                    document.getElementById('new-content').value = '';
+                    fetchThreads();
+                } else {
+                    alert(result.message || '留言失敗');
                 }
-            });
-        }
-
-        // 為所有回覆內的刪除按鈕綁定事件
-        const deleteReplyButtons = replyElement.querySelectorAll('.delete-reply-btn');
-        deleteReplyButtons.forEach(button => {
-            button.removeEventListener('click', handleDeleteReply); // 避免重複綁定
-            button.addEventListener('click', handleDeleteReply);
+            } catch (e) {
+                alert('留言失敗，請稍後再試');
+            }
         });
     }
 
-    function handleSendNestedReply() {
-        const parentReplyId = this.dataset.parentReplyId;
-        const replyTextarea = this.previousElementSibling;
-        const replyContent = replyTextarea.value.trim();
-        if (replyContent) {
-            const currentReplyElement = this.closest('.reply');
-            const nestedRepliesContainer = currentReplyElement.querySelector('.nested-replies-container');
-            const newNestedReplyId = `${parentReplyId}-${Date.now()}`; // 巢狀回覆的唯一 ID
-
-            const newNestedReplyDiv = document.createElement('div');
-            newNestedReplyDiv.className = 'reply nested-reply';
-            newNestedReplyDiv.setAttribute('data-reply-id', newNestedReplyId);
-            newNestedReplyDiv.innerHTML = `
-                <small class="d-flex align-items-center">
-                    <button class="btn btn-link btn-sm text-warning professor-action ${isProfessorLoggedIn ? '' : 'd-none'} delete-reply-btn me-2" data-reply-id="${newNestedReplyId}">
-                        <i class="fas fa-trash-alt"></i>
-                        <span class="d-none d-md-inline">刪除</span>
-                    </button>
-                    <span class="user-name" data-original-name="${isProfessorLoggedIn ? PROFESSOR_NAME : '新回覆者'}">${isProfessorLoggedIn ? PROFESSOR_NAME : '新回覆者'}</span> (${getCurrentDate()})
-                </small>
-                <p>${replyContent}</p>
-                <div class="reply-actions">
-                    <button class="btn btn-sm btn-outline-primary reply-to-reply-btn" data-reply-id="${newNestedReplyId}">回覆</button>
-                    <a href="#" class="view-nested-replies-link" data-target-nested-replies="#nested-replies-${newNestedReplyId}">查看回覆</a>
-                </div>
-                <div id="nested-replies-${newNestedReplyId}" class="nested-replies-container"></div>
-                <div id="reply-form-${newNestedReplyId}" class="collapse mt-2">
-                    <textarea class="form-control form-control-sm" rows="2" placeholder="請輸入您的回覆..."></textarea>
-                    <button class="btn btn-sm btn-primary mt-1 send-nested-reply-btn" data-parent-reply-id="${newNestedReplyId}">發送</button>
-                </div>
-            `;
-            nestedRepliesContainer.appendChild(newNestedReplyDiv);
-            replyTextarea.value = '';
-            this.closest('.collapse').remove(); // 移除回覆表單
-            attachReplyEventListeners(newNestedReplyDiv); // 為新巢狀回覆綁定事件
-        } else {
-            alert('請輸入您的回覆內容。');
-        }
-    }
-
-
-    // *** 新增：刪除問題的事件處理函數 ***
-    function handleDeleteThread(event) {
-        if (!confirm('確定要刪除這個問題及其所有回覆嗎？')) {
-            return;
-        }
-        const threadId = this.dataset.threadId;
-        console.log(`模擬刪除問題: ${threadId}`);
-        // 模擬從 DOM 中移除元素
-        this.closest('.discussion-thread').remove();
-        alert('問題已刪除！(此為前端模擬，無實際資料庫操作)');
-    }
-
-    // *** 新增：刪除回覆的事件處理函數 ***
-    function handleDeleteReply(event) {
-        if (!confirm('確定要刪除這個回覆嗎？')) {
-            return;
-        }
-        const replyId = this.dataset.replyId;
-        console.log(`模擬刪除回覆: ${replyId}`);
-        // 模擬從 DOM 中移除元素
-        this.closest('.reply').remove();
-        alert('回覆已刪除！(此為前端模擬，無實際資料庫操作)');
-    }
-
-
-    const viewRepliesLinks = document.querySelectorAll('.view-replies-link');
-    viewRepliesLinks.forEach(link => {
-        link.addEventListener('click', toggleReplies);
-    });
-
-    function toggleReplies(event) {
-        event.preventDefault();
-        const targetId = this.dataset.targetReplies;
-        const repliesContainer = document.querySelector(targetId);
-        if (repliesContainer) {
-            const bsCollapse = new bootstrap.Collapse(repliesContainer);
-            bsCollapse.toggle();
-            this.textContent = repliesContainer.classList.contains('show') ? '收起回覆' : '查看回覆';
-        }
-    }
-
-    function getCurrentDate() {
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = (today.getMonth() + 1).toString().padStart(2, '0');
-        const day = today.getDate().toString().padStart(2, '0');
-        return `${year}年${month}月${day}日`;
-    }
-
-    // 為初始載入的所有討論串和回覆綁定事件監聽器
-    document.querySelectorAll('.discussion-thread').forEach(thread => {
-        attachThreadEventListeners(thread);
-        thread.querySelectorAll('.reply').forEach(reply => attachReplyEventListeners(reply));
-    });
-
-    // 初始化已存在回覆的 ID (用於模擬)
-    document.querySelectorAll('.discussion-thread').forEach((thread, threadIndex) => {
-        const threadId = `thread-${threadIndex + 1}`;
-        thread.setAttribute('data-thread-id', threadId);
-
-        thread.querySelectorAll('.reply').forEach((reply, replyIndex) => {
-            const replyId = `${threadId}-${replyIndex + 1}`;
-            reply.setAttribute('data-reply-id', replyId);
-            // 確保回覆內的按鈕的 data-reply-id 是正確的
-            const replyToReplyBtn = reply.querySelector('.reply-to-reply-btn');
-            if (replyToReplyBtn) replyToReplyBtn.setAttribute('data-reply-id', replyId);
-            const deleteReplyBtn = reply.querySelector('.delete-reply-btn');
-            if (deleteReplyBtn) deleteReplyBtn.setAttribute('data-reply-id', replyId);
-
-            // 處理巢狀回覆
-            reply.querySelectorAll('.nested-replies-container .reply').forEach((nestedReply, nestedReplyIndex) => {
-                const nestedReplyId = `${replyId}-${nestedReplyIndex + 1}`;
-                nestedReply.setAttribute('data-reply-id', nestedReplyId);
-                const nestedReplyToReplyBtn = nestedReply.querySelector('.reply-to-reply-btn');
-                if (nestedReplyToReplyBtn) nestedReplyToReplyBtn.setAttribute('data-reply-id', nestedReplyId);
-                const nestedDeleteReplyBtn = nestedReply.querySelector('.delete-reply-btn');
-                if (nestedDeleteReplyBtn) nestedDeleteReplyBtn.setAttribute('data-reply-id', nestedReplyId);
-            });
-        });
-    });
-
+    fetchThreads();
 });
