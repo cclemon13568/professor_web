@@ -12,36 +12,30 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
-        <a class="navbar-brand" href="#">教授個人網頁</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="index.html">自我介紹</a></li>
-                <li class="nav-item"><a class="nav-link" href="study.html">研究方向</a></li>
-                <li class="nav-item"><a class="nav-link" href="course.html">課程資訊</a></li>
-                <li class="nav-item"><a class="nav-link" href="meeting.html">預約面談</a></li>
-                <li class="nav-item"><a class="nav-link" href="Discussion.html">討論區</a></li>
-                <li class="nav-item">
-                    <a class="btn btn-outline-light ms-3" href="#" id="login-toggle-btn">登入 (模擬教授)</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+      <a class="navbar-brand" href="#">教授個人網頁</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">自我介紹</a></li>
+          <li class="nav-item"><a class="nav-link" href="study.html">研究方向</a></li>
+          <li class="nav-item"><a class="nav-link" href="course.html">課程資訊</a></li>
+          <li class="nav-item"><a class="nav-link" href="meeting.html">預約面談</a></li>
+          <li class="nav-item"><a class="nav-link" href="Discussion.html">討論區</a></li>
 
-<header class="bg-light py-5 text-center">
-    <img src="images/lee.png" style="max-width: 300px; height: auto;" alt="教授照片">
-    <div class="conecinfo">
-        <h1 class="fw-bold">李榮三教授</h1>
-        <p class="text-muted">國立中正大學 資訊工程系</p>
-        <p><strong>聯絡信箱：</strong><a href="https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcSHwCwSVGvxTqVxZNgQTtTGmHzLrjjGjvlljdssXVHWRRsQrfLBQHzNHTmgZWTGdpfBfdPlX" >leejs@fcu.edu.tw</a>
-        </p>
-        <p><strong>分機號碼 : </strong>#3767</p>
-        <p><strong>實驗室 : </strong>資訊安全實驗室</p>
+          <li class="nav-item">
+            <a id="login-btn"
+            class="btn btn-outline-light rounded-pill fw-bold ms-3 px-4 d-flex align-items-center justify-content-center"
+            href="login.html"
+            style="height: 40px; min-width: 100px; transition: background 0.2s, color 0.2s;">
+                登入
+            </a>
+        </ul>
+      </div>
     </div>
-</header>
+  </nav>
+
 
 <section id="discussion" class="py-5">
     <div class="container">
@@ -177,12 +171,13 @@
 
 <footer class="bg-primary text-white text-center py-3">
     <div class="container">
-        <small>&copy; 2025 李榮三教授 | 國立中正大學</small>
+        <small>&copy; 2025 李榮三教授 | 逢甲大學</small>
     </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/discussion.js"></script>
+    <script src="js/loginout.js"></script>
 
 </body>
 </html>
