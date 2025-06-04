@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>預約面談</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/meeting.css" rel="stylesheet">
-    <link href="css/question_box.css" rel="stylesheet">
+    <link href="css/meeting.css" rel="stylesheet"> <link href="css/question_box.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -48,107 +48,64 @@
                 <li>請於前一天完成預約。</li>
                 <li>白色區塊為可預約時段，點選即可預約。</li>
                 <li>灰色區塊為教授已排定行程，無法預約。</li>
+                <li><strong>淺黃色區塊為審核中預約，淺綠色為預約成功，淺紅色為預約失敗。</strong></li>
                 <li>請務必準時出席。</li>
             </ul>
         </div>
 
         <div class="col-md-8">
+            <div class="professor-view-element mb-3 text-center d-none">
+                <input type="date" id="select-date" class="form-control mb-2 mx-auto" style="max-width: 200px;">
+                <p id="operation-instruction" class="text-muted">點擊時段進行選擇，然後點擊下方按鈕修改狀態。</p>
+
+                <button class="btn btn-info me-2" id="load-appointments-btn">載入預約</button>
+
+                <button class="btn btn-success me-2" id="change-availability-btn">更改開放時段</button>
+                <button class="btn btn-primary me-2 d-none" id="set-available-btn">改為開放</button>
+                <button class="btn btn-warning me-2 d-none" id="set-unavailable-btn">改為不開放</button>
+                <button class="btn btn-secondary d-none" id="cancel-change-btn">取消</button>
+            </div>
             <table class="table table-bordered schedule-table">
                 <thead class="table-primary">
                 <tr>
                     <th>時間</th>
-                    <th>週一</th>
-                    <th>週二</th>
-                    <th>週三</th>
-                    <th>週四</th>
-                    <th>週五</th>
+                    <th data-day-index="0">週一</th>
+                    <th data-day-index="1">週二</th>
+                    <th data-day-index="2">週三</th>
+                    <th data-day-index="3">週四</th>
+                    <th data-day-index="4">週五</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>09:10 - 10:00</td>
-                    <td class="appointment-slot" data-status="available">
-                        <div class="student-view-text">點擊預約</div>
-                        <div class="professor-actions">
-                            <button class="btn btn-success btn-sm accept-btn">接受</button>
-                            <button class="btn btn-danger btn-sm reject-btn">拒絕</button>
-                        </div>
-                    </td>
-                    <td class="appointment-slot" data-status="unavailable">
-                        <div class="student-view-text">無法預約</div>
-                        <div class="professor-actions">
-                            <button class="btn btn-success btn-sm accept-btn">接受</button>
-                            <button class="btn btn-danger btn-sm reject-btn">拒絕</button>
-                        </div>
-                    </td>
-                    <td class="appointment-slot" data-status="available">
-                        <div class="student-view-text">點擊預約</div>
-                        <div class="professor-actions">
-                            <button class="btn btn-success btn-sm accept-btn">接受</button>
-                            <button class="btn btn-danger btn-sm reject-btn">拒絕</button>
-                        </div>
-                    </td>
-                    <td class="appointment-slot" data-status="unavailable">
-                        <div class="student-view-text">無法預約</div>
-                        <div class="professor-actions">
-                            <button class="btn btn-success btn-sm accept-btn">接受</button>
-                            <button class="btn btn-danger btn-sm reject-btn">拒絕</button>
-                        </div>
-                    </td>
-                    <td class="appointment-slot" data-status="available">
-                        <div class="student-view-text">點擊預約</div>
-                        <div class="professor-actions">
-                            <button class="btn btn-success btn-sm accept-btn">接受</button>
-                            <button class="btn btn-danger btn-sm reject-btn">拒絕</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>10:10 - 11:00</td>
-                    <td class="appointment-slot" data-status="unavailable">
-                        <div class="student-view-text">無法預約</div>
-                        <div class="professor-actions">
-                            <button class="btn btn-success btn-sm accept-btn">接受</button>
-                            <button class="btn btn-danger btn-sm reject-btn">拒絕</button>
-                        </div>
-                    </td>
-                    <td class="appointment-slot" data-status="available">
-                        <div class="student-view-text">點擊預約</div>
-                        <div class="professor-actions">
-                            <button class="btn btn-success btn-sm accept-btn">接受</button>
-                            <button class="btn btn-danger btn-sm reject-btn">拒絕</button>
-                        </div>
-                    </td>
-                    <td class="appointment-slot" data-status="unavailable">
-                        <div class="student-view-text">無法預約</div>
-                        <div class="professor-actions">
-                            <button class="btn btn-success btn-sm accept-btn">接受</button>
-                            <button class="btn btn-danger btn-sm reject-btn">拒絕</button>
-                        </div>
-                    </td>
-                    <td class="appointment-slot" data-status="available">
-                        <div class="student-view-text">點擊預約</div>
-                        <div class="professor-actions">
-                            <button class="btn btn-success btn-sm accept-btn">接受</button>
-                            <button class="btn btn-danger btn-sm reject-btn">拒絕</button>
-                        </div>
-                    </td>
-                    <td class="appointment-slot" data-status="unavailable">
-                        <div class="student-view-text">無法預約</div>
-                        <div class="professor-actions">
-                            <button class="btn btn-success btn-sm accept-btn">接受</button>
-                            <button class="btn btn-danger btn-sm reject-btn">拒絕</button>
-                        </div>
-                    </td>
-                </tr>
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
 
-            <div class="professor-mode-controls mt-3 d-flex justify-content-between align-items-center d-none">
-                <span class="operation-instruction fw-bold">選取可以開放給學生預約面談的時段，沒選取的格子為不開放時段。</span>
-                <button class="btn btn-warning" id="set-availability-btn">更新時段</button>
+<div class="modal fade" id="appointmentDetailModal" tabindex="-1" aria-labelledby="appointmentDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="appointmentDetailModalLabel">預約詳情</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
+            <div class="modal-body">
+                <p><strong>預約編號:</strong> <span id="modal_appointment_ID"></span></p>
+                <p><strong>辦公室地點:</strong> <span id="modal_office_location"></span></p>
+                <p><strong>預約日期:</strong> <span id="modal_appoint_Date"></span></p>
+                <p><strong>狀態:</strong> <span id="modal_status"></span></p>
+                <p><strong>學號:</strong> <span id="modal_student_ID"></span></p>
+                <p><strong>學生姓名:</strong> <span id="modal_student_Name"></span></p>
+                <p><strong>學生信箱:</strong> <span id="modal_student_email"></span></p>
+                <p><strong>課程編號:</strong> <span id="modal_course_ID"></span></p>
+                <p><strong>問題描述:</strong> <span id="modal_problem_description"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                <button type="button" class="btn btn-primary" id="accept-appointment-btn">接受預約</button>
+                <button type="button" class="btn btn-danger" id="reject-appointment-btn">拒絕預約</button>
+            </div>
         </div>
     </div>
 </div>
@@ -172,16 +129,59 @@
     </div>
 </div>
 
+<div class="modal fade" id="studentAppointmentModal" tabindex="-1" aria-labelledby="studentAppointmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="studentAppointmentModalLabel">預約面談</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="student-appointment-form">
+                <div class="modal-body">
+                    <p>您選擇的預約時段：<strong id="selectedDateTimeDisplay"></strong></p>
 
-<footer class="bg-primary text-white text-center py-3">
-    <div class="container">
-        <small>&copy; 2025 李榮三教授 | 國立中正大學</small>
+                    <input type="hidden" id="appointDateForDB" name="appoint_Date">
+
+                    <input type="hidden" id="form_appointment_time" name="appointment_time">
+                    <input type="hidden" id="form_appointment_ID" name="appointment_ID">
+
+                    <div class="mb-2">
+                        <label for="student_name" class="form-label">姓名</label>
+                        <input type="text" class="form-control" id="student_name" name="student_Name" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="student_id" class="form-label">學號</label>
+                        <input type="text" class="form-control" id="student_id" name="student_ID" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="student_email" class="form-label">電子郵件</label>
+                        <input type="email" class="form-control" id="student_email" name="student_email" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="office_location" class="form-label">辦公室地點</label>
+                        <input type="text" class="form-control" id="office_location" name="office_location" value="教授研究室" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="course_id" class="form-label">課程編號 (選填)</label>
+                        <input type="text" class="form-control" id="course_id" name="course_ID">
+                    </div>
+                    <div class="mb-2">
+                        <label for="problem_description" class="form-label">問題描述</label>
+                        <textarea class="form-control" id="problem_description" name="problem_description" rows="3" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">提交預約</button>
+                </div>
+            </form>
+        </div>
     </div>
-</footer>
+</div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/meeting.js"></script>
 <script src="js/question_box.js"></script>
-
 </body>
 </html>
