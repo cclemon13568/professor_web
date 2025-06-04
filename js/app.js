@@ -5,7 +5,7 @@ let currentModule = ''; // 用於追蹤當前選中的模組
 const modulesConfig = {
     message_board: {
         title: '留言管理',
-        apiEndpoint: 'http://localhost/professor_web/api/message_board.php', // 對應 message_board 表
+        apiEndpoint: 'api/message_board.php', // 對應 message_board 表
         fields: {
             question_ID: { label: '問題ID', type: 'text', readOnly: true }, // 主鍵通常為 readOnly
             question_name: { label: '提問者姓名', type: 'text' },
@@ -18,7 +18,7 @@ const modulesConfig = {
     },
     appointment: {
         title: '預約管理',
-        apiEndpoint: 'http://localhost/professor_web/api/appointment_info.php', // 對應 appointment_info 表
+        apiEndpoint: 'api/appointment_info.php', // 對應 appointment_info 表
         fields: {
             appointment_ID: { label: '預約ID', type: 'text', readOnly: true }, // 主鍵
             office_location: { label: '辦公室位置', type: 'text' },
@@ -43,7 +43,7 @@ const modulesConfig = {
     },
     evaluation: {
         title: '評論管理',
-        apiEndpoint: 'http://localhost/professor_web/api/evaluation.php', // 對應 evaluation 表
+        apiEndpoint: 'api/evaluation.php', // 對應 evaluation 表
         fields: {
             evaluate_ID: { label: '評論ID', type: 'text', readOnly: true }, // 主鍵
             student_ID: { label: '學生ID', type: 'text' },
@@ -55,7 +55,7 @@ const modulesConfig = {
     },
     course_info: {
         title: '課程管理',
-        apiEndpoint: 'http://localhost/professor_web/api/course_info.php', // 對應 course_info 表
+        apiEndpoint: 'api/course_info.php', // 對應 course_info 表
         fields: {
             course_ID: { label: '課程ID', type: 'text', readOnly: false }, // 主鍵，新增時可能可輸入，編輯時只讀
             course_name: { label: '課程名稱', type: 'text' },
@@ -68,7 +68,7 @@ const modulesConfig = {
     },
     sensitive_words: { // 新增的敏感詞管理模組
         title: '敏感詞管理',
-        apiEndpoint: 'http://localhost/professor_web/api/sensitive_words.php', // 假設你有 sensitive_words.php API
+        apiEndpoint: 'api/sensitive_words.php', // 假設你有 sensitive_words.php API
         fields: {
             word_ID: { label: '詞彙ID', type: 'text', readOnly: true }, // 主鍵
             word: { label: '敏感詞', type: 'text' }
@@ -144,7 +144,11 @@ function generateTable(moduleName, dataRows) {
         <table>
             <thead>
                 <tr>
-                    <th></th> `;
+    `;
+    // 只在個人資訊管理(info)顯示最左邊的框框
+    if (moduleName === 'info') {
+        tableHtml += `<th></th>`;
+    }
     headers.forEach(headerKey => {
         // 使用配置中的 label 作為顯示名稱
         tableHtml += `<th>${config.fields[headerKey].label}</th>`;
@@ -158,7 +162,11 @@ function generateTable(moduleName, dataRows) {
 
     // 填充表格行
     dataRows.forEach(row => {
-        tableHtml += `<tr><td><input type="checkbox"></td>`; // 複選框
+        tableHtml += `<tr>`;
+        // 只在個人資訊管理(info)顯示最左邊的框框
+        if (moduleName === 'info') {
+            tableHtml += `<td><input type="checkbox"></td>`;
+        }
         const idKey = Object.keys(config.fields)[0]; // 第一個字段通常是ID
         const rowId = row[idKey];
 
@@ -182,7 +190,6 @@ function generateTable(moduleName, dataRows) {
             if (fieldConfig.canTruncate && displayValue.length > 50) { // 假設超過50個字元就截斷
                 displayValue = displayValue.substring(0, 50) + '...';
             }
-
 
             tableHtml += `<td>${displayValue}</td>`; // 顯示數據
         });
@@ -659,6 +666,15 @@ const subTableApi = {
     }
 };
 
+// 新增：根據子表型別取得主鍵欄位名稱
+function getSubTableIdField(type) {
+    switch (type) {
+        case 'publication': return 'paper_ID';
+        case 'project': return 'project_ID';
+        default: return 'id';
+    }
+}
+
 function openModal(title, formHtml, onSubmit) {
     const modal = document.querySelector('.modal');
     document.getElementById('modal-title').textContent = title;
@@ -726,7 +742,18 @@ function generateSubtableFormFields(fields, data = {}, type = '') {
 
 function openSubTableModal(type, mode, row = {}) {
     const config = subTableApi[type];
-    const title = mode === 'edit' ? `編輯 ${type}` : `新增 ${type}`;
+    // 取得表格中文名稱
+    const tableNames = {
+        info: '基本資料',
+        major: '專長',
+        degree: '學歷',
+        campus: '校內經歷',
+        external: '校外經歷',
+        publication: '論文',
+        project: '研究計畫'
+    };
+    const tableLabel = tableNames[type] || type;
+    const title = `${mode === 'edit' ? '編輯' : '新增'} ${tableLabel} 資料`;
     const fields = config.fields;
     // 自動填入 teacher_ID，但不顯示於表單（除 info 外）
     if (type !== 'info') row.teacher_ID = currentTeacherID;
@@ -756,8 +783,9 @@ function openSubTableModal(type, mode, row = {}) {
 
 async function deleteSubTableRow(type, id) {
     const config = subTableApi[type];
+    const idField = getSubTableIdField(type);
     if (!confirm(`確定要刪除 ${type} 的資料 ID: ${id} 嗎？`)) return;
-    const res = await fetchData(config.delete, 'POST', { id });
+    const res = await fetchData(config.delete, 'POST', { [idField]: id });
     alert(res.message);
     if (res.success) showTeacherDetail(currentTeacherID, currentTeacherName);
 }
@@ -766,12 +794,48 @@ async function deleteSubTableRow(type, id) {
 async function showTeacherDetail(teacher_ID, teacher_name) {
     currentTeacherID = teacher_ID;
     currentTeacherName = teacher_name;
-    moduleTitleElement.textContent = `教師資訊 - ${teacher_name}`;
+    moduleTitleElement.textContent = `個人資訊 - ${teacher_name}`;
     dataArea.innerHTML = '<p>載入中...</p>';
 
     try {
         const info = await fetchData(`api/teacher_info_get.php?teacher_ID=${teacher_ID}`);
         const ext = await fetchData(`api/teacher_extended_info.php?teacher_ID=${teacher_ID}`);
+
+        // 新增：取得帳號資訊
+        const loginInfoRes = await fetchData(`api/login_info.php?teacher_ID=${teacher_ID}`);
+        let loginInfoHtml = '';
+        if (loginInfoRes.success && loginInfoRes.data) {
+            const login = loginInfoRes.data;
+            loginInfoHtml = `
+                <h2>帳號資訊</h2>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>帳號</th>
+                            <td>${login.professor_accountnumber || ''}</td>
+                        </tr>
+                        <tr>
+                            <th>密碼</th>
+                            <td>${login.professor_password || ''}</td>
+                        </tr>
+                        <tr>
+                            <th>信箱</th>
+                            <td>${login.email || ''}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="action-buttons" style="margin-top: 10px;">
+                    <button class="edit-btn login-edit-btn" data-account="${login.professor_accountnumber}" data-password="${login.professor_password}" data-email="${login.email}">編輯</button>
+                </div>
+            `;
+        } else {
+            loginInfoHtml = `
+                <h2>帳號資訊</h2>
+                <table><tbody>
+                    <tr><td colspan="2">查無帳號資料</td></tr>
+                </tbody></table>
+            `;
+        }
 
         if (!info.success || !ext.success) throw new Error('資料載入失敗');
 
@@ -824,10 +888,13 @@ async function showTeacherDetail(teacher_ID, teacher_name) {
                 html += `<tr><th>${label}</th><td>${v}</td></tr>`;
             }
         });
-        html += `</tbody></table><div class="action-buttons">
+        html += `</tbody></table><div class="action-buttons" style="margin-top:16px;">
             <button class="edit-btn" onclick="openSubTableModal('info', 'edit', ${JSON.stringify(info.data).replace(/"/g, '&quot;')})">編輯</button>
             <button class="delete-btn" onclick="deleteTeacher('${teacher_ID}', '${teacher_name}')">刪除</button>
         </div>`;
+
+        // 插入帳號資訊表（含下方操作按鈕）
+        html += loginInfoHtml;
 
         const tables = [
             { key: 'majors', label: '專長', type: 'major', data: info.data.majors },
@@ -843,7 +910,7 @@ async function showTeacherDetail(teacher_ID, teacher_name) {
             html += `
                 <div style="display:flex;align-items:center;gap:10px;margin-top:24px;">
                     <h2 style="margin:0;">${table.label}</h2>
-                    <button class="add-btn" style="margin-left:8px;" onclick="openSubTableModal('${table.type}', 'add')">新增${table.label}</button>
+                    <button class="add-btn" style="margin-left:8px;" onclick="openSubTableModal('${table.type}', 'add')">新增</button>
                 </div>
                 <table><thead><tr>
             `;
@@ -868,9 +935,67 @@ async function showTeacherDetail(teacher_ID, teacher_name) {
         }
 
         dataArea.innerHTML = html;
+
+        // 綁定帳號表的編輯按鈕事件
+        const editBtn = dataArea.querySelector('.login-edit-btn');
+        if (editBtn) {
+            editBtn.onclick = function () {
+                openLoginEditModal({
+                    professor_accountnumber: editBtn.dataset.account,
+                    professor_password: editBtn.dataset.password,
+                    email: editBtn.dataset.email,
+                    teacher_ID: teacher_ID
+                });
+            };
+        }
     } catch (err) {
         dataArea.innerHTML = `<p>載入失敗：${err.message}</p>`;
     }
+}
+
+// 帳號資訊編輯模態框
+function openLoginEditModal(login) {
+    const modal = document.querySelector('.modal');
+    // 標題改為「編輯 帳號資訊 資料」
+    document.getElementById('modal-title').textContent = '編輯 帳號資訊 資料';
+    const form = document.getElementById('data-form');
+    form.innerHTML = `
+        <label for="current_account">目前帳號：</label>
+        <input id="current_account" name="current_account" value="${login.professor_accountnumber || ''}" readonly>
+        <label for="current_password">目前密碼：</label>
+        <input id="current_password" name="current_password" value="${login.professor_password || ''}" readonly>
+        <label for="new_account">新帳號：</label>
+        <input id="new_account" name="new_account" value="${login.professor_accountnumber || ''}">
+        <label for="new_password">新密碼：</label>
+        <input id="new_password" name="new_password" value="${login.professor_password || ''}">
+        <label for="email">信箱：</label>
+        <input id="email" name="email" value="${login.email || ''}" readonly>
+        <div class="form-buttons">
+            <button type="submit">儲存</button>
+            <button type="button" class="cancel-btn" onclick="closeModal()">取消</button>
+        </div>
+    `;
+    form.onsubmit = async function (e) {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const payload = {
+            current_account: formData.get('current_account'),
+            current_password: formData.get('current_password'),
+            new_account: formData.get('new_account'),
+            new_password: formData.get('new_password')
+        };
+        try {
+            const res = await fetchData('api/login_info.php', 'PUT', payload);
+            alert(res.message);
+            if (res.success) {
+                closeModal();
+                showTeacherDetail(currentTeacherID, currentTeacherName);
+            }
+        } catch (err) {
+            alert('更新失敗：' + err.message);
+        }
+    };
+    modal.style.display = 'flex';
 }
 
 async function deleteTeacher(id, name) {

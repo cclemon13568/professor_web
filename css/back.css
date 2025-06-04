@@ -369,6 +369,10 @@ body {
 #data-area button:not(.edit-btn):not(.delete-btn):not(.cancel-btn) {
     background-color: #007bff;
     color: #fff;
+    border-radius: 5px;
+    border: none;
+    font-size: 14px;
+    padding: 6px 12px; /* 按鈕面積放大 */
 }
 .add-btn:hover,
 #data-area button[type="button"]:not(.cancel-btn):not(.edit-item):not(.delete-item):hover,
