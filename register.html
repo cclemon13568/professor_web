@@ -20,8 +20,8 @@
         <div class="col-md-6">
             <div class="card p-4 shadow">
                 <h2 class="mb-4 text-center">註冊帳號</h2>
-                    <form id="registerForm" method="post" novalidate>
-                        <div class="mb-3">
+                   <form id="registerForm" method="post" novalidate>
+                    <div id="initialInputsGroup"> <div class="mb-3">
                             <label for="teacherId" class="form-label">教師ID：</label>
                             <input type="text" id="teacherId" name="teacherId" class="form-control" required>
                         </div>
@@ -34,12 +34,14 @@
                             <input type="password" id="password" name="password" class="form-control" required>
                         </div>
                         <button type="button" id="registerBtn" class="btn btn-primary w-100 mb-2">註冊</button>
-                        <div id="verification_code_group" class="mb-3" style="display:none;">
-                            <label for="verification_code" class="form-label">驗證碼：</label>
-                            <input type="text" id="verification_code" name="verification_code" class="form-control">
-                        </div>
-                        <button type="button" id="verifyBtn" class="btn btn-success w-100" style="display:none;">送出驗證碼</button>
-                    </form>
+                    </div>
+
+                    <div id="verification_code_group" class="mb-3" style="display:none;">
+                        <label for="verification_code" class="form-label">驗證碼：</label>
+                        <input type="text" id="verification_code" name="verification_code" class="form-control">
+                    </div>
+                    <button type="button" id="verifyBtn" class="btn btn-success w-100" style="display:none;">送出驗證碼</button>
+                </form>
                 <div class="text-center mt-3">
                     <a href="login.html" class="btn btn-outline-secondary w-100">返回登入</a>
                 </div>
