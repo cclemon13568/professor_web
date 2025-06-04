@@ -1,11 +1,18 @@
-/*瀏覽列*/
+/* 預設樣式（適用於大螢幕） */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fafafa;
+}
+
+/* OK 瀏覽列 (從 study.html 調整過來) */
+
 /*色塊區*/
 .navbar {
-    background-color: #fafafa;
+    background-color: #6B7EA5 !important; /* 直接設定為藍色 */
     width: 100%; /* 填滿整條 X 軸 */
     margin: 0; /* 移除外邊距 */
     border-radius: 0; /* 移除圓角 */
-    padding: 10px 20px;
+    padding: 10px 20px; /* <--- 調整這裡的 10px 數值來控制厚度 */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加陰影 */
 }
 
@@ -13,11 +20,13 @@
 .navbar-brand {
     font-size: 1.5rem; /* 調整品牌名稱的字體大小 */
     font-weight: bold; /* 加粗品牌名稱 */
+    color: #fff !important; /* 確保品牌名稱為白色 */
 }
 
 .nav-link {
     font-size: 1.1rem; /* 調整導覽連結的字體大小 */
     margin: 0 10px; /* 增加連結之間的間距 */
+    color: rgba(255, 255, 255, 0.75) !important; /* 預設連結顏色為半透明白色 */
 }
 
 .navbar-toggler {
@@ -28,215 +37,246 @@
 /*點選瀏覽列後的效果*/
 .nav-link.active {
     font-weight: bold;
-    color: #fff !important;
-    background-color: #2f5077;
+    color: #fff !important; /* 選中的連結為純白色 */
+    background-color: #2f5077; /* 深藍色背景 */
     border-radius: 5px;
 }
 
-/* 按鈕樣式 */
+
+.navbar .btn-outline-light {
+    color: #fff; /* 按鈕文字顏色 */
+    border-color: #fff; /* 按鈕邊框顏色 */
+}
+
 .navbar .btn-outline-light:hover {
     background-color: rgba(255, 255, 255, 0.1); /* 輕微亮一點 */
     color: rgba(255, 255, 255, 0.85); /* 提高文字亮度 */
     border-color: rgba(255, 255, 255, 0.85);
 }
 
+.navbar .btn-login {
+    background-color: #5FC0D9; /* 登入按鈕背景色，使用課程頁面提問按鈕的顏色 */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px; /* 調整內邊距 */
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease; /* 添加過渡效果 */
+}
 
 .navbar .btn-login:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加懸浮陰影 */
     transform: translateY(-2px); /* 輕微上移效果（可選） */
+    background-color: #53A7BC; /* 懸停時顏色變深 */
 }
 
-.navbar-dark.bg-primary {
-    background-color: #6B7EA5 !important; /* 紅色背景 */
-    width: 100%; /* 填滿整條 X 軸 */
-    margin: 0; /* 移除外邊距 */
-    border-radius: 0; /* 移除圓角 */
+/* 新增的響應式媒體查詢部分 (從 study.css 複製並適應) */
+
+/* 手機螢幕（小於 768px） */
+@media (max-width: 768px) {
+    header img {
+        max-width: 100%; /* 圖片寬度自適應 */
+        margin-right: 0; /* 手機上移除圖片右邊距 */
+        margin-bottom: 15px; /* 添加圖片底部間距 */
+    }
+
+    header {
+        flex-direction: column; /* 手機上垂直排列 */
+        text-align: center; /* 文字置中 */
+    }
+
+    .navbar {
+        padding: 10px; /* 減少內邊距 */
+    }
+
+    .nav-link {
+        font-size: 1rem; /* 縮小導覽連結字體大小 */
+        margin: 0 5px; /* 減少連結間距 */
+    }
+
+    .navbar-brand {
+        font-size: 1.2rem; /* 縮小品牌名稱字體 */
+    }
 }
 
-/*瀏覽列end*/
+/* 平板螢幕（768px 至 1024px） */
+@media (min-width: 768px) and (max-width: 1024px) {
+    header img {
+        max-width: 200px; /* 限制圖片寬度 */
+        margin-right: 30px; /* 調整圖片和文字間距 */
+    }
 
-/*底部的邊*/
-footer.bg-primary {
-    background-color: #6B7EA5 !important; /*rgb(168, 32, 32)*/
+    header h1 {
+        font-size: 2.5rem; /* 調整標題字體大小 */
+    }
+
+    .navbar {
+        padding: 10px 20px; /* 確保與大螢幕預設值一致 */
+    }
+
+    .nav-link {
+        font-size: 1.05rem; /* 微調連結字體大小 */
+        margin: 0 8px; /* 微調連結間距 */
+    }
 }
 
-#about {
-    border-top: 2px solid #000; /* 設定橫線的粗細與顏色 */
-    padding-top: 20px; /* 增加上方內邊距，讓內容與橫線有間距 */
-}
-
-.container {
-    line-height: 2;
-}
-
-/* 統一表格單元格樣式 */
-.schedule-table th,
-.schedule-table td {
+/* 新增或調整的樣式 (原 meeting.css 的內容，保留不變) */
+.schedule-table .appointment-slot {
     text-align: center;
     vertical-align: middle;
-    padding: 10px;
-    border: 1px solid #ccc;
-    height: 80px;     /* 統一設定高度 */
-    min-height: 80px; /* 確保最小高度，防止內容撐開 */
-    box-sizing: border-box; /* 確保內邊距和邊框計算在高度內 */
+    cursor: pointer; /* 預設可點擊 */
+    background-color: #f8f9fa; /* 白色背景 */
+    min-width: 100px; /* 確保格子有足夠寬度 */
+    height: 60px; /* 統一格子高度 */
+    position: relative; /* 用於定位子元素 */
 }
 
-/* 設定時間列的寬度 */
-.schedule-table td:first-child,
-.schedule-table th:first-child {
-    width: 120px; /* 調整為您需要的固定寬度 */
-    min-width: 120px; /* 確保最小寬度，防止內容撐開 */
-}
-
-
-.available {
-    background-color: #fff;
-}
-
-.available:hover {
-    background-color: #e6ffe6;
-}
-
-.busy {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-.schedule-note {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-right: 1px solid #ccc;
+/* 學生/教授切換時的內容顯示 */
+.student-view-content, .professor-view-content {
+    /* 預設隱藏，由 JS 控制顯示 */
+    display: flex; /* 讓內容垂直置中 */
+    align-items: center;
+    justify-content: center;
     height: 100%;
 }
 
-.time-cell a {
-    text-decoration: none;
-    color: #000;
+.schedule-table .appointment-slot.available {
+    background-color: #ffffff; /* 白色區塊 (可預約) */
+}
+
+/* 預約狀態顏色 */
+.appointment-slot.status-0 {
+    background-color: #f8d7da; /* 淺紅色 (預約失敗) */
+    color: #721c24;
+}
+.appointment-slot.status-1 {
+    background-color: #d1e7dd; /* 淺綠色 (預約成功) */
+    color: #155724;
+}
+.appointment-slot.status-2 {
+    background-color: #fff3cd; /* 淺黃色 (審查中/已申請) */
+    color: #856404;
+}
+.appointment-slot.status--1 { /* 新增: 教授自訂不可用，使用深灰色 */
+    background-color: #e9ecef; /* 灰色區塊，與您原有的 unavailable-custom 顏色一致 */
+    color: #495057;
+    cursor: not-allowed;
+    pointer-events: none; /* 禁用鼠標事件 */
+}
+
+
+/* 教授模式下選中的時段 */
+.appointment-slot.selected-for-change {
+    border: 2px solid blue; /* 藍色邊框表示選中 */
+}
+
+/* 教授模式下的不可用時段（無法被預約） */
+.schedule-table .appointment-slot.unavailable,
+.schedule-table .appointment-slot.unavailable-custom {
+    background-color: #e9ecef; /* 灰色區塊 */
+    cursor: not-allowed; /* 不可點擊 */
+    pointer-events: none; /* 禁用鼠標事件 */
+}
+
+
+.schedule-table .appointment-slot.pending {
+    background-color: #add8e6; /* 藍色區塊 (已申請/審核中) */
+    color: #000000; /* 文字顏色 */
+}
+
+.schedule-table .appointment-slot.success {
+    background-color: #90ee90; /* 綠色區塊 (預約成功) */
+    color: #000000; /* 文字顏色 */
+}
+
+.schedule-table .appointment-slot.failed {
+    background-color: #ff9999; /* 紅色區塊 (預約失敗) */
+    color: #000000; /* 文字顏色 */
+}
+
+.appointment-pending {
+    background-color: #fff3cd; /* Light yellow for pending */
+    color: #856404;
+}
+
+.appointment-success {
+    background-color: #d1e7dd; /* Light green for success */
+    color: #155724;
+}
+
+.appointment-fail {
+    background-color: #f8d7da; /* Light red for failed */
+    color: #721c24;
+}
+
+.appointment-unavailable-fixed { /* For slots that cannot be changed by professor */
+    background-color: #6c757d !important; /* Darker gray */
+    color: #ffffff;
+    cursor: not-allowed;
+}
+
+/* Highlight the day column when changing availability */
+.schedule-table thead th.active-day-for-change {
+    background-color: #28a745; /* Green highlight for active day header */
+}
+
+.appointment-slot.highlight-day {
+    border: 2px solid #28a745; /* Green border for active day cells */
+}
+
+/* Ensure default hover is not applied when in selection mode */
+.appointment-slot.selectable-slot:hover {
+    background-color: #e2f0ff; /* Restore hover for selectable slots */
+}
+
+.appointment-slot.selectable-slot.professor-selected-unavailable:hover {
+    background-color: #f6c0c2 !important; /* Hover for selected unavailable */
+}
+
+.appointment-slot.selectable-slot.professor-selected-available:hover {
+    background-color: #c3e6cb !important; /* Hover for selected available */
+}
+
+/* Modal Styles */
+/* ... (您原有的 modal 樣式) ... */
+
+/* Ensure content is centered in the slot */
+.appointment-slot .student-view-content,
+.appointment-slot .professor-view-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+/* Hide professor view content by default in student view */
+.student-view-element, .professor-view-content {
+    display: none;
+}
+
+/* Show student view content by default in student view */
+.professor-view-element, .student-view-content {
     display: block;
 }
 
-
-/* 教授可修改 */
-
-.appointment-slot {
-    cursor: pointer;        /* 讓學生模式下點擊預約有指針效果 */
-    transition: background-color 0.3s ease; /* 平滑過渡效果 */
-    position: relative;     /* 讓子元素可以絕對定位 */
-}
-
-/* 學生視圖文字的基礎樣式 */
-.appointment-slot .student-view-text {
-    display: block; /* 預設顯示 */
-    font-weight: bold;
-    /* 顏色會由 data-status 決定 */
-}
-
-/* 教授操作按鈕容器 - 預設隱藏 */
-.appointment-slot .professor-actions{
-    display: none; /* 預設隱藏 */
-    justify-content: center; /* 水平居中 */
-    align-items: center; /* 垂直居中 */
-    flex-wrap: wrap; /* 換行以應對小螢幕 */
-    gap: 5px; /* 按鈕間距 */
-    height: 100%; /* 讓容器佔滿單元格高度 */
-    position: absolute; /* 相對於父元素定位 */
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 5px;
-}
-
-/* 教授模式下，當時段為 'booked' 狀態時，顯示教授操作按鈕 */
-body.professor-mode .appointment-slot[data-status="booked"] .professor-actions {
-    display: flex; /* 顯示接受/拒絕按鈕 */
-}
-
-/* 教授模式下，當時段為 'booked' 狀態時，隱藏學生文字 */
-body.professor-mode .appointment-slot[data-status="booked"] .student-view-text {
+/* Override based on login status */
+body.professor-logged-in .student-view-element,
+body.professor-logged-in .student-view-content {
     display: none;
 }
 
-/* 狀態顏色 */
-/* 白色區塊為可預約時段 */
-.appointment-slot[data-status="available"] {
-    background-color: #FFFFFF; /* 白色 */
-    color: #007bff; /* 預設藍色文字 */
+body.professor-logged-in .professor-view-element,
+body.professor-logged-in .professor-view-content {
+    display: block;
 }
 
-/* 灰色區塊為教授已排定行程，無法預約 */
-.appointment-slot[data-status="unavailable"] {
-    background-color: #f0f0f0; /* 淺灰色 */
-    color: #6c757d; /* 灰色文字 */
-    /* 學生模式下不可點擊，教授模式下可以 */
-    cursor: not-allowed;
-}
-
-/* 已預約時段 (例如學生預約後或教授接受後) */
-.appointment-slot[data-status="booked"] {
-    background-color: #e2f0d9; /* 淺綠色或您選擇的其他顏色 */
-    color: #28a745; /* 綠色文字 */
-    /* 學生模式下不可點擊，教授模式下可以 */
-    cursor: not-allowed;
-}
-
-/* 教授模式下選取時段的樣式 */
-body.professor-mode .appointment-slot.selected {
-    background-color: #FFFFFF !important; /* 選取時強制為白色 */
-    border: 3px solid #007bff;            /* 粗藍色邊框 */
-}
-
-/* 教授模式下的控制區塊 */
-.professor-mode-controls {
-    display: none; /* 預設隱藏 */
-}
-
-body.professor-mode .professor-mode-controls {
-    display: flex !important; /* 教授模式下顯示 */
-}
-
-/* 在教授模式下，所有 appointment-slot 都應該是可點擊的 */
-body.professor-mode .appointment-slot {
-    cursor: pointer !important; /* 強制手型指針 */
-}
-
-/* 新增：教授模式下，當時段為 'booked' 狀態時，顯示教授操作按鈕 */
-body.professor-mode .appointment-slot[data-status="booked"] .professor-actions {
-    display: flex; /* 顯示接受/拒絕按鈕 */
-}
-
-/* 新增：教授模式下，當時段為 'booked' 狀態時，隱藏學生文字 */
-body.professor-mode .appointment-slot[data-status="booked"] .student-view-text {
+body.student-logged-in .professor-view-element,
+body.student-logged-in .professor-view-content {
     display: none;
 }
 
-
-/* 調整按鈕大小 */
-.professor-actions .btn{
-    font-size: 0.8rem;
-    padding: 0.2rem 0.5rem;
-    white-space: nowrap; /* 防止文字換行 */
+body.student-logged-in .student-view-element,
+body.student-logged-in .student-logged-in .student-view-content {
+    display: block;
 }
-
-/* 注意事項列表樣式 */
-.schedule-note ul {
-    list-style-type: disc; /* 使用圓點列表 */
-    padding-left: 20px; /* 左側內邊距 */
-}
-.schedule-note li {
-    margin-bottom: 8px;
-    color: #555;
-}
-
-
-/* 響應式調整 */
-@media (max-width: 768px) {
-    .schedule-table th, .schedule-table td {
-        font-size: 0.9rem; /* 縮小字體 */
-        padding: 0.5rem; /* 調整內邊距 */
-    }
-    .professor-actions .btn {
-        font-size: 0.7rem;
-        padding: 0.15rem 0.4rem;
-    }
-}
-/* 教授可修改 end */
