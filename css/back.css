@@ -11,14 +11,20 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 給主要內容區域一個輕微的陰影，增加立體感 */
 }
 
+/* 固定側邊欄 */
 .sidebar {
-    width: 250px; /* 側邊欄寬度，比原先稍寬，提供更多空間給選單項目 */
-    background-color: #6a7da4; /* 側邊欄背景色，這裡選擇了一個相對較深的藍灰色，常見於後台管理介面 */
-    color: #ecf0f1; /* 側邊欄文字顏色，與深色背景形成良好對比 */
-    padding: 20px; /* 側邊欄內部邊距 */
-    box-shadow: 2px 0 5px #2F4F76FF; /* 側邊欄右側陰影，使其與主要內容區塊分離 */
-    display: flex; /* 使用 Flexbox 佈局側邊欄內部元素 */
-    flex-direction: column; /* 內部元素垂直排列 */
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 250px;
+    background-color: #6a7da4;
+    color: #ecf0f1;
+    padding: 20px;
+    box-shadow: 2px 0 5px #2F4F76FF;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
 }
 
 .sidebar h2 {
@@ -57,8 +63,9 @@ body {
     color: #fff; /* 選中時的文字顏色 */
     font-weight: bold; /* 選中時文字加粗 */
 }
-
+/* 主要內容區塊往右推，避免被側邊欄遮住 */
 .main-content {
+    margin-left: 300px;
     flex: 1; /* 佔據 `container` 中除了側邊欄外的所有剩餘空間 */
     display: flex; /* 使用 Flexbox 佈局主要內容區域 */
     flex-direction: column; /* 內部元素垂直堆疊（標題和數據區） */
@@ -321,7 +328,11 @@ body {
     gap: 5px; /* 按鈕間距 */
 }
 
-.action-buttons button {
+.action-buttons button,
+#data-area table .action-buttons button,
+#data-area button.edit-item,
+#data-area button.delete-item,
+#data-area button[type="button"]:not(.cancel-btn) {
     padding: 6px 12px;
     border: none;
     border-radius: 4px;
@@ -330,22 +341,39 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.action-buttons .edit-btn {
-    background-color: #ffc107; /* 黃色 */
+/* 編輯按鈕統一黃色 */
+.action-buttons .edit-btn,
+#data-area button.edit-item {
+    background-color: #ffc107;
     color: #333;
 }
-
-.action-buttons .edit-btn:hover {
+.action-buttons .edit-btn:hover,
+#data-area button.edit-item:hover {
     background-color: #e0a800;
 }
 
-.action-buttons .delete-btn {
-    background-color: #dc3545; /* 紅色 */
-    color: white;
+/* 刪除按鈕統一紅色 */
+.action-buttons .delete-btn,
+#data-area button.delete-item {
+    background-color: #dc3545;
+    color: #fff;
+}
+.action-buttons .delete-btn:hover,
+#data-area button.delete-item:hover {
+    background-color: #c82333;
 }
 
-.action-buttons .delete-btn:hover {
-    background-color: #c82333;
+/* 新增按鈕統一藍色 */
+.add-btn,
+#data-area button[type="button"]:not(.cancel-btn):not(.edit-item):not(.delete-item),
+#data-area button:not(.edit-btn):not(.delete-btn):not(.cancel-btn) {
+    background-color: #007bff;
+    color: #fff;
+}
+.add-btn:hover,
+#data-area button[type="button"]:not(.cancel-btn):not(.edit-item):not(.delete-item):hover,
+#data-area button:not(.edit-btn):not(.delete-btn):not(.cancel-btn):hover {
+    background-color: #0056b3;
 }
 
 /* 教師名單摺疊區塊樣式 */

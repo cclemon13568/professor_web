@@ -456,7 +456,7 @@ function generateFormFields(moduleName, itemData, mode) {
                     break;
             }
         }
-        
+
         // 將 ID 欄位在新增模式下設為可輸入，如果 config 允許的話
         // 你的 course_info.php 在 POST 時需要 course_ID，所以它應該可寫入
         if (fieldKey === Object.keys(config.fields)[0] && mode === 'add') {
@@ -530,12 +530,15 @@ async function toggleTeacherList() {
     if (teacherMenu) teacherMenu.classList.add('active');
 
     const list = document.getElementById('teacher-list');
+    const addBtnContainer = document.getElementById('add-teacher-btn-container');
     if (list.style.display === 'none' || list.style.display === '') {
         // 展開時載入教師名單
         await loadTeacherNames();
         list.style.display = 'block';
+        addBtnContainer.style.display = 'none';
     } else {
         list.style.display = 'none';
+        addBtnContainer.style.display = 'none';
     }
 }
 
@@ -547,10 +550,28 @@ async function loadTeacherNames() {
         const res = await fetch('api/teacher_info_get.php');
         const json = await res.json();
         const teachers = (json && json.success && Array.isArray(json.teachers)) ? json.teachers : [];
+        list.innerHTML = '';
+
+        // 先插入「新增教師」按鈕
+        const addLi = document.createElement('li');
+        addLi.textContent = '＋ 新增教師';
+        addLi.style.fontWeight = 'bold';
+        addLi.style.color = '#fff';
+        addLi.style.cursor = 'pointer';
+        addLi.style.padding = '5px 15px';
+        addLi.onclick = (e) => {
+            e.stopPropagation();
+            openSubTableModal('info', 'add');
+        };
+        list.appendChild(addLi);
+
+        // 再插入教師名單
         if (teachers.length === 0) {
-            list.innerHTML = '<li style="color:#fff; padding:5px 15px;">查無教師資料</li>';
+            const emptyLi = document.createElement('li');
+            emptyLi.textContent = '查無教師資料';
+            emptyLi.style.color = '#fff';
+            list.appendChild(emptyLi);
         } else {
-            list.innerHTML = '';
             teachers.forEach(t => {
                 const li = document.createElement('li');
                 li.textContent = t.teacher_name || '(無名教師)';
@@ -572,7 +593,7 @@ async function loadTeacherNames() {
 // 初始化：頁面載入時載入第一個模組（留言管理）
 document.addEventListener('DOMContentLoaded', () => {
     // 預設載入第一個模組 (留言管理)
-    loadModule('message_board'); 
+    loadModule('message_board');
     loadTeacherNames();
 
     // 綁定全局事件
@@ -593,6 +614,13 @@ let currentTeacherID = '';
 let currentTeacherName = '';
 
 const subTableApi = {
+
+    info: {
+        insert: 'api/teacher_info_insert.php',
+        update: 'api/teacher_info_update.php',
+        delete: 'api/teacher_info_delete.php',
+        fields: ['teacher_ID', 'teacher_name', 'teacher_email', 'teacher_intro', 'office_location', 'office_hours']
+    },
     major: {
         insert: 'api/major_insert.php',
         update: 'api/major_update.php',
@@ -650,25 +678,71 @@ function openModal(title, formHtml, onSubmit) {
     modal.style.display = 'flex';
 }
 
-function generateSubtableFormFields(fields, data = {}) {
-    return fields.map(field => {
-        const value = data[field] || '';
-        const readonly = field === 'teacher_ID' ? 'readonly' : '';
-        return `<label>${field}：</label><input name="${field}" value="${value}" ${readonly} style="width:100%;">`;
-    }).join('');
+function generateSubtableFormFields(fields, data = {}, type = '') {
+    // 中文欄位對照表
+    const fieldLabels = {
+        teacher_ID: '編號',
+        teacher_name: '姓名',
+        teacher_email: '信箱',
+        teacher_intro: '簡介',
+        office_location: '辦公地點',
+        office_hours: '辦公時間',
+        id: '編號',
+        major: '專長',
+        degree: '學歷',
+        experience: '經歷',
+        paper_ID: '編號',
+        paper_topic: '標題',
+        paper_authors: '作者',
+        paper_year: '年份',
+        project_ID: '編號',
+        project_role: '角色',
+        project_period: '時期',
+        project_organization: '計畫組織'
+    };
+
+    // 需要 textarea 的欄位
+    const textareaFields = ['teacher_intro', 'experience', 'paper_authors', 'paper_topic', 'project_organization'];
+
+    // 除 info 外，teacher_ID 不顯示於表單
+    return fields
+        .filter(field => !(field === 'teacher_ID' && type !== 'info'))
+        .map(field => {
+            const value = data[field] || '';
+            const label = fieldLabels[field] || field;
+            if (textareaFields.includes(field)) {
+                return `
+                    <label for="${field}">${label}：</label>
+                    <textarea id="${field}" name="${field}" style="width:100%;min-height:100px;">${value}</textarea>
+                `;
+            } else {
+                return `
+                    <label for="${field}">${label}：</label>
+                    <input id="${field}" name="${field}" value="${value}" style="width:100%;">
+                `;
+            }
+        }).join('');
 }
 
 function openSubTableModal(type, mode, row = {}) {
     const config = subTableApi[type];
     const title = mode === 'edit' ? `編輯 ${type}` : `新增 ${type}`;
     const fields = config.fields;
-    const formHtml = generateSubtableFormFields(fields, row);
+    // 自動填入 teacher_ID，但不顯示於表單（除 info 外）
+    if (type !== 'info') row.teacher_ID = currentTeacherID;
+    const formHtml = generateSubtableFormFields(fields, row, type);
 
     openModal(title, formHtml, async () => {
         const formData = new FormData(document.getElementById('data-form'));
         const payload = {};
-        fields.forEach(f => payload[f] = formData.get(f));
-        payload.teacher_ID = currentTeacherID;
+        fields.forEach(f => {
+            // teacher_ID 自動帶入
+            if (f === 'teacher_ID' && type !== 'info') {
+                payload[f] = currentTeacherID;
+            } else {
+                payload[f] = formData.get(f);
+            }
+        });
 
         const url = config[mode === 'edit' ? 'update' : 'insert'];
         const res = await fetchData(url, 'POST', payload);
@@ -701,14 +775,58 @@ async function showTeacherDetail(teacher_ID, teacher_name) {
 
         if (!info.success || !ext.success) throw new Error('資料載入失敗');
 
+        // 中文欄位對照表
+        const fieldLabels = {
+            teacher_ID: '編號',
+            teacher_name: '姓名',
+            teacher_email: '信箱',
+            teacher_intro: '簡介',
+            office_location: '辦公地點',
+            office_hours: '辦公時間'
+        };
+
+        // 各子表格欄位中文對照
+        const tableFieldLabels = {
+            major: {
+                id: '編號',
+                major: '專長'
+            },
+            degree: {
+                id: '編號',
+                degree: '學歷'
+            },
+            campus: {
+                id: '編號',
+                experience: '經歷'
+            },
+            external: {
+                id: '編號',
+                experience: '經歷'
+            },
+            publication: {
+                paper_ID: '編號',
+                paper_topic: '標題',
+                paper_authors: '作者',
+                paper_year: '年份'
+            },
+            project: {
+                project_ID: '編號',
+                project_role: '角色',
+                project_period: '時期',
+                project_organization: '計畫組織'
+            }
+        };
+
         let html = `<h2>基本資料</h2><table><tbody>`;
         Object.entries(info.data).forEach(([k, v]) => {
-            if (k !== 'majors' && k !== 'degrees')
-                html += `<tr><th>${k}</th><td>${v}</td></tr>`;
+            if (k !== 'majors' && k !== 'degrees') {
+                const label = fieldLabels[k] || k;
+                html += `<tr><th>${label}</th><td>${v}</td></tr>`;
+            }
         });
         html += `</tbody></table><div class="action-buttons">
-            <button onclick="openSubTableModal('info', 'edit', ${JSON.stringify(info.data).replace(/"/g, '&quot;')})">編輯</button>
-            <button onclick="deleteTeacher('${teacher_ID}', '${teacher_name}')">刪除</button>
+            <button class="edit-btn" onclick="openSubTableModal('info', 'edit', ${JSON.stringify(info.data).replace(/"/g, '&quot;')})">編輯</button>
+            <button class="delete-btn" onclick="deleteTeacher('${teacher_ID}', '${teacher_name}')">刪除</button>
         </div>`;
 
         const tables = [
@@ -721,22 +839,32 @@ async function showTeacherDetail(teacher_ID, teacher_name) {
         ];
 
         for (const table of tables) {
-            html += `<h2>${table.label}</h2><table><thead><tr>`;
+            // 將新增按鈕放到表格名稱右側，並統一 class
+            html += `
+                <div style="display:flex;align-items:center;gap:10px;margin-top:24px;">
+                    <h2 style="margin:0;">${table.label}</h2>
+                    <button class="add-btn" style="margin-left:8px;" onclick="openSubTableModal('${table.type}', 'add')">新增${table.label}</button>
+                </div>
+                <table><thead><tr>
+            `;
             if (Array.isArray(table.data) && table.data.length > 0) {
-                Object.keys(table.data[0]).forEach(k => html += `<th>${k}</th>`);
+                const fieldMap = tableFieldLabels[table.type];
+                Object.keys(table.data[0]).forEach(k => {
+                    html += `<th>${(fieldMap && fieldMap[k]) ? fieldMap[k] : k}</th>`;
+                });
                 html += `<th>操作</th></tr></thead><tbody>`;
                 table.data.forEach(row => {
                     html += '<tr>';
                     Object.values(row).forEach(v => html += `<td>${v}</td>`);
                     html += `<td>
-                        <button class="edit-item" data-type="${table.type}" data-row='${JSON.stringify(row)}'>編輯</button>
-                        <button class="delete-item" data-type="${table.type}" data-id="${row.id || row.paper_ID || row.project_ID}">刪除</button>
+                        <button class="edit-btn edit-item" data-type="${table.type}" data-row='${JSON.stringify(row)}'>編輯</button>
+                        <button class="delete-btn delete-item" data-type="${table.type}" data-id="${row.id || row.paper_ID || row.project_ID}">刪除</button>
                     </td></tr>`;
                 });
             } else {
                 html += `<tr><td colspan="100%">無資料</td></tr>`;
             }
-            html += `</tbody></table><button onclick="openSubTableModal('${table.type}', 'add')">新增${table.label}</button>`;
+            html += `</tbody></table>`;
         }
 
         dataArea.innerHTML = html;
