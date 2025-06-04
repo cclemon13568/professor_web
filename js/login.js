@@ -1,7 +1,7 @@
-//瀏覽列互動效果
 document.addEventListener("DOMContentLoaded", () => {
+    // 瀏覽列互動效果
     const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
-    const currentPage = window.location.pathname.split("/").pop(); // e.g. 'course.html'
+    const currentPage = window.location.pathname.split("/").pop();
 
     navLinks.forEach(link => {
         const linkHref = link.getAttribute("href");
@@ -12,37 +12,57 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 登入表單 AJAX 串接
-    const loginForm = document.querySelector('form[action="process_login.php"]');
-    if (loginForm) {
-        loginForm.addEventListener('submit', function (e) {
-            e.preventDefault();
+    // 登入表單動態處理
+    const form = document.querySelector('form');
+    if (!form) return;
 
-            const formData = new FormData(loginForm);
-            const data = {
-                professor_accountnumber: formData.get('username'),
-                professor_password: formData.get('password')
-            };
+    // 動態插入驗證碼欄位（初始隱藏）
+    let codeGroup = document.createElement('div');
+    codeGroup.className = "mb-3";
+    codeGroup.id = "verification_code_group";
+    codeGroup.style.display = "none";
+    codeGroup.innerHTML = `
+        <label for="verification_code" class="form-label">驗證碼：</label>
+        <input type="text" id="verification_code" name="verification_code" class="form-control">
+    `;
+    form.insertBefore(codeGroup, form.querySelector('button[type="submit"]'));
 
-            fetch('api/login_info.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // 取得欄位值
+        const account = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const codeInput = document.getElementById('verification_code');
+        const code = codeInput ? codeInput.value : '';
+
+        fetch('api/process_login pro.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                professor_accountnumber: account,
+                professor_password: password,
+                verification_code: code
             })
-            .then(res => res.json())
-            .then(result => {
-                if (result.success) {
-                    alert('登入成功！');
-                    window.location.href = 'index.html';
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                if (data.step === 'code_sent') {
+                    alert(data.message); // 驗證碼已寄出
+                    document.getElementById('verification_code_group').style.display = 'block';
+                } else if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
                 } else {
-                    alert(result.message || '登入失敗');
+                    alert(data.message);
                 }
-            })
-            .catch(err => {
-                alert('伺服器錯誤，請稍後再試');
-            });
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(err => {
+            alert('登入失敗，請稍後再試');
+            console.error(err);
         });
-    }
+    });
 });
