@@ -82,7 +82,7 @@ if (empty($code)) {
         $mail->Port = 587;
         $mail->CharSet = 'UTF-8';
         $mail->Encoding = 'base64';
-        
+
         $mail->setFrom('lyfish0316@gmail.com', '教授系統');
         $mail->addAddress($email);
         $mail->Subject = "登入驗證碼";
