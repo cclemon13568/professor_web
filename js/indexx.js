@@ -75,12 +75,12 @@ document.addEventListener("DOMContentLoaded", () => {
      */
     async function fetchTeacherAllInfo(id) {
 
-            console.log('teacherName:', teacherName);
-            console.log('teacherEmail:', teacherEmail);
-            console.log('teacherLab:', teacherLab);
-            console.log('teacherSelfIntroduction:', teacherSelfIntroduction);
-            console.log('educationList:', educationList);
-            console.log('specialtyList:', specialtyList);
+        console.log('teacherName:', teacherName);
+        console.log('teacherEmail:', teacherEmail);
+        console.log('teacherLab:', teacherLab);
+        console.log('teacherSelfIntroduction:', teacherSelfIntroduction);
+        console.log('educationList:', educationList);
+        console.log('specialtyList:', specialtyList);
         // 初始載入提示
         if (teacherName) teacherName.textContent = '載入中...';
         if (teacherEmail) teacherEmail.textContent = '載入中...';
@@ -118,13 +118,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (specialtyList) specialtyList.innerHTML = `<li class="list-group text-danger">${errorMessage}</li>`;
             } else {
                 // 個人資訊
-               // 個人資訊
                 if (teacherName) teacherName.textContent = coreData.data.teacher_name || 'N/A';
                 if (teacherEmail) {
                     teacherEmail.textContent = coreData.data.teacher_email || 'N/A';
                     teacherEmail.href = coreData.data.teacher_email ? `mailto:${coreData.data.teacher_email}` : '#';
                 }
-                if (teacherPhone) teacherPhone.textContent = coreData.data.phone || 'N/A'; // 注意這裡
+                if (teacherPhone) teacherPhone.textContent = coreData.data.phone || 'N/A';
                 if (teacherLab) teacherLab.textContent = coreData.data.office_location || 'N/A';
                 if (teacherSelfIntroduction) teacherSelfIntroduction.textContent = coreData.data.teacher_intro || 'N/A';
 
@@ -132,10 +131,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (educationList) {
                     educationList.innerHTML = '';
                     if (coreData.data.degrees && coreData.data.degrees.length > 0) {
-                        coreData.data.degrees.forEach(degree => {
+                        coreData.data.degrees.forEach(degreeObj => {
                             const li = document.createElement('li');
                             li.className = 'list-group-item';
-                            li.textContent = degree;
+                            li.textContent = degreeObj.degree; // 取 degree 欄位
                             educationList.appendChild(li);
                         });
                     } else {
@@ -150,10 +149,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (specialtyList) {
                     specialtyList.innerHTML = '';
                     if (coreData.data.majors && coreData.data.majors.length > 0) {
-                        coreData.data.majors.forEach(major => {
+                        coreData.data.majors.forEach(majorObj => {
                             const li = document.createElement('li');
                             li.className = 'list-group';
-                            li.textContent = major;
+                            li.textContent = majorObj.major; // 取 major 欄位
                             specialtyList.appendChild(li);
                         });
                     } else {
