@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： localhost:3306
--- 產生時間： 2025 年 06 月 02 日 14:45
+-- 產生時間： 2025 年 06 月 04 日 12:52
 -- 伺服器版本： 10.11.11-MariaDB-0ubuntu0.24.04.2
 -- PHP 版本： 8.3.6
 
@@ -154,6 +154,15 @@ CREATE TABLE `evaluation_mapping` (
   `evaluate_ID` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- 傾印資料表的資料 `evaluation_mapping`
+--
+
+INSERT INTO `evaluation_mapping` (`course_ID`, `evaluate_ID`) VALUES
+('CS001', 'E001(test)'),
+('CS001', 'E002(test)'),
+('CS002', 'E003(test)');
+
 -- --------------------------------------------------------
 
 --
@@ -194,7 +203,8 @@ CREATE TABLE `login_info` (
 --
 
 INSERT INTO `login_info` (`professor_accountnumber`, `professor_password`, `verification_code`, `email`, `teacher_ID`) VALUES
-('P101', 'testpass123', NULL, 'codepalce316@gmail.com', NULL);
+('P100', 'ej03xu3m06', NULL, 'any12355@gmail.com', 'P001'),
+('P101', 'testpass123', NULL, 'codepalce316@gmail.com', 'T002');
 
 -- --------------------------------------------------------
 
@@ -283,6 +293,7 @@ CREATE TABLE `personal_info` (
 --
 
 INSERT INTO `personal_info` (`teacher_ID`, `teacher_name`, `teacher_email`, `teacher_intro`, `office_location`, `office_hours`) VALUES
+('P001', '管禮元', 'any12355@gmail.com', 'abcdefg', '234', '星期八 24:60'),
 ('T002', '李榮三', 'codepalce316@gmail.com', '資安領域的先驅，專精人工智慧資安應用，引領未來科技發展。研究成果不僅在學術界備受矚目，更在產業界產生深遠影響。', '資訊安全實驗室', '星期一、四、五 12:10~13:00(test)');
 
 -- --------------------------------------------------------
