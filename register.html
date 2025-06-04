@@ -20,21 +20,26 @@
         <div class="col-md-6">
             <div class="card p-4 shadow">
                 <h2 class="mb-4 text-center">註冊帳號</h2>
-                <form id="registerForm" action="process_register.php" method="post" novalidate>
-                    <div class="mb-3">
-                        <label for="teacherId" class="form-label">教師ID：</label>
-                        <input type="text" id="teacherId" name="teacherId" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="username" class="form-label">帳號：</label>
-                        <input type="text" id="username" name="username" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">密碼：</label>
-                        <input type="password" id="password" name="password" class="form-control" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">註冊</button>
-                </form>
+                    <form id="registerForm" method="post" novalidate>
+                        <div class="mb-3">
+                            <label for="teacherId" class="form-label">教師ID：</label>
+                            <input type="text" id="teacherId" name="teacherId" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">帳號：</label>
+                            <input type="text" id="username" name="username" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">密碼：</label>
+                            <input type="password" id="password" name="password" class="form-control" required>
+                        </div>
+                        <button type="button" id="registerBtn" class="btn btn-primary w-100 mb-2">註冊</button>
+                        <div id="verification_code_group" class="mb-3" style="display:none;">
+                            <label for="verification_code" class="form-label">驗證碼：</label>
+                            <input type="text" id="verification_code" name="verification_code" class="form-control">
+                        </div>
+                        <button type="button" id="verifyBtn" class="btn btn-success w-100" style="display:none;">送出驗證碼</button>
+                    </form>
                 <div class="text-center mt-3">
                     <a href="login.html" class="btn btn-outline-secondary w-100">返回登入</a>
                 </div>
@@ -45,31 +50,7 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-// 簡單驗證
-document.getElementById('registerForm').addEventListener('submit', function(e) {
-    const teacherId = document.getElementById('teacherId').value.trim();
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
+<script src="js/register.js"></script>
 
-    let message = '';
-    if (!teacherId) {
-        message += '請輸入教師ID。\n';
-    }
-    if (!username) {
-        message += '請輸入帳號。\n';
-    }
-    if (!password) {
-        message += '請輸入密碼。\n';
-    }
-    if (password.length > 0 && password.length < 6) {
-        message += '密碼長度至少6個字元。\n';
-    }
-    if (message) {
-        alert(message);
-        e.preventDefault();
-    }
-});
-</script>
 </body>
 </html>
