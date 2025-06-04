@@ -12,172 +12,54 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
-      <a class="navbar-brand" href="#">教授個人網頁</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="index.html">自我介紹</a></li>
-          <li class="nav-item"><a class="nav-link" href="study.html">研究方向</a></li>
-          <li class="nav-item"><a class="nav-link" href="course.html">課程資訊</a></li>
-          <li class="nav-item"><a class="nav-link" href="meeting.html">預約面談</a></li>
-          <li class="nav-item"><a class="nav-link" href="Discussion.html">討論區</a></li>
-
-          <li class="nav-item">
-            <a id="login-btn"
-            class="btn btn-outline-light rounded-pill fw-bold ms-3 px-4 d-flex align-items-center justify-content-center"
-            href="login.html"
-            style="height: 40px; min-width: 100px; transition: background 0.2s, color 0.2s;">
-                登入
-            </a>
-        </ul>
-      </div>
+        <a class="navbar-brand" href="#">教授個人網頁</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">自我介紹</a></li>
+                <li class="nav-item"><a class="nav-link" href="study.html">研究方向</a></li>
+                <li class="nav-item"><a class="nav-link" href="course.html">課程資訊</a></li>
+                <li class="nav-item"><a class="nav-link" href="meeting.html">預約面談</a></li>
+                <li class="nav-item"><a class="nav-link" href="Discussion.html">討論區</a></li>
+                <li class="nav-item">
+                <a id="login-btn"
+                    class="btn btn-outline-light rounded-pill fw-bold ms-3 px-4 d-flex align-items-center justify-content-center"
+                    href="login.html"
+                    style="height: 40px; min-width: 100px; transition: background 0.2s, color 0.2s;">
+                        登入
+                </a>                
+            </ul>
+        </div>
     </div>
-  </nav>
+</nav>
 
+<!-- header 內容已移除 -->
 
 <section id="discussion" class="py-5">
     <div class="container">
         <h2 class="mb-4"><strong>討論區</strong></h2>
-
-        <div class="discussion-board">
-            <div class="discussion-thread" data-thread-id="thread-1">
-                <div class="thread-header d-flex justify-content-between">
-                    <h4>如何選擇適合的資料庫系統？</h4>
-                    <small>2025年5月8日 | <span class="user-name" data-original-name="使用者1">使用者1</span></small>
-                    <button class="btn btn-warning btn-sm professor-action d-none delete-thread-btn" data-thread-id="thread-1">刪除問題</button>
-                </div>
-                <div class="thread-body">
-                    <p>請問各位同學，有沒有推薦的資料庫系統可以用來開發一個小型的商業網站？</p>
-                    <button class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#reply1">回覆</button>
-                    <a href="#" class="view-replies-link" data-target-replies="#allReplies1">查看所有回覆</a>
-                    <div id="reply1" class="collapse mt-2">
-                        <textarea class="form-control" rows="3" placeholder="請輸入您的回覆..."></textarea>
-                        <button class="btn btn-primary mt-2 send-reply-btn" data-parent-thread-id="thread-1">發送回覆</button>
-                    </div>
-                    <div id="allReplies1" class="replies-container collapse mt-2">
-                        <div class="reply" data-reply-id="reply-1-1">
-                            <small class="d-flex align-items-center">
-                                <button class="btn btn-warning btn-sm professor-action d-none delete-reply-btn me-2" data-reply-id="reply-1-1">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                                <span class="user-name" data-original-name="U1">U1</span> (2025年5月9日)
-                            </small>
-                            <p>我推薦使用 MySQL，它是一個開源且廣泛使用的關聯式資料庫。</p>
-                            <div class="reply-actions">
-                                <button class="btn btn-sm btn-outline-primary reply-to-reply-btn" data-reply-id="reply-1-1">回覆</button>
-                                <a href="#" class="view-nested-replies-link" data-target-nested-replies="#nested-replies-1-1">查看回覆</a>
-                            </div>
-                            <div id="nested-replies-1-1" class="nested-replies-container collapse mt-2">
-                                <div class="reply" data-reply-id="reply-1-1-1">
-                                    <small class="d-flex align-items-center">
-                                        <button class="btn btn-warning btn-sm professor-action d-none delete-reply-btn me-2" data-reply-id="reply-1-1-1">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <span class="user-name" data-original-name="U3">U3</span> (2025年5月9日)
-                                    </small>
-                                    <p>我也這麼認為！</p>
-                                    <div class="reply-actions">
-                                        <button class="btn btn-sm btn-outline-primary reply-to-reply-btn" data-reply-id="reply-1-1-1">回覆</button>
-                                        <a href="#" class="view-nested-replies-link" data-target-nested-replies="#nested-replies-1-1-1">查看回覆</a>
-                                    </div>
-                                    <div id="nested-replies-1-1-1" class="nested-replies-container collapse mt-2">
-                                    </div>
-                                    <div id="reply-form-1-1-1" class="collapse mt-2">
-                                        <textarea class="form-control form-control-sm" rows="2" placeholder="回覆此留言..."></textarea>
-                                        <button class="btn btn-sm btn-primary mt-1 send-nested-reply-btn" data-parent-reply-id="reply-1-1-1">發送</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="reply-form-1-1" class="collapse mt-2">
-                                <textarea class="form-control form-control-sm" rows="2" placeholder="回覆此留言..."></textarea>
-                                <button class="btn btn-sm btn-primary mt-1 send-nested-reply-btn" data-parent-reply-id="reply-1-1">發送</button>
-                            </div>
-                        </div>
-                        <div class="reply" data-reply-id="reply-1-2">
-                            <small class="d-flex align-items-center">
-                                <button class="btn btn-warning btn-sm professor-action d-none delete-reply-btn me-2" data-reply-id="reply-1-2">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                                <span class="user-name" data-original-name="U2">U2</span> (2025年5月9日)
-                            </small>
-                            <p>PostgreSQL 也是一個不錯的選擇，功能更強大一些。</p>
-                            <div class="reply-actions">
-                                <button class="btn btn-sm btn-outline-primary reply-to-reply-btn" data-reply-id="reply-1-2">回覆</button>
-                                <a href="#" class="view-nested-replies-link" data-target-nested-replies="#nested-replies-1-2">查看回覆</a>
-                            </div>
-                            <div id="nested-replies-1-2" class="nested-replies-container collapse mt-2">
-                            </div>
-                            <div id="reply-form-1-2" class="collapse mt-2">
-                                <textarea class="form-control form-control-sm" rows="2" placeholder="回覆此留言..."></textarea>
-                                <button class="btn btn-sm btn-primary mt-1 send-nested-reply-btn" data-parent-reply-id="reply-1-2">發送</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <hr>
-
-            <div class="discussion-thread" data-thread-id="thread-2">
-                <div class="thread-header d-flex justify-content-between">
-                    <h4>如何理解區塊鏈技術的基礎概念？</h4>
-                    <small>2025年5月6日 | <span class="user-name" data-original-name="使用者2">使用者2</span></small>
-                    <button class="btn btn-warning btn-sm professor-action d-none delete-thread-btn" data-thread-id="thread-2">刪除問題</button>
-                </div>
-                <div class="thread-body">
-                    <p>有同學可以分享如何更好地理解區塊鏈的概念和技術細節嗎？</p>
-                    <button class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#reply2">回覆</button>
-                    <a href="#" class="view-replies-link" data-target-replies="#allReplies2">查看所有回覆</a>
-                    <div id="reply2" class="collapse mt-2">
-                        <textarea class="form-control" rows="3" placeholder="請輸入您的回覆..."></textarea>
-                        <button class="btn btn-primary mt-2 send-reply-btn" data-parent-thread-id="thread-2">發送回覆</button>
-                    </div>
-                    <div id="allReplies2" class="replies-container collapse mt-2">
-                        <div class="reply" data-reply-id="reply-2-1">
-                            <small class="d-flex align-items-center">
-                                <button class="btn btn-warning btn-sm professor-action d-none delete-reply-btn me-2" data-reply-id="reply-2-1">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                                <span class="user-name" data-original-name="U1">U1</span> (2025年5月7日)
-                            </small>
-                            <p>可以從比特幣的白皮書開始了解。</p>
-                            <div class="reply-actions">
-                                <button class="btn btn-sm btn-outline-primary reply-to-reply-btn" data-reply-id="reply-2-1">回覆</button>
-                                <a href="#" class="view-nested-replies-link" data-target-nested-replies="#nested-replies-2-1">查看回覆</a>
-                            </div>
-                            <div id="nested-replies-2-1" class="nested-replies-container collapse mt-2">
-                            </div>
-                            <div id="reply-form-2-1" class="collapse mt-2">
-                                <textarea class="form-control form-control-sm" rows="2" placeholder="回覆此留言..."></textarea>
-                                <button class="btn btn-sm btn-primary mt-1 send-nested-reply-btn" data-parent-reply-id="reply-2-1">發送</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <hr>
-        </div>
-
+        <div class="discussion-board"></div>
         <div class="new-post">
             <h4>發表新問題</h4>
-            <input id="new-title" class="form-control" placeholder="輸入標題..." />
-            <textarea id="new-content" class="form-control mt-2" rows="4" placeholder="輸入您的問題(限300字)..."></textarea>
+            <input id="new-name" class="form-control mb-2" placeholder="提問者姓名">
+            <input id="new-dept" class="form-control mb-2" placeholder="系所">
+            <input id="new-title" class="form-control mb-2" placeholder="標題">
+            <textarea id="new-content" class="form-control mb-2" rows="4" placeholder="內容 (限300字)" maxlength="300"></textarea>
             <button id="post-button" class="btn btn-primary mt-2">發表問題</button>
         </div>
     </div>
-
 </section>
 
 <footer class="bg-primary text-white text-center py-3">
     <div class="container">
-        <small>&copy; 2025 李榮三教授 | 逢甲大學</small>
+        <small>© 2025 李榮三教授 | 國立中正大學</small>
     </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/discussion.js"></script>
-    <script src="js/loginout.js"></script>
-
+<script src="js/loginout.js"></script>
 </body>
 </html>
