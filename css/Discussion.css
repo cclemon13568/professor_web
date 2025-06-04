@@ -1,44 +1,34 @@
+/* ===================== 既有主架構區塊（勿動） ===================== */
 /* 手機螢幕（小於 768px） */
 @media (max-width: 768px) {
     header img {
-        max-width: 100%; /* 圖片寬度自適應 */
+        max-width: 100%;
     }
-
     header h1 {
-        font-size: 2rem; /* 縮小標題字體大小 */
+        font-size: 2rem;
     }
-
     .navbar {
-        padding: 10px; /* 減少內邊距 */
+        padding: 10px;
     }
-
     .nav-link {
-        font-size: 1rem; /* 縮小導覽連結字體大小 */
-        margin: 0 5px; /* 減少連結間距 */
+        font-size: 1rem;
+        margin: 0 5px;
     }
 }
-
 /* 平板螢幕（768px 至 1024px） */
 @media (min-width: 768px) and (max-width: 1024px) {
     header img {
-        max-width: 600px; /* 限制圖片寬度 */
+        max-width: 600px;
     }
-
     header h1 {
-        font-size: 2.5rem; /* 調整標題字體大小 */
+        font-size: 2.5rem;
     }
-
-    
 }
 /*網頁大小調整*/
-
 
 /* /////////////////////////////////////////////////////////// */
 
 /*瀏覽列*/
-
-
-/*色塊區*/
 .navbar {
     width: 100% !important;
     max-width: 100% !important;
@@ -48,157 +38,239 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     background-color: #fafafa;
 }
-
-/* 左上網頁標題 */
 .navbar-brand {
-    font-size: 1.5rem; /* 調整品牌名稱的字體大小 */
-    font-weight: bold; /* 加粗品牌名稱 */
+    font-size: 1.5rem;
+    font-weight: bold;
 }
-
 .nav-link {
-    font-size: 1.1rem; /* 調整導覽連結的字體大小 */
-    margin: 0 10px; /* 增加連結之間的間距 */
+    font-size: 1.1rem;
+    margin: 0 10px;
 }
-
 .navbar-toggler {
-    border: none; /* 移除切換按鈕的邊框 */
-    background-color: rgba(255, 255, 255, 0.2); /* 添加透明背景 */
+    border: none;
+    background-color: rgba(255, 255, 255, 0.2);
 }
-
-/*點選瀏覽列後的效果*/
 .nav-link.active {
     font-weight: bold;
     color: #fff !important;
     background-color: #2f5077;
     border-radius: 5px;
 }
-
-
 .navbar .btn-outline-light:hover {
-    background-color: rgba(255, 255, 255, 0.1); /* 輕微亮一點 */
-    color: rgba(255, 255, 255, 0.85); /* 提高文字亮度 */
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.85);
     border-color: rgba(255, 255, 255, 0.85);
 }
-
-
 .navbar .btn-login:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加懸浮陰影 */
-    transform: translateY(-2px); /* 輕微上移效果（可選） */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
 }
-
 .navbar-dark.bg-primary {
-    background-color: #6B7EA5 !important; /* 紅色背景 */
-    width: 100%; /* 填滿整條 X 軸 */
-    margin: 0; /* 移除外邊距 */
-    border-radius: 0; /* 移除圓角 */
+    background-color: #6B7EA5 !important;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
 }
 /*瀏覽列end*/
 
-
 /*底部的邊*/
 footer.bg-primary {
-    background-color: #6B7EA5 !important; /*rgb(168, 32, 32)*/
+    background-color: #6B7EA5 !important;
 }
-
 #about {
-    border-top: 2px solid #000; /* 設定橫線的粗細與顏色 */
-    padding-top: 20px; /* 增加上方內邊距，讓內容與橫線有間距 */
+    border-top: 2px solid #000;
+    padding-top: 20px;
 }
-
 .container {
     line-height: 2;
 }
 
+/* ===================== 討論區優化區塊 ===================== */
 
-/*Discussion*/
-/*發表新問題 標題、問題空隙*/
-textarea.form-control {
-    margin-bottom: 10px; /* 調整下方的間距 */
+/* 主留言標題與內容 */
+.thread-title {
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: #2d3a4b;
+    letter-spacing: 0.5px;
+}
+.thread-content {
+    font-size: 1.18rem;
+    font-weight: 500;
+    color: #222;
+    margin-bottom: 0.5rem;
+    line-height: 1.7;
 }
 
-/* "查看所有回覆"的樣式 */
-.view-replies-link {
-    margin-left: 10px; /* 與回覆按鈕的間距 */
-    text-decoration: none; /* 移除預設的下劃線 */
-    color: #6091f6; /* 藍色連結文字 */
-    cursor: pointer;
+/* 主留言卡片 */
+.discussion-thread {
+    background: #fff;
+    border: 1.5px solid #e3e6ef;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px 0 rgba(80, 90, 120, 0.06);
+    margin-bottom: 2rem;
+    padding: 1.5rem 1.5rem 1rem 1.5rem;
 }
 
-.view-replies-link:hover {
-    color: #6B7EA5;
+/* 回覆卡片樣式 */
+.respond-card {
+    background: #f8f9fa;
+    border-left: 4px solid #b0b0b0;
+    margin-bottom: 0.5rem;
+    padding: 0.8rem 1rem 0.8rem 1rem;
+    border-radius: 8px;
+    position: relative;
+    transition: box-shadow 0.2s;
+}
+.respond-card:hover {
+    box-shadow: 0 2px 8px rgba(80, 90, 120, 0.10);
+}
+.teacher-respond {
+    background: #fffbe6;
+    border-left: 5px solid #ffc107;
+}
+.user-respond {
+    background: #f8f9fa;
+    border-left: 4px solid #b0b0b0;
 }
 
-.replies-container .reply {
-    margin-bottom: 10px;
-    padding: 10px;
-    border-left: 2px solid #ccc;
+/* 教師標籤 */
+.teacher-respond .badge.bg-warning {
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.4em 0.9em;
+    border-radius: 1em;
+    margin-left: 0.5em;
+    letter-spacing: 1px;
+    box-shadow: 0 1px 4px #ffe08280;
 }
 
-.replies-container .reply small {
-    color: #6c757d;
+/* 一般標籤 */
+.user-respond .badge.bg-light {
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.3em 0.8em;
+    border-radius: 1em;
+    margin-left: 0.5em;
+    color: #555 !important;
+    background: #e9ecef !important;
+    border: 1px solid #d1d5db;
 }
 
-/* 回覆操作按鈕樣式 */
-.reply-actions button.reply-to-reply-btn,
-.reply-actions a.view-nested-replies-link {
-    margin-right: 5px;
-    font-size: 0.9rem; /* 保留原有的字體大小 */
-    color: #6091f6; /* 與 "查看回覆" 相同的顏色 */
-    text-decoration: none; /* 移除預設的下劃線 */
-    cursor: pointer;
-    border: none; /* 移除按鈕邊框 */
-    background: none; /* 移除按鈕背景 */
-    padding: 0; /* 移除內邊距 */
+/* 回覆內容字體 */
+.respond-content {
+    font-size: 1.08rem;
+    color: #333;
+    word-break: break-all;
+    flex: 1 1 auto;
 }
 
-.reply-actions button.reply-to-reply-btn:hover,
-.reply-actions a.view-nested-replies-link:hover {
-    color: #6B7EA5; /* 與 "查看回覆:hover" 相同的顏色 */
-    text-decoration: underline; /* 可以添加底線效果 */
-}
-
-/* 子回覆容器的縮排 */
+/* 子回覆縮排 */
 .nested-replies-container {
-    margin-left: 20px;
-    border-left: 1px solid #eee;
-    padding-left: 10px;
+    margin-left: 28px;
+    border-left: 2px solid #e0e0e0;
+    padding-left: 14px;
+    margin-top: 0.5rem;
 }
-/*Discussion end*/
 
-/*這裡是針對按鈕的樣式*/
+/* 回覆按鈕 */
+.reply-btn {
+    font-size: 0.98rem;
+    font-weight: 500;
+    color: #6091f6 !important;
+    background: none;
+    border: none;
+    margin-left: 0.7em;
+    padding: 0.1em 0.7em;
+    border-radius: 6px;
+    transition: background 0.15s;
+}
+.reply-btn:hover {
+    background: #e3eefe;
+    color: #2d3a4b !important;
+    text-decoration: underline;
+}
+
+/* 回覆表單 */
+.reply-form {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.reply-form input[type="text"] {
+    font-size: 1rem;
+    padding: 0.3em 0.7em;
+}
+.reply-form button {
+    font-size: 0.98rem;
+    padding: 0.3em 1.1em;
+}
+
+/* 新發文區塊 */
+.new-post {
+    background: #f7f9fc;
+    border: 1.5px solid #e3e6ef;
+    border-radius: 10px;
+    padding: 1.5rem 1.5rem 1rem 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px 0 rgba(80, 90, 120, 0.06);
+}
+.new-post h4 {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #2d3a4b;
+}
+.new-post input,
+.new-post textarea {
+    font-size: 1.08rem;
+    margin-bottom: 0.7rem;
+}
+.new-post button {
+    font-size: 1.08rem;
+    font-weight: bold;
+    padding: 0.5em 2em;
+}
+
+/* ========== 既有按鈕樣式 ========== */
 .btn-primary {
-    background-color: #6B7EA5; /* 修改背景顏色 */
-    border-color: #6B7EA5; /* 修改邊框顏色 */
-    font-weight: bold; /* 加粗文字 */
+    background-color: #6B7EA5;
+    border-color: #6B7EA5;
+    font-weight: bold;
 }
-
 .btn-primary:hover {
-    background-color: #5A6C8E; /* 懸停時的背景顏色 */
-    border-color: #5A6C8E; /* 懸停時的邊框顏色 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加懸停陰影效果 */
+    background-color: #5A6C8E;
+    border-color: #5A6C8E;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* 教授動作按鈕 */
-/* 黃色樣式 */
 .professor-action {
-    background-color: #ffc107; /* Bootstrap's warning yellow */
+    background-color: #ffc107;
     border-color: #ffc107;
-    color: #212529; /* Dark text for contrast */
+    color: #212529;
 }
-
 .professor-action:hover {
-    background-color: #e0a800; /* Darker yellow on hover */
+    background-color: #e0a800;
     border-color: #e0a800;
     color: #212529;
 }
-
-/* 針對刪除圖示按鈕 (btn-link 樣式) */
 .professor-action.btn-link {
-    color: #ffc107 !important; /* 強制文字顏色為黃色 */
-    text-decoration: none; /* 移除下劃線 */
+    color: #ffc107 !important;
+    text-decoration: none;
 }
-
 .professor-action.btn-link:hover {
-    color: #e0a800 !important; /* 懸停時顏色變深 */
+    color: #e0a800 !important;
 }
 /* 教授動作按鈕 end */
+
+.toggle-replies-btn, .toggle-children-btn {
+    font-size: 0.95rem;
+    padding: 0.2em 1em;
+    border-radius: 1em;
+    margin-left: 0.5em;
+    transition: background 0.15s;
+}
+.toggle-replies-btn:hover, .toggle-children-btn:hover {
+    background: #e3eefe;
+    color: #2d3a4b !important;
+}
