@@ -109,11 +109,11 @@ if ($code === strtoupper($user['verification_code'])) {
     $firstChar = strtoupper(substr($teacher_ID, 0, 1)); // 取開頭第一個字母
 
     if ($firstChar === 'T') {
-        $redirect_url = 'http://localhost/professor_web/index.html';
+        $redirect_url = 'http://140.134.53.57/~D1249166/professor_web/index.html';
     } elseif ($firstChar === 'P') {
-        $redirect_url = 'http://localhost/professor_web/background.html';
+        $redirect_url = 'http://140.134.53.57/~D1249166/professor_web/background.html';
     } else {
-        $redirect_url = 'http://localhost/professor_web/default.html'; // 可選的預設頁面
+        $redirect_url = 'http://140.134.53.57/~D1249166/professor_web/default.html'; // 可選的預設頁面
     }
 
     echo json_encode([
