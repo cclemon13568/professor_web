@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+    
+
     // DOM 元素引用
     const loginToggleButton = document.getElementById('login-toggle-btn');
     const scheduleTable = document.querySelector('.schedule-table');

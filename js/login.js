@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     alert(data.message); // 驗證碼已寄出
                     document.getElementById('verification_code_group').style.display = 'block';
                 } else if (data.redirect_url) {
+                    localStorage.setItem('isLoggedIn', 'true'); // 登入成功，設置狀態
                     window.location.href = data.redirect_url;
                 } else {
                     alert(data.message);

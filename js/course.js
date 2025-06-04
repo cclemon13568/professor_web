@@ -93,6 +93,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // 評價送出
         evalForm.addEventListener('submit', function (e) {
             e.preventDefault();
+
+
+
             const studentInput = evalForm.querySelector('input[name="student_ID"]');
             const periodInput = evalForm.querySelector('input[name="course_period"]');
             const textarea = evalForm.querySelector('textarea');
