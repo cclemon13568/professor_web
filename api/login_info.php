@@ -70,7 +70,7 @@ switch ($method) {
         }
 
         // 產生驗證碼
-        $verification_code = strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 6));
+        $verification_code = "稍後會寄出";
 
         // 寫入 login_info 表
         $insert_sql = "INSERT INTO login_info (professor_accountnumber, professor_password, email, verification_code, teacher_ID)
@@ -95,11 +95,11 @@ switch ($method) {
             $mail->setFrom('lyfish0316@gmail.com', '教授系統');
             $mail->addAddress($teacher_email);
             $mail->Subject = "教授系統註冊驗證碼";
-            $mail->Body = "您好，您的註冊驗證碼為：$verification_code\n\n請在系統中輸入以完成帳號驗證。";
+            $mail->Body = "您好，您的註冊驗證碼$verification_code\n";
 
             $mail->send();
             $_SESSION['pending_user'] = $username;
-            echo json_encode(["success" => true, "message" => "註冊成功，已發送驗證碼至教授信箱"]);
+            echo json_encode(["success" => true, "message" => "註冊成功，請查看信箱"]);
         } catch (Exception $e) {
             echo json_encode(["success" => false, "message" => "寄送失敗：" . $mail->ErrorInfo]);
         }
