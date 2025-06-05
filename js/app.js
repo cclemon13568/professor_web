@@ -19,24 +19,24 @@ const modulesConfig = {
         title: '預約管理',
         apiEndpoint: 'api/appointment_info.php', // 對應 appointment_info 表
         fields: {
-            appointment_ID: { label: '預約ID', type: 'text', readOnly: true }, // 主鍵
+            appointment_ID: { label: '預約ID', type: 'text', readOnly: true },
             office_location: { label: '辦公室位置', type: 'text' },
-            appoint_Date: { label: '預約日期', type: 'datetime-local' }, // 根據你的資料庫 datetime 類型調整
+            appoint_Date: { label: '預約日期', type: 'datetime-local' },
             status: {
                 label: '狀態',
-                type: 'select', // <--- **修改為 'select'**
-                options: [       // <--- **新增 options 陣列**
+                type: 'select', // <--- This indicates it's a dropdown in forms
+                options: [        // <--- These are the options for the dropdown
                     { value: 0, label: '預約失敗' },
                     { value: 1, label: '預約成功' },
                     { value: 2, label: '審查中' }
                 ],
-                displayField: 'status_display' // <--- **新增這行！用於表格顯示**
+                displayField: 'status_display' // <--- **Crucial for table display**
             },
             student_ID: { label: '學生ID', type: 'text' },
             student_Name: { label: '學生姓名', type: 'text' },
             student_email: { label: '學生EMAIL', type: 'text' },
             course_ID: { label: '課程ID', type: 'text' },
-            problem_description: { label: '問題描述', type: 'textarea', canTruncate: true } // 設置為 textarea 且可截斷
+            problem_description: { label: '問題描述', type: 'textarea', canTruncate: true }
         },
         actions: ['edit', 'delete']
     },
@@ -219,7 +219,6 @@ function generateTable(moduleName, dataRows) {
 }
 
 
-// 載入模組內容 (更新為從 API 獲取數據)
 // 載入模組內容 (更新為從 API 獲取數據)
 async function loadModule(moduleName) {
     currentModule = moduleName;
@@ -410,14 +409,29 @@ async function openEditModal(moduleName, id) {
 
     try {
         // 從 API 獲取單個條目數據
+        // 確保這裡發送的 GET 請求包含 ID 參數，例如 api/course_info.php?course_ID=C001
         const response = await fetchData(`${config.apiEndpoint}?${idKey}=${id}`, 'GET');
 
         // *** 關鍵修改 START ***
         // 檢查 response.success 並取出實際的數據
         if (response.success && response.data) {
-            const itemToEdit = response.data; // 這裡才是實際的資料物件
-            generateFormFields(moduleName, itemToEdit, 'edit');
-            modal.style.display = 'flex'; // 顯示模態框
+            let itemToEdit;
+            // 判斷 response.data 是陣列還是物件
+            if (Array.isArray(response.data)) {
+                // 如果是陣列，取出第一個元素
+                itemToEdit = response.data[0];
+            } else {
+                // 如果是物件，直接使用
+                itemToEdit = response.data;
+            }
+
+            if (itemToEdit) { // 確保 itemToEdit 不為 undefined
+                generateFormFields(moduleName, itemToEdit, 'edit');
+                modal.style.display = 'flex'; // 顯示模態框
+            } else {
+                alert(`載入編輯資料失敗：未找到資料`);
+                closeModal();
+            }
         } else {
             // 如果 success 為 false 或沒有 data 屬性，顯示錯誤訊息
             alert(`載入編輯資料失敗：${response.message || '未找到資料或操作失敗'}`);
