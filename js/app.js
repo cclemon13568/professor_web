@@ -1074,15 +1074,20 @@ function openLoginEditModal(login) {
     const form = document.getElementById('data-form');
     form.innerHTML = `
         <label for="current_account">目前帳號：</label>
-        <input id="current_account" name="current_account" value="${login.professor_accountnumber || ''}" readonly>
-        <label for="current_password">目前密碼：</label>
-        <input id="current_password" name="current_password" value="${login.professor_password || ''}" readonly>
+        <input id="current_account" name="current_professor_accountnumber" value="${login.professor_accountnumber || ''}" readonly>
+        
+        <label for="current_password">請輸入目前密碼：</label>
+        <input type="password" id="current_password_input" name="current_professor_password" placeholder="請輸入您目前的密碼" required>
+        
         <label for="new_account">新帳號：</label>
-        <input id="new_account" name="new_account" value="${login.professor_accountnumber || ''}">
+        <input id="new_account" name="new_professor_accountnumber" value="${login.professor_accountnumber || ''}" required>
+        
         <label for="new_password">新密碼：</label>
-        <input id="new_password" name="new_password" value="${login.professor_password || ''}">
+        <input type="password" id="new_password_input" name="new_professor_password" placeholder="請輸入新密碼" required>
+        
         <label for="email">信箱：</label>
         <input id="email" name="email" value="${login.email || ''}" readonly>
+        
         <div class="form-buttons">
             <button type="submit">儲存</button>
             <button type="button" class="cancel-btn" onclick="closeModal()">取消</button>
@@ -1092,17 +1097,24 @@ function openLoginEditModal(login) {
         e.preventDefault();
         const formData = new FormData(form);
         const payload = {
-            current_account: formData.get('current_account'),
-            current_password: formData.get('current_password'),
-            new_account: formData.get('new_account'),
-            new_password: formData.get('new_password')
+            // **新增 action 參數，值為 'update'，以匹配後端邏輯**
+            action: 'update', 
+            // **修正鍵名以匹配後端 PHP 期望的名稱**
+            current_professor_accountnumber: formData.get('current_professor_accountnumber'),
+            current_professor_password: formData.get('current_professor_password'), 
+            new_professor_accountnumber: formData.get('new_professor_accountnumber'),
+            new_professor_password: formData.get('new_professor_password')
         };
         try {
-            const res = await fetchData('api/login_info.php', 'PUT', payload);
+            // **請求方法改為 'POST'，以匹配後端 PHP 邏輯**
+            const res = await fetchData('api/login_info.php', 'POST', payload);
             alert(res.message);
             if (res.success) {
                 closeModal();
-                showTeacherDetail(currentTeacherID, currentTeacherName);
+                // 假設這個函數能重新載入並顯示更新後的教師資訊
+                // 如果帳號或密碼改變，用戶可能需要重新登入。
+                // 這裡假設 showTeacherDetail 能正確處理資料刷新。
+                showTeacherDetail(currentTeacherID, currentTeacherName); 
             }
         } catch (err) {
             alert('更新失敗：' + err.message);
