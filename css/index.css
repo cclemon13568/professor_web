@@ -149,6 +149,7 @@ header .conecinfo {
 }
 
 /* 專長區塊標題、學歷區塊標題 */
+
 #education h3,
 #specialty h3 {
     height: 50px;
@@ -241,7 +242,7 @@ header .conecinfo {
     content: "";
     position: absolute;
     top: 10%;
-    right: -20px;
+    right: 30px;
     width: 1px;
     height: 80%;
     background: #e0e6ed;
@@ -323,6 +324,11 @@ header .conecinfo {
 
 .exp-hidden {
     display: none;
+}
+
+#timetable h3,
+#timetable h3 strong {
+    color: #2f5077 !important;
 }
 
 /* /////////////////////////////////////////////////////////// */
