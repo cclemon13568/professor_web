@@ -73,6 +73,20 @@ const modulesConfig = {
             word: { label: '敏感詞', type: 'text' }
         },
         actions: ['edit', 'delete'] // 敏感詞也應該可以編輯、刪除
+    },
+    responds: { // 新增的回應管理模組Add commentMore actions
+        title: '回應管理',
+        apiEndpoint: 'api/responds.php',
+        fields: {
+            respond_ID: { label: '回應ID', type: 'text' }, // 讓 respond_ID 成為主鍵並只讀
+            question_ID: { label: '問題ID', type: 'text' }, // 指向主留言，可能也設為只讀
+            respond_content: { label: '回應內容', type: 'textarea' }, // 新增回應內容欄位
+            parent_respond_ID: { label: '父回應ID', type: 'text', optional: true }, // 可以是 null，設為可選
+            created_at: { label: '創建時間', type: 'text', readOnly: true } // 可能也需要顯示
+        },
+        // 注意：這裡的 actions 是針對表格中每一行數據的操作
+        // 如果您想編輯嵌套的回覆，後端 GET 需要以扁平化形式返回數據
+        actions: ['delete']
     }
 };
 
@@ -333,33 +347,52 @@ async function performSearch() {
 // 刪除數據
 async function deleteData(moduleName, idToDelete) {
     const config = modulesConfig[moduleName];
-    // 獲取主鍵名 (例如 'question_ID', 'appointment_ID', 'course_ID')
-    const idKey = Object.keys(config.fields)[0]; 
+    // 獲取主鍵名 (例如 'question_ID', 'respond_ID', 'course_ID')
+    // 注意：這裡假設 config.fields 的第一個鍵總是正確的 ID 名稱
+    // 但更嚴謹的做法是在 config 中明確定義 idKey
+    const idKey = Object.keys(config.fields)[0];
 
-    // 構建要發送給後端的 payload
-    const payload = {
-        action: 'delete', // 後端期望的動作
-        [idKey]: idToDelete // 使用計算屬性名來動態設置 ID
-    };
+    let payload = {}; // 初始化 payload
+
+    // 根據模組名稱決定 payload 結構和 endpoint
+    // 這裡我們假設 'responds' 模組需要 _method 參數
+    // 而 'course_info' 模組需要 action 參數
+    if (moduleName === 'responds') { // 如果是回應管理模組
+        payload = {
+            _method: 'DELETE', // responds.php 期望的刪除方式
+            [idKey]: idToDelete
+        };
+    } else if (moduleName === 'course_info') { // 如果是課程管理模組 (根據您提供的 course_info.php)
+        payload = {
+            action: 'delete', // course_info.php 期望的刪除方式
+            [idKey]: idToDelete
+        };
+    } else {
+        // 如果有其他模組，可以在這裡添加更多條件
+        // 或者提供一個通用的 fallback
+        payload = {
+            action: 'delete', // 預設使用 action
+            [idKey]: idToDelete
+        };
+        console.warn(`未知模組名稱: ${moduleName}，使用預設刪除payload。`);
+    }
 
     try {
-        // 將 method 改為 'POST'，並傳遞 payload
-        const result = await fetchData(config.apiEndpoint, 'POST', payload); 
+        // 發送 POST 請求
+        const result = await fetchData(config.apiEndpoint, 'POST', payload);
 
-        // 由於 fetchData 現在直接返回整個 JSON 響應 (包含 success, message)
-        // 這裡的邏輯是正確的，無需修改
-        if (result && result.success) { 
+        if (result && result.success) {
             alert(result.message);
-        } else if (result && result.message) { 
+        } else if (result && result.message) {
             alert(`刪除失敗：${result.message}`);
         } else {
             // 這段通常在 success:true, message: "..." 情況下不會觸發
-            // 只有當後端響應非常不規範時才可能走到這裡
-            alert('刪除成功！');
+            alert('刪除成功！'); // 如果後端沒有返回 message，但 success 為 true
         }
         loadModule(moduleName); // 重新載入頁面以更新顯示
     } catch (error) {
         alert(`刪除失敗：${error.message}`);
+        console.error('刪除錯誤:', error);
     }
 }
 
