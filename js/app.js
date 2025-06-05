@@ -11,10 +11,9 @@ const modulesConfig = {
             question_name: { label: '提問者姓名', type: 'text' },
             question_department: { label: '提問者系所', type: 'text' },
             question_title: { label: '問題標題', type: 'text' }, // 雖然是 TEXT，但這裡通常顯示單行
-            question_content: { label: '問題內容', type: 'textarea', canTruncate: true }, // 設置為 textarea 且可截斷
-            popular_question: { label: '熱門問題', type: 'text' } // 考慮使用 select 類型實現 是/否
+            question_content: { label: '問題內容', type: 'textarea', canTruncate: true } // 設置為 textarea 且可截斷
         },
-        actions: ['delete']
+        actions: ['add','edit','delete']
     },
     appointment: {
         title: '預約管理',
@@ -74,25 +73,12 @@ const modulesConfig = {
             word: { label: '敏感詞', type: 'text' }
         },
         actions: ['edit', 'delete'] // 敏感詞也應該可以編輯、刪除
-    },
-    responds: { // 新增的回應管理模組
-        title: '回應管理',
-        apiEndpoint: 'api/responds.php',
-        fields: {
-            respond_ID: { label: '回應ID', type: 'text' }, // 讓 respond_ID 成為主鍵並只讀
-            question_ID: { label: '問題ID', type: 'text' }, // 指向主留言，可能也設為只讀
-            respond_content: { label: '回應內容', type: 'textarea' }, // 新增回應內容欄位
-            parent_respond_ID: { label: '父回應ID', type: 'text', optional: true }, // 可以是 null，設為可選
-            created_at: { label: '創建時間', type: 'text', readOnly: true } // 可能也需要顯示
-        },
-        // 注意：這裡的 actions 是針對表格中每一行數據的操作
-        // 如果您想編輯嵌套的回覆，後端 GET 需要以扁平化形式返回數據
-        actions: ['delete']
     }
 };
 
 // --- 通用 API 請求函數 ---
-async function fetchData(url, method = 'GET', data = null) {
+// --- 通用 API 請求函數 ---
+async function fetchData(url, method = 'GET', payload = null) { // 將 data 改名為 payload 更清晰
     const options = {
         method: method,
         headers: {
@@ -101,18 +87,33 @@ async function fetchData(url, method = 'GET', data = null) {
         }
     };
 
-    if (data) {
-        options.body = JSON.stringify(data);
+    if (payload) { // 使用 payload
+        options.body = JSON.stringify(payload);
     }
 
     try {
         const response = await fetch(url, options);
+        const jsonResponse = await response.json().catch(() => {
+            // 如果無法解析 JSON，返回一個預設的錯誤結構
+            return { success: false, message: response.statusText || 'Response not JSON' };
+        });
+
+        // 檢查 HTTP 狀態碼
         if (!response.ok) {
-            // 嘗試解析錯誤訊息，即使狀態碼不是 2xx
-            const errorData = await response.json().catch(() => ({ message: response.statusText }));
-            throw new Error(errorData.message || 'API 請求失敗');
+            // 如果 HTTP 狀態碼不是 2xx，拋出錯誤，使用後端返回的 message
+            throw new Error(jsonResponse.message || `API 請求失敗，狀態碼: ${response.status}`);
         }
-        return await response.json();
+
+        // 檢查後端返回的 success 屬性
+        if (jsonResponse.success === false) {
+            throw new Error(jsonResponse.message || '操作失敗');
+        }
+
+        // 如果一切成功，返回實際的數據 (對於 GET/POST 新增/更新/刪除等，返回 data 或 message)
+        // 這裡判斷是否返回 data 屬性。對於 GET，通常有 data。對於 POST/PUT/DELETE，可能只有 message。
+        // 所以這裡我們返回整個 jsonResponse，讓調用者根據需要處理
+        return jsonResponse; // 返回整個 JSON 響應，包含 success, message 和 data (如果存在)
+
     } catch (error) {
         console.error(`API 請求錯誤 (${method} ${url}):`, error);
         throw error; // 將錯誤重新拋出，讓調用者處理
@@ -219,6 +220,7 @@ function generateTable(moduleName, dataRows) {
 
 
 // 載入模組內容 (更新為從 API 獲取數據)
+// 載入模組內容 (更新為從 API 獲取數據)
 async function loadModule(moduleName) {
     currentModule = moduleName;
     const config = modulesConfig[moduleName];
@@ -252,10 +254,21 @@ async function loadModule(moduleName) {
     }
 
     try {
-        const data = await fetchData(config.apiEndpoint, 'GET');
-        dataArea.innerHTML = generateTable(moduleName, data);
+        const responseData = await fetchData(config.apiEndpoint, 'GET'); // 這裡獲取的是 { success: true, data: [...] }
+
+        // *** 關鍵修改 START ***
+        if (responseData.success) {
+            // 如果成功，使用 responseData.data 傳遞給 generateTable
+            dataArea.innerHTML = generateTable(moduleName, responseData.data);
+        } else {
+            // 如果後端 success 為 false，顯示後端返回的錯誤訊息
+            dataArea.innerHTML = `<p style="color: red;">載入資料失敗：${responseData.message || '未知錯誤'}</p>`;
+        }
+        // *** 關鍵修改 END ***
+
         addActionButtonListeners(); // 重新綁定事件
     } catch (error) {
+        // 捕獲網路或其他錯誤
         dataArea.innerHTML = `<p style="color: red;">載入資料失敗：${error.message}</p>`;
     }
 }
@@ -320,25 +333,33 @@ async function performSearch() {
 
 // 刪除數據
 async function deleteData(moduleName, idToDelete) {
-    
     const config = modulesConfig[moduleName];
-    const idKey = Object.keys(config.fields)[0]; // 獲取主鍵名
-    const deleteUrl = `${config.apiEndpoint}?${idKey}=${idToDelete}`;
+    // 獲取主鍵名 (例如 'question_ID', 'appointment_ID', 'course_ID')
+    const idKey = Object.keys(config.fields)[0]; 
+
+    // 構建要發送給後端的 payload
+    const payload = {
+        action: 'delete', // 後端期望的動作
+        [idKey]: idToDelete // 使用計算屬性名來動態設置 ID
+    };
 
     try {
-        const result = await fetchData(deleteUrl, 'DELETE');
-        if (result && result.success) { // 假設後端返回 { success: true, message: "..." }
+        // 將 method 改為 'POST'，並傳遞 payload
+        const result = await fetchData(config.apiEndpoint, 'POST', payload); 
+
+        // 由於 fetchData 現在直接返回整個 JSON 響應 (包含 success, message)
+        // 這裡的邏輯是正確的，無需修改
+        if (result && result.success) { 
             alert(result.message);
-        } else if (result && result.message) { // 如果後端返回 { success: false, message: "..." }
+        } else if (result && result.message) { 
             alert(`刪除失敗：${result.message}`);
         } else {
-            // 如果後端沒有明確的 success/message 字段，但 HTTP 狀態碼是成功的
-            // 且 result 不是 undefined，則假設成功
-            alert('刪除成功！'); // 這裡顯示「刪除成功」
+            // 這段通常在 success:true, message: "..." 情況下不會觸發
+            // 只有當後端響應非常不規範時才可能走到這裡
+            alert('刪除成功！');
         }
         loadModule(moduleName); // 重新載入頁面以更新顯示
     } catch (error) {
-        // 如果 fetchData 拋出錯誤 (例如網路問題或伺服器非 2xx 響應)
         alert(`刪除失敗：${error.message}`);
     }
 }
@@ -389,9 +410,21 @@ async function openEditModal(moduleName, id) {
 
     try {
         // 從 API 獲取單個條目數據
-        const itemToEdit = await fetchData(`${config.apiEndpoint}?${idKey}=${id}`, 'GET');
-        generateFormFields(moduleName, itemToEdit, 'edit');
-        modal.style.display = 'flex'; // 顯示模態框
+        const response = await fetchData(`${config.apiEndpoint}?${idKey}=${id}`, 'GET');
+
+        // *** 關鍵修改 START ***
+        // 檢查 response.success 並取出實際的數據
+        if (response.success && response.data) {
+            const itemToEdit = response.data; // 這裡才是實際的資料物件
+            generateFormFields(moduleName, itemToEdit, 'edit');
+            modal.style.display = 'flex'; // 顯示模態框
+        } else {
+            // 如果 success 為 false 或沒有 data 屬性，顯示錯誤訊息
+            alert(`載入編輯資料失敗：${response.message || '未找到資料或操作失敗'}`);
+            closeModal();
+        }
+        // *** 關鍵修改 END ***
+
     } catch (error) {
         alert(`載入編輯資料失敗：${error.message}`);
         closeModal();
@@ -527,16 +560,35 @@ async function handleFormSubmit(moduleName) {
 
     try {
         let result;
+        const idKey = Object.keys(config.fields)[0]; // 獲取主鍵名
+
         if (currentModalType === 'add') {
+            submitData.action = 'create'; // 新增操作
+            // 如果 ID 是自動生成的，這裡不需要包含 ID
+            // 如果前端需要提供 ID (例如 course_ID)，則確保 payload 中包含 ID
+            if (config.fields[idKey].readOnly && submitData[idKey] === '') {
+                // 如果是只讀且為空字串，說明是自動生成的，可以移除
+                delete submitData[idKey]; 
+            }
+            // 由於您的 course_ID 是 `readOnly: false` 且在新增時可輸入，所以不用刪除
+            // 但如果其他模組的 ID 是自動生成且是 readOnly: true，則需要這個判斷
+
             result = await fetchData(config.apiEndpoint, 'POST', submitData);
+
         } else if (currentModalType === 'edit') {
-            const idKey = Object.keys(config.fields)[0];
-            const url = `${config.apiEndpoint}`; // PUT 請求通常是直接到端點，數據在 body 裡
-            result = await fetchData(url, 'PUT', submitData);
+            submitData.action = 'update'; // 編輯操作
+            // 確保編輯時傳遞當前編輯項目的 ID
+            submitData[idKey] = editingItemId; // 從全局變量獲取 ID
+
+            // 調用 fetchData，方法為 POST，數據為 submitData
+            result = await fetchData(config.apiEndpoint, 'POST', submitData);
         }
+
         alert(result.message);
-        closeModal();
-        loadModule(moduleName); // 重新載入數據
+        if (result.success) {
+            closeModal();
+            loadModule(moduleName); // 重新載入數據
+        }
     } catch (error) {
         alert(`操作失敗：${error.message}`);
     }
