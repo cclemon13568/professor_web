@@ -1,8 +1,6 @@
-
-
 document.addEventListener('DOMContentLoaded', function () {
 
-     const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+    const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
     const currentPage = window.location.pathname.split("/").pop();
     navLinks.forEach(link => {
         const linkHref = link.getAttribute("href");
@@ -12,15 +10,16 @@ document.addEventListener('DOMContentLoaded', function () {
             link.classList.remove("active");
         }
     });
-    
+
     const courseList = document.getElementById('course-list');
     const teacherId = 'T002'; // 可依需求調整
 
     // 取得課程資料
     fetch(`api/course_info.php?teacher_ID=${encodeURIComponent(teacherId)}`)
         .then(res => res.json())
-        .then(courses => {
+        .then(result => {
             courseList.innerHTML = '';
+            const courses = result.data;
             if (!Array.isArray(courses) || courses.length === 0) {
                 courseList.innerHTML = '<div class="text-muted">查無課程資料</div>';
                 return;
@@ -66,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(`api/evaluation.php?course_ID=${encodeURIComponent(courseId)}`)
             .then(res => res.json())
             .then(data => {
-                comments = Array.isArray(data) ? data.reverse() : [];
+                comments = Array.isArray(data.data) ? data.data.reverse() : [];
                 renderComments();
             });
 
@@ -108,8 +107,6 @@ document.addEventListener('DOMContentLoaded', function () {
         evalForm.addEventListener('submit', function (e) {
             e.preventDefault();
 
-
-
             const studentInput = evalForm.querySelector('input[name="student_ID"]');
             const periodInput = evalForm.querySelector('input[name="course_period"]');
             const textarea = evalForm.querySelector('textarea');
@@ -134,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     fetch(`api/evaluation.php?course_ID=${encodeURIComponent(courseId)}`)
                         .then(res => res.json())
                         .then(data => {
-                            comments = Array.isArray(data) ? data.reverse() : [];
+                            comments = Array.isArray(data.data) ? data.data.reverse() : [];
                             renderComments(false);
                         });
                     textarea.value = '';
@@ -146,6 +143,5 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
-
 
 });
