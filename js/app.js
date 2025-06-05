@@ -77,7 +77,7 @@ const modulesConfig = {
     },
     responds: { // 新增的回應管理模組
         title: '回應管理',
-        apiEndpoint: 'http://localhost/professor_web/api/responds.php',
+        apiEndpoint: 'api/responds.php',
         fields: {
             respond_ID: { label: '回應ID', type: 'text' }, // 讓 respond_ID 成為主鍵並只讀
             question_ID: { label: '問題ID', type: 'text' }, // 指向主留言，可能也設為只讀
