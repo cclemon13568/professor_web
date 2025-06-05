@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>教授個人網頁 - 研究方向</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="css/index.css" rel="stylesheet">
     <link href="css/question_box.css" rel="stylesheet">
     <link href="css/stuu.css" rel="stylesheet">
@@ -80,25 +81,22 @@
 <script src="js/loginout.js"></script>
 
 
-<div id="floating-question-button">
-    <button id="question-icon-button">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-6h2v6zm-1-8c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
-        </svg>
-    </button>
-    <div id="question-modal" class="hidden">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h3>提問</h3>
-            <textarea id="question-textarea" placeholder="請輸入您的問題..."></textarea>
-            <button id="send-question-button" class="btn btn-primary">發送</button>
-            <div id="question-response" class="hidden mt-2">
-                <p><strong>回覆：</strong></p>
-                <div id="response-text"></div>
-            </div>
-        </div>
-    </div>
+<div id="question-modal" class="hidden">
+  <div class="modal-content">
+    <button class="close-button">&times;</button>
+    <h5>發表新問題</h5>
+    <input id="question-name" class="form-control mb-2" placeholder="姓名/暱稱">
+    <input id="question-dept" class="form-control mb-2" placeholder="系級">
+    <input id="question-title" class="form-control mb-2" placeholder="問題標題">
+    <textarea id="question-content" class="form-control mb-2" rows="4" placeholder="請輸入您的問題"></textarea>
+    <button id="send-question-button" class="btn btn-primary w-100">送出</button>
+    <div id="question-response" class="hidden mt-2"><span id="response-text"></span></div>
+  </div>
 </div>
+<button id="question-icon-button"
+    style="position: fixed; bottom: 32px; right: 32px; z-index: 1050; background: #6B7EA5; color: #fff; border: none; border-radius: 50%; width: 72px; height: 72px; box-shadow: 0 2px 8px rgba(80,90,120,0.15); font-size: 2.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+    <i class="bi bi-question-circle-fill"></i>
+</button>
 
 </body>
 </html>
