@@ -1,4 +1,18 @@
+
+
 document.addEventListener('DOMContentLoaded', function () {
+
+     const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+    const currentPage = window.location.pathname.split("/").pop();
+    navLinks.forEach(link => {
+        const linkHref = link.getAttribute("href");
+        if (linkHref === currentPage) {
+            link.classList.add("active");
+        } else {
+            link.classList.remove("active");
+        }
+    });
+    
     const courseList = document.getElementById('course-list');
     const teacherId = 'T002'; // 可依需求調整
 
@@ -133,15 +147,5 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ====== 導覽列互動效果 ======
-    const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
-    const currentPage = window.location.pathname.split("/").pop();
-    navLinks.forEach(link => {
-        const linkHref = link.getAttribute("href");
-        if (linkHref === currentPage) {
-            link.classList.add("active");
-        } else {
-            link.classList.remove("active");
-        }
-    });
+
 });
