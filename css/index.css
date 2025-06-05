@@ -242,7 +242,7 @@ header .conecinfo {
     content: "";
     position: absolute;
     top: 10%;
-    right: 30px;
+    right: 10px;
     width: 1px;
     height: 80%;
     background: #e0e6ed;
