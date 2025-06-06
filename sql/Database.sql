@@ -131,7 +131,8 @@ CREATE TABLE `evaluation` (
   `evaluate_ID` char(15) NOT NULL,
   `student_ID` char(15) DEFAULT NULL,
   `course_period` varchar(20) DEFAULT NULL,
-  `evaluate` text DEFAULT NULL
+  `evaluate` text DEFAULT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
