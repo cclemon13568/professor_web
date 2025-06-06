@@ -109,6 +109,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 ? 'respond-card teacher-respond p-3 rounded mb-2'
                 : 'respond-card user-respond p-3 rounded mb-2';
 
+
+            let timeStr = '';
+            if (respond.created_at) {
+                const d = new Date(respond.created_at.replace(/-/g, '/'));
+                if (!isNaN(d)) {
+                    const rocYear = d.getFullYear() - 1911;
+                    timeStr = `（${rocYear}年${d.getMonth() + 1}月${d.getDate()}日 ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}）`;
+                }
+            }
+
+
             li.innerHTML = `
                 <div class="${respondClass}">
                     <div class="d-flex align-items-center mb-1">
@@ -120,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <button class="btn btn-sm btn-link text-primary ms-2 reply-btn" data-respond-id="${respond.respond_ID}" data-question-id="${respond.question_ID}">回覆</button>
                         <button class="btn btn-sm btn-outline-secondary ms-2 toggle-children-btn">收起</button>
                     </div>
+                    <span class="respond-time text-muted" style="display:block;text-align:right;font-size:0.95em;margin-top:2px;">${timeStr}</span>
                 </div>
             `;
             // 子回覆
