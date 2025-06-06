@@ -185,8 +185,8 @@ switch ($method) {
             try {
                 // Insert into evaluation
                 $stmt = mysqli_prepare($conn, "
-                    INSERT INTO evaluation (evaluate_ID, student_ID, course_period, evaluate)
-                    VALUES (?, ?, ?, ?)
+                    INSERT INTO evaluation (evaluate_ID, student_ID, course_period, evaluate,created_at)
+                    VALUES (?, ?, ?, ?,NOW())
                 ");
                 if (!$stmt) {
                     throw new Exception("新增 evaluation 資料庫準備失敗: " . mysqli_error($conn));
