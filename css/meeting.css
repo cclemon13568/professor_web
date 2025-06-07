@@ -1,89 +1,17 @@
-/* 預設樣式（適用於大螢幕） */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #fafafa;
-}
-
-/* OK 瀏覽列 (從 study.html 調整過來) */
-
-/*色塊區*/
-.navbar {
-    background-color: #6B7EA5 !important; /* 直接設定為藍色 */
-    width: 100%; /* 填滿整條 X 軸 */
-    margin: 0; /* 移除外邊距 */
-    border-radius: 0; /* 移除圓角 */
-    padding: 10px 20px; /* <--- 調整這裡的 10px 數值來控制厚度 */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加陰影 */
-}
-
-/* 左上網頁標題 */
-.navbar-brand {
-    font-size: 1.5rem; /* 調整品牌名稱的字體大小 */
-    font-weight: bold; /* 加粗品牌名稱 */
-    color: #fff !important; /* 確保品牌名稱為白色 */
-}
-
-.nav-link {
-    font-size: 1.1rem; /* 調整導覽連結的字體大小 */
-    margin: 0 10px; /* 增加連結之間的間距 */
-    color: rgba(255, 255, 255, 0.75) !important; /* 預設連結顏色為半透明白色 */
-}
-
-.navbar-toggler {
-    border: none; /* 移除切換按鈕的邊框 */
-    background-color: rgba(255, 255, 255, 0.2); /* 添加透明背景 */
-}
-
-/*點選瀏覽列後的效果*/
-.nav-link.active {
-    font-weight: bold;
-    color: #fff !important; /* 選中的連結為純白色 */
-    background-color: #2f5077; /* 深藍色背景 */
-    border-radius: 5px;
-}
-
-
-.navbar .btn-outline-light {
-    color: #fff; /* 按鈕文字顏色 */
-    border-color: #fff; /* 按鈕邊框顏色 */
-}
-
-.navbar .btn-outline-light:hover {
-    background-color: rgba(255, 255, 255, 0.1); /* 輕微亮一點 */
-    color: rgba(255, 255, 255, 0.85); /* 提高文字亮度 */
-    border-color: rgba(255, 255, 255, 0.85);
-}
-
-.navbar .btn-login {
-    background-color: #5FC0D9; /* 登入按鈕背景色，使用課程頁面提問按鈕的顏色 */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 8px 15px; /* 調整內邊距 */
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease; /* 添加過渡效果 */
-}
-
-.navbar .btn-login:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加懸浮陰影 */
-    transform: translateY(-2px); /* 輕微上移效果（可選） */
-    background-color: #53A7BC; /* 懸停時顏色變深 */
-}
-
-/* 新增的響應式媒體查詢部分 (從 study.css 複製並適應) */
+/*!* 預設樣式（適用於大螢幕） *!*/
+/*body {*/
+/*    font-family: Arial, sans-serif;*/
+/*    background-color: #fafafa;*/
+/*}*/
 
 /* 手機螢幕（小於 768px） */
 @media (max-width: 768px) {
     header img {
         max-width: 100%; /* 圖片寬度自適應 */
-        margin-right: 0; /* 手機上移除圖片右邊距 */
-        margin-bottom: 15px; /* 添加圖片底部間距 */
     }
 
-    header {
-        flex-direction: column; /* 手機上垂直排列 */
-        text-align: center; /* 文字置中 */
+    header h1 {
+        font-size: 2rem; /* 縮小標題字體大小 */
     }
 
     .navbar {
@@ -94,32 +22,86 @@ body {
         font-size: 1rem; /* 縮小導覽連結字體大小 */
         margin: 0 5px; /* 減少連結間距 */
     }
-
-    .navbar-brand {
-        font-size: 1.2rem; /* 縮小品牌名稱字體 */
-    }
 }
 
 /* 平板螢幕（768px 至 1024px） */
 @media (min-width: 768px) and (max-width: 1024px) {
     header img {
-        max-width: 200px; /* 限制圖片寬度 */
-        margin-right: 30px; /* 調整圖片和文字間距 */
+        max-width: 600px; /* 限制圖片寬度 */
     }
 
     header h1 {
         font-size: 2.5rem; /* 調整標題字體大小 */
     }
 
-    .navbar {
-        padding: 10px 20px; /* 確保與大螢幕預設值一致 */
-    }
 
-    .nav-link {
-        font-size: 1.05rem; /* 微調連結字體大小 */
-        margin: 0 8px; /* 微調連結間距 */
-    }
 }
+/*網頁大小調整*/
+
+/* /////////////////////////////////////////////////////////// */
+
+/*瀏覽列*/
+
+
+/*色塊區*/
+.navbar {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    padding: 10px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fafafa;
+}
+
+/* 左上網頁標題 */
+.navbar-brand {
+    font-size: 1.5rem; /* 調整品牌名稱的字體大小 */
+    font-weight: bold; /* 加粗品牌名稱 */
+}
+
+.nav-link {
+    font-size: 1.1rem; /* 調整導覽連結的字體大小 */
+    margin: 0 10px; /* 增加連結之間的間距 */
+}
+
+.navbar-toggler {
+    border: none; /* 移除切換按鈕的邊框 */
+    background-color: rgba(255, 255, 255, 0.2); /* 添加透明背景 */
+}
+
+/*點選瀏覽列後的效果*/
+.nav-link.active {
+    font-weight: bold;
+    color: #fff !important;
+    background-color: #2f5077;
+    border-radius: 5px;
+}
+
+
+.navbar .btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* 輕微亮一點 */
+    color: rgba(255, 255, 255, 0.85); /* 提高文字亮度 */
+    border-color: rgba(255, 255, 255, 0.85);
+}
+
+
+.navbar .btn-login:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加懸浮陰影 */
+    transform: translateY(-2px); /* 輕微上移效果（可選） */
+}
+
+.navbar-dark.bg-primary {
+    background-color: #6B7EA5 !important; /* 紅色背景 */
+    width: 100%; /* 填滿整條 X 軸 */
+    margin: 0; /* 移除外邊距 */
+    border-radius: 0; /* 移除圓角 */
+}
+
+
+/*瀏覽列end*/
+
+
 
 /* 新增或調整的樣式 (原 meeting.css 的內容，保留不變) */
 .schedule-table .appointment-slot {
@@ -164,6 +146,12 @@ body {
     cursor: not-allowed;
     pointer-events: none; /* 禁用鼠標事件 */
 }
+/*新增*/
+body.professor-logged-in .appointment-slot.status--1[data-status="2"][data-student-id="T002"] {
+    pointer-events: auto;
+    cursor: pointer;
+}
+
 
 
 /* 教授模式下選中的時段 */
