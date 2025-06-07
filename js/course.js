@@ -1,8 +1,6 @@
-
-
 document.addEventListener('DOMContentLoaded', function () {
 
-     const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+    const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
     const currentPage = window.location.pathname.split("/").pop();
     navLinks.forEach(link => {
         const linkHref = link.getAttribute("href");
@@ -12,15 +10,16 @@ document.addEventListener('DOMContentLoaded', function () {
             link.classList.remove("active");
         }
     });
-    
+
     const courseList = document.getElementById('course-list');
     const teacherId = 'T002'; // 可依需求調整
 
     // 取得課程資料
     fetch(`api/course_info.php?teacher_ID=${encodeURIComponent(teacherId)}`)
         .then(res => res.json())
-        .then(courses => {
+        .then(result => {
             courseList.innerHTML = '';
+            const courses = result.data;
             if (!Array.isArray(courses) || courses.length === 0) {
                 courseList.innerHTML = '<div class="text-muted">查無課程資料</div>';
                 return;
@@ -66,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(`api/evaluation.php?course_ID=${encodeURIComponent(courseId)}`)
             .then(res => res.json())
             .then(data => {
-                comments = Array.isArray(data) ? data.reverse() : [];
+                comments = Array.isArray(data.data) ? data.data.reverse() : [];
                 renderComments();
             });
 
@@ -77,8 +76,20 @@ document.addEventListener('DOMContentLoaded', function () {
             comments.forEach((c, idx) => {
                 const div = document.createElement('div');
                 div.className = 'mb-2 p-2 border-bottom';
-                div.innerHTML = `<strong>#${c.evaluate_ID}</strong> (課程代碼:${courseId}) [修課期間：${c.course_period || ''}]：${c.evaluate}`;
-                if (!expanded && idx >= showCount) {
+
+                let timeStr = '';
+                if (c.created_at) {
+                    const d = new Date(c.created_at.replace(/-/g, '/')); // Safari 相容
+                    const rocYear = d.getFullYear() - 1911;
+                    timeStr = `（${rocYear}年${d.getMonth() + 1}月${d.getDate()}日 ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}）`;
+                }
+
+                div.innerHTML = `
+                <div>
+                    <strong>#${c.evaluate_ID}</strong> (課程代碼:${courseId}) [修課期間：${c.course_period || ''}]：${c.evaluate}
+                </div>
+                <span class="eval-time text-muted">${timeStr}</span>
+                `;                if (!expanded && idx >= showCount) {
                     div.classList.add('eval-hidden');
                     div.style.display = 'none';
                 }
@@ -108,8 +119,6 @@ document.addEventListener('DOMContentLoaded', function () {
         evalForm.addEventListener('submit', function (e) {
             e.preventDefault();
 
-
-
             const studentInput = evalForm.querySelector('input[name="student_ID"]');
             const periodInput = evalForm.querySelector('input[name="course_period"]');
             const textarea = evalForm.querySelector('textarea');
@@ -117,6 +126,32 @@ document.addEventListener('DOMContentLoaded', function () {
             const coursePeriod = periodInput.value.trim();
             const content = textarea.value.trim();
             if (!studentID || !coursePeriod || !content) return;
+
+            const match = coursePeriod.match(/^(\d{2,3})-(\d)$/);
+            if (!match) {
+                alert('修課期間格式錯誤，請輸入如 112-1');
+                return;
+            }
+            const inputYear = parseInt(match[1], 10);
+            const inputSemester = parseInt(match[2], 10);
+
+            const now = new Date();
+            const nowRocYear = now.getFullYear() - 1911;
+            // 判斷學期
+            // 假設 1=上學期(約9月~隔年1月)，2=下學期(約2月~7月)
+            let nowSemester;
+            const month = now.getMonth() + 1;
+            if (month >= 9 || month <= 1) {
+                nowSemester = 1;
+            } else {
+                nowSemester = 2;
+            }
+
+            if (inputYear > nowRocYear || (inputYear === nowRocYear && inputSemester > nowSemester)) {
+                alert('修課期間不能為未來時間');
+                return;
+            }
+
             // 送出到 API
             fetch('api/evaluation.php', {
                 method: 'POST',
@@ -134,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     fetch(`api/evaluation.php?course_ID=${encodeURIComponent(courseId)}`)
                         .then(res => res.json())
                         .then(data => {
-                            comments = Array.isArray(data) ? data.reverse() : [];
+                            comments = Array.isArray(data.data) ? data.data.reverse() : [];
                             renderComments(false);
                         });
                     textarea.value = '';
@@ -146,6 +181,5 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
-
 
 });

@@ -73,6 +73,20 @@ const modulesConfig = {
             word: { label: '敏感詞', type: 'text' }
         },
         actions: ['edit', 'delete'] // 敏感詞也應該可以編輯、刪除
+    },
+    responds: { // 新增的回應管理模組Add commentMore actions
+        title: '回應管理',
+        apiEndpoint: 'api/responds.php',
+        fields: {
+            respond_ID: { label: '回應ID', type: 'text' }, // 讓 respond_ID 成為主鍵並只讀
+            question_ID: { label: '問題ID', type: 'text' }, // 指向主留言，可能也設為只讀
+            respond_content: { label: '回應內容', type: 'textarea' }, // 新增回應內容欄位
+            parent_respond_ID: { label: '父回應ID', type: 'text', optional: true }, // 可以是 null，設為可選
+            created_at: { label: '創建時間', type: 'text', readOnly: true } // 可能也需要顯示
+        },
+        // 注意：這裡的 actions 是針對表格中每一行數據的操作
+        // 如果您想編輯嵌套的回覆，後端 GET 需要以扁平化形式返回數據
+        actions: ['delete']
     }
 };
 
@@ -101,7 +115,13 @@ async function fetchData(url, method = 'GET', payload = null) { // 將 data 改�
         // 檢查 HTTP 狀態碼
         if (!response.ok) {
             // 如果 HTTP 狀態碼不是 2xx，拋出錯誤，使用後端返回的 message
-            throw new Error(jsonResponse.message || `API 請求失敗，狀態碼: ${response.status}`);
+            if (!response.ok) {
+                // 如果是 404，讓它變成正常返回
+                if (response.status === 404) {
+                    return { success: false, message: jsonResponse.message || '查無資料' };
+                }
+                throw new Error(jsonResponse.message || `API 請求失敗，狀態碼: ${response.status}`);
+            }
         }
 
         // 檢查後端返回的 success 屬性
@@ -307,23 +327,49 @@ async function performSearch() {
     const config = modulesConfig[currentModule];
 
     try {
-        const allData = await fetchData(config.apiEndpoint, 'GET'); // 獲取所有數據
+        // 從 API 獲取整個響應物件
+        const response = await fetchData(config.apiEndpoint, 'GET');
+
+        // 檢查 API 響應是否成功
+        if (!response.success) {
+            dataArea.innerHTML = `<p style="color: red;">查詢失敗：${response.message || '未知錯誤'}</p>`;
+            return; // 如果不成功，則停止執行
+        }
+
+        // 從響應中獲取實際的數據陣列
+        const allData = response.data; // <--- 這裡是要修正的關鍵行
+
+        if (!allData || allData.length === 0) { // 檢查數據是否為空或不存在
+            dataArea.innerHTML = '<p>目前沒有資料可顯示。</p>'; // 顯示無數據訊息
+            return;
+        }
+
+        let displayData;
         if (!searchTerm) {
-            dataArea.innerHTML = generateTable(currentModule, allData);
+            displayData = allData;
         } else {
             const filteredData = allData.filter(item => {
                 for (const key in item) {
+                    // 確保 config.fields[key] 存在且 item[key] 可以轉為字符串進行包含性檢查
                     if (config.fields.hasOwnProperty(key) && String(item[key]).toLowerCase().includes(searchTerm)) {
                         return true;
                     }
                 }
                 return false;
             });
-            dataArea.innerHTML = generateTable(currentModule, filteredData);
+            displayData = filteredData;
+            if (displayData.length === 0) {
+                dataArea.innerHTML = `<p>找不到包含 "${searchTerm}" 的資料。</p>`;
+                return;
+            }
         }
+
+        dataArea.innerHTML = generateTable(currentModule, displayData);
         addActionButtonListeners(); // 重新綁定事件
+
     } catch (error) {
-        dataArea.innerHTML = `<p style="color: red;">查詢失敗：${error.message}</p>`;
+        console.error('Perform search error:', error); // 更詳細的錯誤日誌
+        dataArea.innerHTML = `<p style="color: red;">查詢失敗：${error.message || '發生未知錯誤'}</p>`;
     }
 }
 
@@ -333,33 +379,52 @@ async function performSearch() {
 // 刪除數據
 async function deleteData(moduleName, idToDelete) {
     const config = modulesConfig[moduleName];
-    // 獲取主鍵名 (例如 'question_ID', 'appointment_ID', 'course_ID')
-    const idKey = Object.keys(config.fields)[0]; 
+    // 獲取主鍵名 (例如 'question_ID', 'respond_ID', 'course_ID')
+    // 注意：這裡假設 config.fields 的第一個鍵總是正確的 ID 名稱
+    // 但更嚴謹的做法是在 config 中明確定義 idKey
+    const idKey = Object.keys(config.fields)[0];
 
-    // 構建要發送給後端的 payload
-    const payload = {
-        action: 'delete', // 後端期望的動作
-        [idKey]: idToDelete // 使用計算屬性名來動態設置 ID
-    };
+    let payload = {}; // 初始化 payload
+
+    // 根據模組名稱決定 payload 結構和 endpoint
+    // 這裡我們假設 'responds' 模組需要 _method 參數
+    // 而 'course_info' 模組需要 action 參數
+    if (moduleName === 'responds') { // 如果是回應管理模組
+        payload = {
+            _method: 'DELETE', // responds.php 期望的刪除方式
+            [idKey]: idToDelete
+        };
+    } else if (moduleName === 'course_info') { // 如果是課程管理模組 (根據您提供的 course_info.php)
+        payload = {
+            action: 'delete', // course_info.php 期望的刪除方式
+            [idKey]: idToDelete
+        };
+    } else {
+        // 如果有其他模組，可以在這裡添加更多條件
+        // 或者提供一個通用的 fallback
+        payload = {
+            action: 'delete', // 預設使用 action
+            [idKey]: idToDelete
+        };
+        console.warn(`未知模組名稱: ${moduleName}，使用預設刪除payload。`);
+    }
 
     try {
-        // 將 method 改為 'POST'，並傳遞 payload
-        const result = await fetchData(config.apiEndpoint, 'POST', payload); 
+        // 發送 POST 請求
+        const result = await fetchData(config.apiEndpoint, 'POST', payload);
 
-        // 由於 fetchData 現在直接返回整個 JSON 響應 (包含 success, message)
-        // 這裡的邏輯是正確的，無需修改
-        if (result && result.success) { 
+        if (result && result.success) {
             alert(result.message);
-        } else if (result && result.message) { 
+        } else if (result && result.message) {
             alert(`刪除失敗：${result.message}`);
         } else {
             // 這段通常在 success:true, message: "..." 情況下不會觸發
-            // 只有當後端響應非常不規範時才可能走到這裡
-            alert('刪除成功！');
+            alert('刪除成功！'); // 如果後端沒有返回 message，但 success 為 true
         }
         loadModule(moduleName); // 重新載入頁面以更新顯示
     } catch (error) {
         alert(`刪除失敗：${error.message}`);
+        console.error('刪除錯誤:', error);
     }
 }
 
@@ -641,7 +706,7 @@ async function loadTeacherNames() {
 
         // 先插入「新增教師」按鈕
         const addLi = document.createElement('li');
-        addLi.textContent = '＋ 新增教師';
+        addLi.textContent = '＋ 新增人員';
         addLi.style.fontWeight = 'bold';
         addLi.style.color = '#fff';
         addLi.style.cursor = 'pointer';
@@ -855,6 +920,10 @@ function openSubTableModal(type, mode, row = {}) {
         const res = await fetchData(url, 'POST', payload);
         alert(res.message);
         if (res.success) {
+            if (type === 'info' && mode === 'add') {
+                currentTeacherID = payload.teacher_ID;
+                currentTeacherName = payload.teacher_name;
+            }
             closeModal();
             showTeacherDetail(currentTeacherID, currentTeacherName);
         }
@@ -884,38 +953,53 @@ async function showTeacherDetail(teacher_ID, teacher_name) {
         // 新增：取得帳號資訊
         const loginInfoRes = await fetchData(`api/login_info.php?teacher_ID=${teacher_ID}`);
         let loginInfoHtml = '';
-        if (loginInfoRes.success && loginInfoRes.data) {
-            const login = loginInfoRes.data;
+        let login = null;
+        try {
+            const loginInfoRes = await fetchData(`api/login_info.php?teacher_ID=${teacher_ID}`);
+            if (loginInfoRes.success && loginInfoRes.data) {
+                login = loginInfoRes.data;
+            }
+        } catch (e) {
+            // 如果查詢帳號時發生錯誤（例如找不到帳號），不影響整體畫面
+            console.warn('無法取得帳號資料：', e.message);
+        }
+
+        if (login) {
             loginInfoHtml = `
-                <h2>帳號資訊</h2>
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>帳號</th>
-                            <td>${login.professor_accountnumber || ''}</td>
-                        </tr>
-                        <tr>
-                            <th>密碼</th>
-                            <td>${login.professor_password || ''}</td>
-                        </tr>
-                        <tr>
-                            <th>信箱</th>
-                            <td>${login.email || ''}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="action-buttons" style="margin-top: 10px;">
-                    <button class="edit-btn login-edit-btn" data-account="${login.professor_accountnumber}" data-password="${login.professor_password}" data-email="${login.email}">編輯</button>
-                </div>
-            `;
+        <h2>帳號資訊</h2>
+        <table>
+            <tbody>
+                <tr>
+                    <th>帳號</th>
+                    <td>${login.professor_accountnumber || ''}</td>
+                </tr>
+                <tr>
+                    <th>密碼</th>
+                    <td>${login.professor_password || ''}</td>
+                </tr>
+                <tr>
+                    <th>信箱</th>
+                    <td>${login.email || ''}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="action-buttons" style="margin-top: 10px;">
+            <button class="edit-btn login-edit-btn" data-account="${login.professor_accountnumber}" data-password="${login.professor_password}" data-email="${login.email}">編輯</button>
+            <button class="delete-btn login-delete-btn"
+                data-account="${login.professor_accountnumber}">
+                刪除
+            </button>
+        </div>
+    `;
         } else {
             loginInfoHtml = `
-                <h2>帳號資訊</h2>
-                <table><tbody>
-                    <tr><td colspan="2">查無帳號資料</td></tr>
-                </tbody></table>
-            `;
+        <h2>帳號資訊</h2>
+        <table><tbody>
+            <tr><td colspan="2">無資料</td></tr>
+        </tbody></table>
+    `;
         }
+
 
         if (!info.success || !ext.success) throw new Error('資料載入失敗');
 
@@ -1028,6 +1112,28 @@ async function showTeacherDetail(teacher_ID, teacher_name) {
                 });
             };
         }
+
+        const deleteBtn = dataArea.querySelector('.login-delete-btn');
+        if (deleteBtn) {
+            deleteBtn.onclick = async function () {
+                const account = deleteBtn.dataset.account;
+                if (!confirm(`確定要刪除帳號「${account}」嗎？`)) return;
+
+                try {
+                    const res = await fetchData('api/login_info.php', 'POST', {
+                        action: 'delete',
+                        professor_accountnumber: account
+                    });
+                    alert(res.message);
+                    if (res.success) {
+                        // 刪除成功後重新載入畫面
+                        showTeacherDetail(currentTeacherID, currentTeacherName);
+                    }
+                } catch (err) {
+                    alert('刪除帳號失敗：' + err.message);
+                }
+            };
+        }
     } catch (err) {
         dataArea.innerHTML = `<p>載入失敗：${err.message}</p>`;
     }
@@ -1041,15 +1147,20 @@ function openLoginEditModal(login) {
     const form = document.getElementById('data-form');
     form.innerHTML = `
         <label for="current_account">目前帳號：</label>
-        <input id="current_account" name="current_account" value="${login.professor_accountnumber || ''}" readonly>
-        <label for="current_password">目前密碼：</label>
-        <input id="current_password" name="current_password" value="${login.professor_password || ''}" readonly>
+        <input id="current_account" name="current_professor_accountnumber" value="${login.professor_accountnumber || ''}" readonly>
+        
+        <label for="current_password">請輸入目前密碼：</label>
+        <input type="password" id="current_password_input" name="current_professor_password" placeholder="請輸入您目前的密碼" required>
+        
         <label for="new_account">新帳號：</label>
-        <input id="new_account" name="new_account" value="${login.professor_accountnumber || ''}">
+        <input id="new_account" name="new_professor_accountnumber" value="${login.professor_accountnumber || ''}" required>
+        
         <label for="new_password">新密碼：</label>
-        <input id="new_password" name="new_password" value="${login.professor_password || ''}">
+        <input type="password" id="new_password_input" name="new_professor_password" placeholder="請輸入新密碼" required>
+        
         <label for="email">信箱：</label>
         <input id="email" name="email" value="${login.email || ''}" readonly>
+        
         <div class="form-buttons">
             <button type="submit">儲存</button>
             <button type="button" class="cancel-btn" onclick="closeModal()">取消</button>
@@ -1059,16 +1170,23 @@ function openLoginEditModal(login) {
         e.preventDefault();
         const formData = new FormData(form);
         const payload = {
-            current_account: formData.get('current_account'),
-            current_password: formData.get('current_password'),
-            new_account: formData.get('new_account'),
-            new_password: formData.get('new_password')
+            // **新增 action 參數，值為 'update'，以匹配後端邏輯**
+            action: 'update',
+            // **修正鍵名以匹配後端 PHP 期望的名稱**
+            current_professor_accountnumber: formData.get('current_professor_accountnumber'),
+            current_professor_password: formData.get('current_professor_password'),
+            new_professor_accountnumber: formData.get('new_professor_accountnumber'),
+            new_professor_password: formData.get('new_professor_password')
         };
         try {
-            const res = await fetchData('api/login_info.php', 'PUT', payload);
+            // **請求方法改為 'POST'，以匹配後端 PHP 邏輯**
+            const res = await fetchData('api/login_info.php', 'POST', payload);
             alert(res.message);
             if (res.success) {
                 closeModal();
+                // 假設這個函數能重新載入並顯示更新後的教師資訊
+                // 如果帳號或密碼改變，用戶可能需要重新登入。
+                // 這裡假設 showTeacherDetail 能正確處理資料刷新。
                 showTeacherDetail(currentTeacherID, currentTeacherName);
             }
         } catch (err) {

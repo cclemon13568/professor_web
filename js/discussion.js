@@ -1,4 +1,17 @@
 document.addEventListener('DOMContentLoaded', function () {
+
+    const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+    const currentPage = window.location.pathname.split("/").pop();
+
+    navLinks.forEach(link => {
+        const linkHref = link.getAttribute("href");
+        if (linkHref === currentPage) {
+            link.classList.add("active");
+        } else {
+            link.classList.remove("active");
+        }
+    });
+
     const API_BASE_URL = 'api';
     const board = document.querySelector('.discussion-board');
     const postButton = document.getElementById('post-button');
@@ -8,15 +21,15 @@ document.addEventListener('DOMContentLoaded', function () {
         board.innerHTML = '<div class="text-secondary">載入中...</div>';
         try {
             const res = await fetch(`${API_BASE_URL}/message_board.php`);
-            const data = await res.json();
+            const result = await res.json();
             board.innerHTML = '';
-            if (!Array.isArray(data) || data.length === 0) {
+            if (!result.success || !Array.isArray(result.data) || result.data.length === 0) {
                 board.innerHTML = '<div class="text-muted">目前尚無留言。</div>';
                 return;
             }
             // 依 question_ID 倒序顯示
-            data.sort((a, b) => b.question_ID.localeCompare(a.question_ID));
-            for (const thread of data) {
+            result.data.sort((a, b) => b.question_ID.localeCompare(a.question_ID));
+            for (const thread of result.data) {
                 const threadDiv = await createThreadElement(thread);
                 board.appendChild(threadDiv);
             }
@@ -56,7 +69,8 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             const res = await fetch(`${API_BASE_URL}/responds.php?question_ID=${encodeURIComponent(thread.question_ID)}`);
             const threadDetail = await res.json();
-            responds = threadDetail.responds || [];
+            responds = (threadDetail.success && threadDetail.data && Array.isArray(threadDetail.data.responds))
+                ? threadDetail.data.responds : [];
         } catch (e) {
             respondsListDiv.innerHTML = '<div class="text-danger">回覆載入失敗</div>';
         }
@@ -95,6 +109,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 ? 'respond-card teacher-respond p-3 rounded mb-2'
                 : 'respond-card user-respond p-3 rounded mb-2';
 
+
+            let timeStr = '';
+            if (respond.created_at) {
+                const d = new Date(respond.created_at.replace(/-/g, '/'));
+                if (!isNaN(d)) {
+                    const rocYear = d.getFullYear() - 1911;
+                    timeStr = `（${rocYear}年${d.getMonth() + 1}月${d.getDate()}日 ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}）`;
+                }
+            }
+
+
             li.innerHTML = `
                 <div class="${respondClass}">
                     <div class="d-flex align-items-center mb-1">
@@ -106,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <button class="btn btn-sm btn-link text-primary ms-2 reply-btn" data-respond-id="${respond.respond_ID}" data-question-id="${respond.question_ID}">回覆</button>
                         <button class="btn btn-sm btn-outline-secondary ms-2 toggle-children-btn">收起</button>
                     </div>
+                    <span class="respond-time text-muted" style="display:block;text-align:right;font-size:0.95em;margin-top:2px;">${timeStr}</span>
                 </div>
             `;
             // 子回覆
@@ -166,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     })
                 });
                 const result = await res.json();
-                if (result.success === 'success') {
+                if (result.success) {
                     if (typeof onSuccess === 'function') onSuccess();
                 } else {
                     alert(result.message || '回覆失敗');
@@ -234,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     })
                 });
                 const result = await res.json();
-                if (result.status === 'success') {
+                if (result.success) {
                     alert('留言已發布！');
                     document.getElementById('new-name').value = '';
                     document.getElementById('new-dept').value = '';
