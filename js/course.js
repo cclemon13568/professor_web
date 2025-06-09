@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
             courses.forEach(course => {
+                if (course.course_ID === 'CS000') return; // 跳過 CS000
+//新增功能
                 const card = document.createElement('div');
                 card.className = 'card mb-4';
                 card.dataset.courseId = course.course_ID;
