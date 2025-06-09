@@ -550,7 +550,43 @@ document.addEventListener('DOMContentLoaded', function() {
         $('#unavailable-batch-modal').modal('show');
     });
 
-    // modal 表單送出時，才發送多筆資料
+    //============================================================
+    // 產生隨機 appointment_ID（A+3碼數字）
+    function generateRandomAppointmentID() {
+        return 'A' + Math.floor(100 + Math.random() * 900); // A100~A999
+    }
+
+// 檢查 appointment_ID 是否存在
+    function checkAppointmentIDExists(id) {
+        return $.ajax({
+            url: 'api/appointment_info.php',
+            method: 'GET',
+            data: { appointment_ID: id },
+            dataType: 'json'
+        });
+    }
+
+// 取得不重複的 appointment_ID
+    function getUniqueAppointmentID(callback) {
+        const newID = generateRandomAppointmentID();
+        checkAppointmentIDExists(newID)
+            .done(function(res) {
+                if (res && res.success && res.data && res.data.length > 0) {
+                    getUniqueAppointmentID(callback); // 已存在，重試
+                } else {
+                    callback(newID); // 不存在，可用
+                }
+            })
+            .fail(function(xhr) {
+                if (xhr.status === 404) {
+                    callback(newID); // 404 表示沒找到，可用
+                } else {
+                    alert('檢查預約代碼時發生錯誤');
+                }
+            });
+    }
+
+// modal 表單送出時，只針對一個時段發送資料
     $('#unavailable-batch-form').on('submit', function(e) {
         e.preventDefault();
         const customContent = $('#unavailable-batch-reason').val();
@@ -562,28 +598,33 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!confirm(`確定將選定的時段設為不開放，原因為 "${customContent}" 嗎？這將會刪除該時段內所有的學生預約！`)) {
             return;
         }
-        const unavailablePromises = selectedSlotsForChange.map(slot => {
-            const fullDateTime = `${slot.fullDate} ${slot.time.split('-')[0]}:00`;
-            const deleteExistingPromise = (slot.appointment_ID && slot.appointment_ID !== 'undefined') ? $.ajax({
-                url: 'api/appointment_info.php',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    action: 'delete',
-                    appointment_ID: slot.appointment_ID
-                }),
-                dataType: 'json'
-            }) : Promise.resolve({ success: true, message: '沒有現有預約可刪除' });
+        const slot = selectedSlotsForChange[0];
+        if (!slot) {
+            alert('請先選擇一個時段。');
+            return;
+        }
+        const fullDateTime = `${slot.fullDate} ${slot.time.split('-')[0]}:00`;
+        const deleteExistingPromise = (slot.appointment_ID && slot.appointment_ID !== 'undefined') ? $.ajax({
+            url: 'api/appointment_info.php',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                action: 'delete',
+                appointment_ID: slot.appointment_ID
+            }),
+            dataType: 'json'
+        }) : Promise.resolve({ success: true, message: '沒有現有預約可刪除' });
 
-            return deleteExistingPromise.then(() => {
-                const newUnavailableID = `PROF_UNA_${Math.random().toString(36).substring(2, 9)}`;
-                return $.ajax({
+        deleteExistingPromise.then(() => {
+            // 先取得不重複的 appointment_ID
+            getUniqueAppointmentID(function(uniqueID) {
+                $.ajax({
                     url: 'api/appointment_info.php',
                     method: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({
-                        action: 'create', // 這裡要用 create
-                        appointment_ID: newUnavailableID,
+                        action: 'create',
+                        appointment_ID: uniqueID,
                         office_location: 'E405',
                         appoint_Date: fullDateTime,
                         status: 2,
@@ -593,22 +634,24 @@ document.addEventListener('DOMContentLoaded', function() {
                         course_ID: 'CS000',
                         problem_description: customContent
                     }),
-                    dataType: 'json'
+                    dataType: 'json',
+                    success: function(response) {
+                        alert('選定時段已設為不開放。');
+                        $('#unavailable-batch-modal').modal('hide');
+                        cancelChangeBtn.click();
+                    },
+                    error: function(xhr) {
+                        console.error('設定不開放時段失敗:', xhr);
+                        alert('設定不開放時段失敗，請檢查控制台。');
+                    }
                 });
             });
+        }).catch(error => {
+            console.error('設定不開放時段失敗:', error);
+            alert('設定不開放時段失敗，請檢查控制台。');
         });
-
-        Promise.all(unavailablePromises)
-            .then(responses => {
-                alert('選定時段已設為不開放。');
-                $('#unavailable-batch-modal').modal('hide');
-                cancelChangeBtn.click();
-            })
-            .catch(error => {
-                console.error('設定不開放時段失敗:', error);
-                alert('設定不開放時段失敗，請檢查控制台。');
-            });
     });
+    //============================================================
 
     // 3. 教授設定開放時段按鈕
     $('#set-available-btn').on('click', function() {
