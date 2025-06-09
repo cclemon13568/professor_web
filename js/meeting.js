@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         courses.forEach(course => {
             // 支援 "星期二、三 12:10~13:00" 及 "星期六 09:10~12:00"
-            const match = course.course_time.match(/^((星期[一二三四五六日](?:、[一二三四五六日])*)?)\s*(\d{2}:\d{2})[~-](\d{2}:\d{2})$/);
+            const match = course.course_time.match(/^((星期[一二三四五六日七](?:、[一二三四五六日七])*)?)\s*(\d{2}:\d{2})[~-](\d{2}:\d{2})$/);
             if (match) {
                 let daysPart = match[1]; // 可能是 "星期二、三" 或 "星期六"
                 const courseStartTimeStr = match[3];
@@ -254,9 +254,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     // 將 "星期二、三" 轉為 ["星期二", "星期三"]
                     if (daysPart.includes('、')) {
                         // 先將 "星期二、三" 換成 "星期二、星期三"
-                        daysPart = daysPart.replace(/、([一二三四五六日])/g, '、星期$1');
+                        daysPart = daysPart.replace(/、([一二三四五六日七])/g, '、星期$1');
                     }
                     courseDays = daysPart.split('、');
+                }
+
+                // 跳過包含"星期七"的資料
+                if (courseDays.includes('星期七')) {
+                    return; // 直接跳過這筆資料
                 }
 
                 if (courseDays.includes(targetDayOfWeekChinese)) {
