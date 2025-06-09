@@ -561,7 +561,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const fullDateTime = `${slot.fullDate} ${slot.time.split('-')[0]}:00`;
             const deleteExistingPromise = (slot.appointment_ID && slot.appointment_ID !== 'undefined') ? $.ajax({
                 url: 'api/appointment_info.php' + '?appointment_ID=' + slot.appointment_ID,
-                method: 'DELETE',
+                method: 'POST',
                 dataType: 'json'
             }) : Promise.resolve({ success: true, message: '沒有現有預約可刪除' });
 
