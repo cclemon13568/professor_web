@@ -40,14 +40,14 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
     // 統一 API 路徑變數
-    const API_BASE_URL = './api/'; // 基礎路徑
-    const APPOINTMENT_API_URL = `${API_BASE_URL}appointment_info.php`;
-    const COURSE_API_URL = `${API_BASE_URL}course_info.php`;
+    // const API_BASE_URL = './api/'; // 基礎路徑
+    // const APPOINTMENT_API_URL = `${API_BASE_URL}appointment_info.php`;
+    // const COURSE_API_URL = `${API_BASE_URL}course_info.php`;
 
     // 1. 載入課程清單並填入下拉選單
     function loadCourses() {
         $.ajax({
-            url: COURSE_API_URL,
+            url: 'api/course_info.php',
             method: 'GET',
             dataType: 'json',
             success: function(response) {
@@ -148,8 +148,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 注意：您的 appointment_info.php 在 GET 請求中似乎沒有 date_filter 參數來過濾，
                 // 它會返回所有預約。我們這裡暫時保持這個行為，在前端處理過濾。
                 // 如果您希望後端過濾，需要修改 appointment_info.php 的 GET 邏輯。
-                fetch(APPOINTMENT_API_URL),
-                fetch(COURSE_API_URL) // 獲取所有課程
+                fetch('api/appointment_info.php'),
+                fetch('api/course_info.php') // 獲取所有課程
             ]);
 
             if (!appointmentsResponse.ok) {
@@ -560,7 +560,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const unavailablePromises = selectedSlotsForChange.map(slot => {
             const fullDateTime = `${slot.fullDate} ${slot.time.split('-')[0]}:00`;
             const deleteExistingPromise = (slot.appointment_ID && slot.appointment_ID !== 'undefined') ? $.ajax({
-                url: APPOINTMENT_API_URL + '?appointment_ID=' + slot.appointment_ID,
+                url: 'api/appointment_info.php' + '?appointment_ID=' + slot.appointment_ID,
                 method: 'DELETE',
                 dataType: 'json'
             }) : Promise.resolve({ success: true, message: '沒有現有預約可刪除' });
@@ -568,7 +568,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return deleteExistingPromise.then(() => {
                 const newUnavailableID = `PROF_UNA_${Math.random().toString(36).substring(2, 9)}`;
                 return $.ajax({
-                    url: APPOINTMENT_API_URL,
+                    url: 'api/appointment_info.php',
                     method: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({
@@ -607,7 +607,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (slot && slot.student_ID === 'T002' && slot.appointment_ID) {
             // 發送刪除請求
             $.ajax({
-                url: APPOINTMENT_API_URL,
+                url: 'api/appointment_info.php',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
@@ -639,7 +639,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!appointmentID) return;
 
         $.ajax({
-            url: APPOINTMENT_API_URL,
+            url: 'api/appointment_info.php',
             method: 'GET',
             data: { appointment_ID: appointmentID },
             dataType: 'json',
@@ -698,7 +698,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         $.ajax({
-            url: APPOINTMENT_API_URL, // 使用正確的 API URL
+            url: 'api/appointment_info.php', // 使用正確的 API URL
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(formData),
@@ -739,7 +739,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 更新預約狀態的 AJAX 函數
     function updateAppointmentStatus(appointmentID, newStatus) {
         $.ajax({
-            url: APPOINTMENT_API_URL,
+            url: 'api/appointment_info.php',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({
