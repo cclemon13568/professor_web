@@ -560,8 +560,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const unavailablePromises = selectedSlotsForChange.map(slot => {
             const fullDateTime = `${slot.fullDate} ${slot.time.split('-')[0]}:00`;
             const deleteExistingPromise = (slot.appointment_ID && slot.appointment_ID !== 'undefined') ? $.ajax({
-                url: 'api/appointment_info.php' + '?appointment_ID=' + slot.appointment_ID,
+                url: 'api/appointment_info.php',
                 method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    action: 'delete',
+                    appointment_ID: slot.appointment_ID
+                }),
                 dataType: 'json'
             }) : Promise.resolve({ success: true, message: '沒有現有預約可刪除' });
 
@@ -697,6 +702,7 @@ document.addEventListener('DOMContentLoaded', function() {
             problem_description: $('#problem_description').val()
         };
 
+        formData.action = 'create';
         $.ajax({
             url: 'api/appointment_info.php', // 使用正確的 API URL
             method: 'POST',
