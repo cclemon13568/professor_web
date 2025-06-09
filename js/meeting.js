@@ -496,7 +496,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 $('#form_appointment_time').val(time);
-                $('#form_appointment_ID').val(generateUUID());
+                // $('#form_appointment_ID').val(generateUUID());
 
                 studentAppointmentModal.show();
             } else {
@@ -689,45 +689,85 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    //appointment_ID隨機生成
+    // 產生隨機 appointment_ID（A+3碼數字）
+    function generateRandomAppointmentID() {
+        return 'A' + Math.floor(100 + Math.random() * 900); // A100~A999
+    }
+
+    // 檢查 appointment_ID 是否存在
+    function checkAppointmentIDExists(id) {
+        return $.ajax({
+            url: 'api/appointment_info.php',
+            method: 'GET',
+            data: { appointment_ID: id },
+            dataType: 'json'
+        });
+    }
+
     // 提交學生預約表單
     $('#student-appointment-form').on('submit', function(e) {
         e.preventDefault();
 
         const appointDateForDB = document.getElementById('appointDateForDB').value;
 
-        const formData = {
-            appointment_ID: $('#form_appointment_ID').val(),
-            office_location: $('#office_location').val(),
-            appoint_Date: appointDateForDB,
-            status: 2, // 預設審查中 (學生預約)
-            student_ID: $('#student_id').val(),
-            student_Name: $('#student_name').val(),
-            student_email: $('#student_email').val(),
-            course_ID: $('#course_id').val(),
-            problem_description: $('#problem_description').val()
-        };
+        // 產生不重複的 appointment_ID
+        function getUniqueAppointmentID(callback) {
+            const newID = generateRandomAppointmentID();
+            checkAppointmentIDExists(newID)
+                .done(function(res) {
+                    // 若查到資料，代表已存在，重試
+                    if (res && res.success && res.data && res.data.length > 0) {
+                        getUniqueAppointmentID(callback);
+                    } else {
+                        callback(newID);
+                    }
+                })
+                .fail(function(xhr) {
+                    // 404 代表沒找到，表示可用
+                    if (xhr.status === 404) {
+                        callback(newID);
+                    } else {
+                        alert('檢查預約代碼時發生錯誤');
+                    }
+                });
+        }
 
-        formData.action = 'create';
-        $.ajax({
-            url: 'api/appointment_info.php', // 使用正確的 API URL
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(formData),
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    alert('預約成功！等待教授審核。');
-                    studentAppointmentModal.hide();
-                    loadAppointmentsAndCourses(currentSelectedDate); // 重新載入以更新課表顯示
-                    $('#student-appointment-form')[0].reset(); // 清空表單
-                } else {
-                    alert('預約失敗: ' + response.message);
+        getUniqueAppointmentID(function(uniqueID) {
+            const formData = {
+                appointment_ID: uniqueID,
+                office_location: $('#office_location').val(),
+                appoint_Date: appointDateForDB,
+                status: 2,
+                student_ID: $('#student_id').val(),
+                student_Name: $('#student_name').val(),
+                student_email: $('#student_email').val(),
+                course_ID: $('#course_id').val(),
+                problem_description: $('#problem_description').val(),
+                action: 'create'
+            };
+
+            $.ajax({
+                url: 'api/appointment_info.php',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        alert('預約成功！等待教授審核。');
+                        studentAppointmentModal.hide();
+                        loadAppointmentsAndCourses(currentSelectedDate);
+                        $('#student-appointment-form')[0].reset();
+                    } else {
+                        alert('預約失敗: ' + response.message);
+                    }
+                },
+                error: function(xhr) {
+                    alert('預約請求失敗: ' + xhr.responseText);
+                    console.error('AJAX Error:', xhr.responseText);
                 }
-            },
-            error: function(xhr) {
-                alert('預約請求失敗: ' + xhr.responseText);
-                console.error('AJAX Error:', xhr.responseText);
-            }
+            });
         });
     });
 
