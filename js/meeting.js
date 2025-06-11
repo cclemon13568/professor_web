@@ -39,11 +39,6 @@ document.addEventListener('DOMContentLoaded', function() {
         "21:00-21:30", "21:30-22:00"
     ];
 
-    // 統一 API 路徑變數
-    // const API_BASE_URL = './api/'; // 基礎路徑
-    // const APPOINTMENT_API_URL = `${API_BASE_URL}appointment_info.php`;
-    // const COURSE_API_URL = `${API_BASE_URL}course_info.php`;
-
     // 1. 載入課程清單並填入下拉選單
     function loadCourses() {
         $.ajax({
@@ -367,6 +362,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     professorContentHtml += `<br><button class="btn btn-sm btn-info mt-1 view-appointment-btn" data-appointment-id="${dataAppointmentID}">查看預約</button>`;
                 }
 
+                // 處理過去時段顯示空白
+                const isPast = new Date(fullDateTime) < new Date();
+                if (isPast && (['available', 0, 1, 2].includes(dataStatus) || [0, 1, 2].includes(parseInt(dataStatus)))) {
+                    slotClass += 'past-slot';
+                    studentContent = '';
+                }
+
                 rowHtml += `
                     <td class="appointment-slot ${slotClass}"
                         data-day="${chineseDayName}"
@@ -380,6 +382,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="professor-view-content d-none">${professorContentHtml}</div>
                     </td>
                 `;
+
+
 
             }
             rowHtml += `</tr>`;
@@ -442,6 +446,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const fullDateTimeForDB = `${fullDateFromSlot} ${time.split('-')[0]}:00`;
 
+
         if (isProfessorLoggedIn) {
             // 教授模式
             if (isChangingAvailability) {
@@ -477,6 +482,16 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } else {
             // 學生模式
+
+            // 新增：判斷是否為過去時段
+            const slotDateTime = new Date(fullDateTimeForDB);
+            const now = new Date();
+            if (slotDateTime < now) {
+                alert('無法預約過去的時段！');
+                return;
+            }
+            //====================
+
             if (slotStatus === 'available') { // 只有 'available' (白色) 的時段才能點擊預約
                 const selectedDateTimeDisplay = document.getElementById('selectedDateTimeDisplay');
                 const appointDateForDBInput = document.getElementById('appointDateForDB');
@@ -550,7 +565,7 @@ document.addEventListener('DOMContentLoaded', function() {
         $('#unavailable-batch-modal').modal('show');
     });
 
-    //============================================================
+
     // 產生隨機 appointment_ID（A+3碼數字）
     function generateRandomAppointmentID() {
         return 'A' + Math.floor(100 + Math.random() * 900); // A100~A999
@@ -651,7 +666,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('設定不開放時段失敗，請檢查控制台。');
         });
     });
-    //============================================================
+
 
     // 3. 教授設定開放時段按鈕
     $('#set-available-btn').on('click', function() {
