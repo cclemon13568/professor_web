@@ -125,9 +125,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="d-flex align-items-center mb-1">
                         <span class="respond-content flex-grow-1">${escapeHTML(respond.respond_content)}</span>
                         ${respond.is_teacher_response == 1
-                            ? '<span class="badge bg-warning text-dark ms-2">教師</span>'
-                            : '<span class="badge bg-light text-dark ms-2">一般</span>'
-                        }
+                ? '<span class="badge bg-warning text-dark ms-2">教師</span>'
+                : '<span class="badge bg-light text-dark ms-2">一般</span>'
+            }
                         <button class="btn btn-sm btn-link text-primary ms-2 reply-btn" data-respond-id="${respond.respond_ID}" data-question-id="${respond.question_ID}">回覆</button>
                         <button class="btn btn-sm btn-outline-secondary ms-2 toggle-children-btn">收起</button>
                     </div>

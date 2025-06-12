@@ -56,6 +56,56 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
+    // --- 新增的學期驗證邏輯 ---
+    function isValidCoursePeriod(periodString) {
+        const regex = /^(\d{2,3})-(\d)$/; // 匹配 "數字-1" 或 "數字-2"
+        const match = periodString.match(regex);
+
+        if (!match) {
+            return false; // 格式不符
+        }
+
+        const inputYear = parseInt(match[1], 10);
+        const inputSemester = parseInt(match[2], 10);
+
+        // 學期只能是 1 或 2
+        if (inputSemester !== 1 && inputSemester !== 2) {
+            return false;
+        }
+
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth() + 1; // getMonth() 回傳 0-11
+
+        let currentValidROCYear;
+        let currentValidSemester;
+
+        // 根據「今年8月才是114-1學期」的規則判斷當前學期
+        // 2月到7月：當前西元年減1911後的民國年，為第二學期 (例如 2025/6 -> 113-2)
+        if (currentMonth >= 2 && currentMonth <= 7) {
+            currentValidROCYear = currentYear - 1912;
+            currentValidSemester = 2;
+        }
+            // 8月到隔年1月：當前西元年減1911後的民國年，為第一學期 (例如 2025/8 -> 114-1)
+        // 特別處理 1 月份，它屬於前一個學年度的第一學期 (例如 2026/1 -> 114-1)
+        else {
+            currentValidROCYear = (currentMonth === 1) ? (currentYear - 1911 - 1) : (currentYear - 1911);
+            currentValidSemester = 1;
+        }
+
+        // 檢查輸入的學年和學期是否合法（不能超過當前學期）
+        if (inputYear > currentValidROCYear) {
+            return false; // 學年超過當前學年
+        } else if (inputYear === currentValidROCYear) {
+            if (inputSemester > currentValidSemester) {
+                return false; // 同學年但學期超過當前學期
+            }
+        }
+        // 如果輸入的學期是 1 或 2，且沒有超過當前學期，則合法
+        return true;
+    }
+    // --- 學期驗證邏輯結束 ---
+
     // 載入評價並處理送出
     function loadEvaluations(card, courseId) {
         const evalList = card.querySelector('.evaluation-list');
@@ -91,7 +141,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     <strong>#${c.evaluate_ID}</strong> (課程代碼:${courseId}) [修課期間：${c.course_period || ''}]：${c.evaluate}
                 </div>
                 <span class="eval-time text-muted">${timeStr}</span>
-                `;                if (!expanded && idx >= showCount) {
+                `;
+                if (!expanded && idx >= showCount) {
                     div.classList.add('eval-hidden');
                     div.style.display = 'none';
                 }
@@ -127,32 +178,18 @@ document.addEventListener('DOMContentLoaded', function () {
             const studentID = studentInput.value.trim();
             const coursePeriod = periodInput.value.trim();
             const content = textarea.value.trim();
-            if (!studentID || !coursePeriod || !content) return;
 
-            const match = coursePeriod.match(/^(\d{2,3})-(\d)$/);
-            if (!match) {
-                alert('修課期間格式錯誤，請輸入如 112-1');
+            if (!studentID || !coursePeriod || !content) {
+                alert('請完整填寫所有欄位'); // 增加提示
                 return;
             }
-            const inputYear = parseInt(match[1], 10);
-            const inputSemester = parseInt(match[2], 10);
 
-            const now = new Date();
-            const nowRocYear = now.getFullYear() - 1911;
-            // 判斷學期
-            // 假設 1=上學期(約9月~隔年1月)，2=下學期(約2月~7月)
-            let nowSemester;
-            const month = now.getMonth() + 1;
-            if (month >= 9 || month <= 1) {
-                nowSemester = 1;
-            } else {
-                nowSemester = 2;
-            }
-
-            if (inputYear > nowRocYear || (inputYear === nowRocYear && inputSemester > nowSemester)) {
-                alert('修課期間不能為未來時間');
+            // --- 呼叫新的驗證函數 ---
+            if (!isValidCoursePeriod(coursePeriod)) {
+                alert('修課期間格式錯誤，請輸入例如 "113-2" 的格式，學期必須是 "1" 或 "2"，且不能超過當前學期。');
                 return;
             }
+            // --- 驗證結束 ---
 
             // 送出到 API
             fetch('api/evaluation.php', {
@@ -165,22 +202,27 @@ document.addEventListener('DOMContentLoaded', function () {
                     course_ID: courseId
                 })
             })
-            .then(res => res.json())
-            .then(result => {
-                if (result.success) {
-                    fetch(`api/evaluation.php?course_ID=${encodeURIComponent(courseId)}`)
-                        .then(res => res.json())
-                        .then(data => {
-                            comments = Array.isArray(data.data) ? data.data.reverse() : [];
-                            renderComments(false);
-                        });
-                    textarea.value = '';
-                    periodInput.value = '';
-                    studentInput.value = '';
-                } else {
-                    alert(result.message || '送出失敗');
-                }
-            });
+                .then(res => res.json())
+                .then(result => {
+                    if (result.success) {
+                        // 成功後重新載入評價並清空表單
+                        fetch(`api/evaluation.php?course_ID=${encodeURIComponent(courseId)}`)
+                            .then(res => res.json())
+                            .then(data => {
+                                comments = Array.isArray(data.data) ? data.data.reverse() : [];
+                                renderComments(false); // 重新渲染並收起評論
+                            });
+                        textarea.value = '';
+                        periodInput.value = '';
+                        studentInput.value = '';
+                    } else {
+                        alert(result.message || '送出失敗');
+                    }
+                })
+                .catch(error => { // 增加錯誤捕捉
+                    console.error('送出評價時發生錯誤:', error);
+                    alert('送出評價失敗，請稍後再試。');
+                });
         });
     }
 

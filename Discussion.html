@@ -24,31 +24,28 @@
                 <li class="nav-item"><a class="nav-link" href="meeting.html">預約面談</a></li>
                 <li class="nav-item"><a class="nav-link" href="Discussion.html">討論區</a></li>
                 <li class="nav-item">
-                <a id="login-btn"
-                    class="btn btn-outline-light rounded-pill fw-bold ms-3 px-4 d-flex align-items-center justify-content-center"
-                    href="login.html"
-                    style="height: 40px; min-width: 100px; transition: background 0.2s, color 0.2s;">
+                    <a id="login-btn"
+                       class="btn btn-outline-light rounded-pill fw-bold ms-3 px-4 d-flex align-items-center justify-content-center"
+                       href="login.html"
+                       style="height: 40px; min-width: 100px; transition: background 0.2s, color 0.2s;">
                         登入
-                </a>                
+                    </a>
             </ul>
         </div>
     </div>
 </nav>
 
-<!-- header 內容已移除 -->
-
 <section id="discussion" class="py-5">
     <div class="container">
         <h2 class="mb-4"><strong>討論區</strong></h2>
-        <div class="discussion-board"></div>
-        <div class="new-post">
-            <h4>發表新問題</h4>
+        <div class="new-post mb-4 p-3 border rounded bg-light"> <h4>發表新問題</h4>
             <input id="new-name" class="form-control mb-2" placeholder="提問者姓名">
             <input id="new-dept" class="form-control mb-2" placeholder="系所">
             <input id="new-title" class="form-control mb-2" placeholder="標題">
             <textarea id="new-content" class="form-control mb-2" rows="4" placeholder="內容 (限300字)" maxlength="300"></textarea>
             <button id="post-button" class="btn btn-primary mt-2">發表問題</button>
         </div>
+        <div class="discussion-board"></div>
     </div>
 </section>
 
