@@ -42,7 +42,7 @@
     max-width: 100% !important;
     margin: 0 !important;
     border-radius: 0 !important;
-    padding: 15px 40px;
+    padding: 16px 45px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     background-color: #fafafa;
 }
@@ -79,7 +79,6 @@
     color: rgba(255, 255, 255, 0.85);           /* 提高文字亮度 */
     border-color: rgba(255, 255, 255, 0.85);
 }
-
 
 .navbar .btn-login:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);   /* 添加懸浮陰影 */
