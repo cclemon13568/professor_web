@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await fetchData(`api/teacher_extended_info.php?teacher_ID=${encodeURIComponent(id)}`, 'GET');
 
             const extendedData = data.data; // 確保取得 data 屬性，因為您的 API 返回 { success: true, data: {...} }
-            
+
             console.log("從API獲取的論文資料:", extendedData.publications);
             console.log("從API獲取的研究計畫資料:", extendedData.projects);
             // 確認這裡的陣列長度是否包含你資料庫中所有筆數
@@ -154,7 +154,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         tr.innerHTML = `
                             <td><span class="paper-title-span">論文名稱: ${pub.paper_topic || 'N/A'} (${pub.paper_year || 'N/A'})</span></td>
                             <td><span class="paper-authors-span">作者群: ${pub.paper_authors || 'N/A'}</span></td>
-                            <td><span class="paper-journal-span">期刊名稱: ${pub.paper_link && pub.paper_link.includes('(SCIE)') ? pub.paper_link : 'N/A'}</span></td>
                         `;
                         publicationsTableBody.appendChild(tr);
                     });
