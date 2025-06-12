@@ -483,7 +483,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             // 學生模式
 
-            // 新增：判斷是否為過去時段
+            // 判斷是否為過去時段
             const slotDateTime = new Date(fullDateTimeForDB);
             const now = new Date();
             if (slotDateTime < now) {
@@ -902,6 +902,18 @@ document.addEventListener('DOMContentLoaded', function() {
         loadAppointmentsAndCourses(currentSelectedDate); // 取消時重新載入以顯示最新狀態
     });
 
+
+    // 取得今天日期（YYYY-MM-DD 格式）
+    function getTodayDateString() {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+    }
+
+    // 初始化 currentSelectedDate 為今天
+    currentSelectedDate = getTodayDateString();
 
     // 初始載入（學生視圖），載入當前日期的預約和課程
     selectDateInput.value = currentSelectedDate;
